@@ -5,7 +5,7 @@ date:   2022-01-02
 categories: tutorial
 ---
 
-This tutorial describes the level 0 of game creation with the wide-dot Thomson TO8 game engine. 
+This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine. 
 
 The generated binary will boot to a main program that will run an awesome infinite loop.
 
