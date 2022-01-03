@@ -1,0 +1,61 @@
+---
+layout: post
+title:  "Tutorial 00 - Create a new game project"
+date:   2022-01-02
+categories: tutorial
+---
+
+This tutorial describes the level 0 of game creation with the wide-dot Thomson TO8 game engine. 
+
+The generated binary will boot to a main program that will run an awesome infinite loop.
+
+<!--excerpt-->
+
+# Prerequisites :
+- Java, check version superior to 8
+   
+```bash
+$ java -version
+openjdk version "11.0.11" 2021-04-20
+OpenJDK Runtime Environment AdoptOpenJDK-11.0.11+9 (build 11.0.11+9)
+OpenJDK 64-Bit Server VM AdoptOpenJDK-11.0.11+9 (build 11.0.11+9, mixed mode)
+```
+- Maven, check versin superior to 3.6.X
+
+```bash
+$ mvn -version
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+```
+
+- Clone this repository :
+
+```bash
+$ git clone https://github.com/wide-dot/thomson-to8-game-engine.git
+Clonage dans 'thomson-to8-game-engine'...
+remote: Enumerating objects: 2629, done.
+remote: Counting objects: 100% (2629/2629), done.
+remote: Compressing objects: 100% (1614/1614), done.
+remote: Total 2629 (delta 911), reused 2606 (delta 889), pack-reused 0
+Réception d'objets: 100% (2629/2629), 11.62 MiB | 8.96 MiB/s, fait.
+Résolution des deltas: 100% (911/911), fait.
+```
+
+# Compiling the engine
+
+Before building your first Thomson TO8 project you will have to build the java generator. You will need to do this only once.
+run this command in the `java-generator` directory.
+
+```bash
+$ mvn clean compile assembly:single
+
+TODO
+```
+
+# File Structure
+
+Enter the `game-projects` directory and create a directory named : `tutorial-00-project`
+
+
+
+
+<<TO BE CONTINUED>>
