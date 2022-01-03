@@ -20,19 +20,26 @@
 
 title: wide-dot
 email: webmaster@wide-dots.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+description: >- # this means to ignore newlines until "baseurl:"  
+    wide-dot is a group which aims to develop an engine to make game creation easier on THOMSON TO8 computer,
+    to show creations (game and demos)
+    and to share the knowledge gathered since our way back to the 6809 microprocessor.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
 github_username:  wide-dot
 
+
+minima:
+  date_format: "%Y-%m-%d"
+
 # Build settings
 theme: minima
 plugins:
   - jekyll-feed
+
+show_excerpts: true
+excerpt_separator: "<!--excerpt-->"
 
 # Exclude from processing.
 # The following items will not be processed, by default.
