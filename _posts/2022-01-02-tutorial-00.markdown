@@ -1,0 +1,192 @@
+---
+layout: post
+title:  "Tutorial 00 - Create a new game project"
+date:   2022-01-02
+categories: tutorial
+---
+
+This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine. 
+
+The generated binary will boot to a main program that will run an awesome infinite loop.
+
+<!--excerpt-->
+
+# Prerequisites :
+- Java, check version superior to 8
+   
+```bash
+$ java -version
+openjdk version "11.0.11" 2021-04-20
+OpenJDK Runtime Environment AdoptOpenJDK-11.0.11+9 (build 11.0.11+9)
+OpenJDK 64-Bit Server VM AdoptOpenJDK-11.0.11+9 (build 11.0.11+9, mixed mode)
+```
+- Maven, check versin superior to 3.6.X
+
+```bash
+$ mvn -version
+Apache Maven 3.6.3 (cecedd343002696d0abb50b32b541b8a6ba2883f)
+```
+
+- Clone this repository :
+
+```bash
+$ git clone https://github.com/wide-dot/thomson-to8-game-engine.git
+Clonage dans 'thomson-to8-game-engine'...
+remote: Enumerating objects: 2629, done.
+remote: Counting objects: 100% (2629/2629), done.
+remote: Compressing objects: 100% (1614/1614), done.
+remote: Total 2629 (delta 911), reused 2606 (delta 889), pack-reused 0
+Réception d'objets: 100% (2629/2629), 11.62 MiB | 8.96 MiB/s, fait.
+Résolution des deltas: 100% (911/911), fait.
+```
+
+# Compiling the engine
+
+Before building your first Thomson TO8 project you will have to build the java generator. You will need to do this only once.
+run this command in the `java-generator` directory.
+
+```bash
+ $ mvn clean compile assembly:single
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< bento8:game-engine >-------------------------
+[INFO] Building game-engine 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ game-engine ---
+[INFO] Deleting /home/robin/tmp/thomson-to8-game-engine/java-generator/target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ game-engine ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.8.1:compile (default-compile) @ game-engine ---
+[INFO] Changes detected - recompiling the module!
+[WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+[INFO] Compiling 139 source files to /home/robin/tmp/thomson-to8-game-engine/java-generator/target/classes
+[INFO] /home/robin/tmp/thomson-to8-game-engine/java-generator/src/main/java/fr/bento8/to8/build/BuildDisk.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/robin/tmp/thomson-to8-game-engine/java-generator/src/main/java/fr/bento8/to8/build/BuildDisk.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- maven-assembly-plugin:2.2-beta-5:single (default-cli) @ game-engine ---
+[INFO] META-INF/MANIFEST.MF already added, skipping
+[INFO] META-INF/ already added, skipping
+[INFO] org/ already added, skipping
+[INFO] org/apache/ already added, skipping
+[INFO] org/apache/logging/ already added, skipping
+[INFO] org/apache/logging/log4j/ already added, skipping
+[INFO] META-INF/versions/ already added, skipping
+[INFO] META-INF/versions/9/ already added, skipping
+[INFO] META-INF/versions/9/org/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/logging/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/logging/log4j/ already added, skipping
+[INFO] META-INF/services/ already added, skipping
+[INFO] META-INF/maven/ already added, skipping
+[INFO] META-INF/maven/org.apache.logging.log4j/ already added, skipping
+[INFO] META-INF/LICENSE already added, skipping
+[INFO] META-INF/DEPENDENCIES already added, skipping
+[INFO] META-INF/NOTICE already added, skipping
+[INFO] Building jar: /home/robin/tmp/thomson-to8-game-engine/java-generator/target/game-engine-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+[INFO] META-INF/MANIFEST.MF already added, skipping
+[INFO] META-INF/ already added, skipping
+[INFO] org/ already added, skipping
+[INFO] org/apache/ already added, skipping
+[INFO] org/apache/logging/ already added, skipping
+[INFO] org/apache/logging/log4j/ already added, skipping
+[INFO] META-INF/versions/ already added, skipping
+[INFO] META-INF/versions/9/ already added, skipping
+[INFO] META-INF/versions/9/org/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/logging/ already added, skipping
+[INFO] META-INF/versions/9/org/apache/logging/log4j/ already added, skipping
+[INFO] META-INF/services/ already added, skipping
+[INFO] META-INF/maven/ already added, skipping
+[INFO] META-INF/maven/org.apache.logging.log4j/ already added, skipping
+[INFO] META-INF/LICENSE already added, skipping
+[INFO] META-INF/DEPENDENCIES already added, skipping
+[INFO] META-INF/NOTICE already added, skipping
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.379 s
+[INFO] Finished at: 2022-01-04T11:12:21+01:00
+[INFO] ------------------------------------------------------------------------
+```
+
+# File Structure
+
+Enter the `game-projects` directory and create a directory named : `tutorial-00-project`
+
+```bash
+$ cd game-projects
+$ mkdir tutorial-00-project
+```
+
+On linux, create a new file `config-linux.properties` in this newly created folder, with this content :
+
+```
+# ******************************************************************************
+# BuildDisk - Configuration file
+# ------------------------------------------------------------------------------
+#
+# ******************************************************************************
+
+# Engine ASM source code
+# ******************************************************************************
+
+# Engine loader
+engine.asm.boot.fd=../../Engine/Boot/BootFd.asm
+engine.asm.RAMLoaderManager.fd=../../Engine/Ram/RAMLoaderManagerFd.asm
+engine.asm.RAMLoader.fd=../../Engine/Ram/RAMLoaderFd.asm
+
+engine.asm.boot.t2=../../Engine/Boot/BootT2.asm
+engine.asm.RAMLoaderManager.t2=../../Engine/Ram/RAMLoaderManagerT2.asm
+engine.asm.RAMLoader.t2=../../Engine/Ram/RAMLoaderT2.asm
+
+# T2 Loader for SDDRIVE
+engine.asm.boot.t2Loader=../../Engine/Boot/BootT2Loader.asm
+engine.asm.t2Loader=../../Engine/T2/T2Loader.asm
+
+# Game definition
+# ******************************************************************************
+
+gameModeBoot=infiniteloop
+gameMode.infiniteloop=./game-mode/infinite-loop/infinite-loop.properties
+
+# Build parameters
+# ******************************************************************************
+#
+# Compilated image converter
+# --------------------------
+#
+# builder.compilatedsprite.useCache:
+#    param: N: No cache, Y: use already generated asm, bin and lst files
+#
+# builder.compilatedsprite.maxTries
+#    param: number of maximum random tries for generated code optimization
+#           (default value 500000)
+#
+# ------------------------------------------------------------------------------
+builder.lwasm=../../tools/linux/lwasm
+builder.lwasm.pragma=undefextern
+builder.lwasm.includeDirs=../..
+builder.exobin=../../tools/linux/exomizer
+builder.debug=Y
+builder.logToConsole=Y
+builder.diskName=./dist/empty-project
+builder.generatedCode=./generated-code
+builder.constAnim=./Engine/Graphics/ConstantsAnimation.asm
+builder.to8.memoryExtension=Y
+builder.compilatedSprite.useCache=Y
+builder.compilatedSprite.maxTries=500000
+```
+
+This configuration file will be used by the java builder to produce your Thomson TO8 binaries. These binaries will be produced with the template name defined by the builder.diskName property value.
+
+The builder will generate a TO8 program that will be able to boot from a 3½ Disk or from a Megarom T.2. The program itself will be able to load different sub programs from Disk/Cardtridge to RAM. The sub programs are called *game modes*. 
+
+All games modes have their own property file referenced in the builder main config property file. This is described in the next section
+
+
+
+<<TO BE CONTINUED>>
