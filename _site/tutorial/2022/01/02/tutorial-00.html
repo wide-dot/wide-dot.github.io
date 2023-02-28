@@ -1,54 +1,51 @@
-<!DOCTYPE html>
-<html lang="en"><head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Tutorial 00 - Create a new game project | wide-dot</title>
-<meta name="generator" content="Jekyll v3.9.0" />
-<meta property="og:title" content="Tutorial 00 - Create a new game project" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine. The generated binary will boot to a main program that will run an awesome infinite loop." />
-<meta property="og:description" content="This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine. The generated binary will boot to a main program that will run an awesome infinite loop." />
-<link rel="canonical" href="http://localhost:4000/tutorial/2022/01/02/tutorial-00.html" />
-<meta property="og:url" content="http://localhost:4000/tutorial/2022/01/02/tutorial-00.html" />
-<meta property="og:site_name" content="wide-dot" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-01-02T00:00:00+01:00" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Tutorial 00 - Create a new game project" />
-<script type="application/ld+json">
-{"datePublished":"2022-01-02T00:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tutorial/2022/01/02/tutorial-00.html"},"url":"http://localhost:4000/tutorial/2022/01/02/tutorial-00.html","headline":"Tutorial 00 - Create a new game project","description":"This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine. The generated binary will boot to a main program that will run an awesome infinite loop.","dateModified":"2022-01-02T00:00:00+01:00","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="wide-dot" />
-</head>
-<body><header class="site-header">
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>wide-dot</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="assets/css/custom.css" />
+	</head>
+	<body class="is-preload">
 
-  <div class="wrapper"><a class="site-title" rel="author" href="/">wide-dot</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+				<!-- Main -->
+				<div id="main">
+					<div class="inner">
 
-  <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Tutorial 00 - Create a new game project</h1>
-    <p class="post-meta"><time class="dt-published" datetime="2022-01-02T00:00:00+01:00" itemprop="datePublished">
-        2022-01-02
-      </time></p>
-  </header>
+						<!-- Header -->
+							<header id="header">
+								<a href="index.html" class="logo"><img src="images/name.png"></img></a>
+								<ul class="icons">
+																			<li><a href="https://youtube.com/@wide-dot" class="icon brands fa-youtube"><span class="label">Youtube</span></a></li>
+									<li><a href="https://github.com/wide-dot" class="icon brands fa-github"><span class="label">Github</span></a></li>
+								</ul>
+							</header>
 
-  <div class="post-content e-content" itemprop="articleBody">
-    <p>This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine.</p>
+						<!-- Content -->
+						<section>
+							<div class="content">
+
+								
+
+							<header class="main">
+								<h1>Tutorial 00 - Create a new game project</h1>
+							</header>
+							
+							
+
+							<div class="flex-container">
+								<div class="flex-item-left">
+									
+									<p>This tutorial describes the low level game creation with the wide-dot Thomson TO8 game engine.</p>
 
 <p>The generated binary will boot to a main program that will run an awesome infinite loop.</p>
 
@@ -91,47 +88,232 @@ Résolution des deltas: 100% (911/911), fait.
 <p>Before building your first Thomson TO8 project you will have to build the java generator. You will need to do this only once.
 run this command in the <code class="language-plaintext highlighter-rouge">java-generator</code> directory.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>mvn clean compile assembly:single
-
-TODO
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$ </span>mvn clean compile assembly:single
+<span class="o">[</span>INFO] Scanning <span class="k">for </span>projects...
+<span class="o">[</span>INFO] 
+<span class="o">[</span>INFO] <span class="nt">-------------------------</span>&lt; bento8:game-engine <span class="o">&gt;</span><span class="nt">-------------------------</span>
+<span class="o">[</span>INFO] Building game-engine 0.0.1-SNAPSHOT
+<span class="o">[</span>INFO] <span class="nt">--------------------------------</span><span class="o">[</span> jar <span class="o">]</span><span class="nt">---------------------------------</span>
+<span class="o">[</span>INFO] 
+<span class="o">[</span>INFO] <span class="nt">---</span> maven-clean-plugin:2.5:clean <span class="o">(</span>default-clean<span class="o">)</span> @ game-engine <span class="nt">---</span>
+<span class="o">[</span>INFO] Deleting /home/robin/tmp/thomson-to8-game-engine/java-generator/target
+<span class="o">[</span>INFO] 
+<span class="o">[</span>INFO] <span class="nt">---</span> maven-resources-plugin:2.6:resources <span class="o">(</span>default-resources<span class="o">)</span> @ game-engine <span class="nt">---</span>
+<span class="o">[</span>WARNING] Using platform encoding <span class="o">(</span>UTF-8 actually<span class="o">)</span> to copy filtered resources, i.e. build is platform dependent!
+<span class="o">[</span>INFO] Copying 1 resource
+<span class="o">[</span>INFO] 
+<span class="o">[</span>INFO] <span class="nt">---</span> maven-compiler-plugin:3.8.1:compile <span class="o">(</span>default-compile<span class="o">)</span> @ game-engine <span class="nt">---</span>
+<span class="o">[</span>INFO] Changes detected - recompiling the module!
+<span class="o">[</span>WARNING] File encoding has not been <span class="nb">set</span>, using platform encoding UTF-8, i.e. build is platform dependent!
+<span class="o">[</span>INFO] Compiling 139 <span class="nb">source </span>files to /home/robin/tmp/thomson-to8-game-engine/java-generator/target/classes
+<span class="o">[</span>INFO] /home/robin/tmp/thomson-to8-game-engine/java-generator/src/main/java/fr/bento8/to8/build/BuildDisk.java: Some input files use unchecked or unsafe operations.
+<span class="o">[</span>INFO] /home/robin/tmp/thomson-to8-game-engine/java-generator/src/main/java/fr/bento8/to8/build/BuildDisk.java: Recompile with <span class="nt">-Xlint</span>:unchecked <span class="k">for </span>details.
+<span class="o">[</span>INFO] 
+<span class="o">[</span>INFO] <span class="nt">---</span> maven-assembly-plugin:2.2-beta-5:single <span class="o">(</span>default-cli<span class="o">)</span> @ game-engine <span class="nt">---</span>
+<span class="o">[</span>INFO] META-INF/MANIFEST.MF already added, skipping
+<span class="o">[</span>INFO] META-INF/ already added, skipping
+<span class="o">[</span>INFO] org/ already added, skipping
+<span class="o">[</span>INFO] org/apache/ already added, skipping
+<span class="o">[</span>INFO] org/apache/logging/ already added, skipping
+<span class="o">[</span>INFO] org/apache/logging/log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/logging/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/logging/log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/services/ already added, skipping
+<span class="o">[</span>INFO] META-INF/maven/ already added, skipping
+<span class="o">[</span>INFO] META-INF/maven/org.apache.logging.log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/LICENSE already added, skipping
+<span class="o">[</span>INFO] META-INF/DEPENDENCIES already added, skipping
+<span class="o">[</span>INFO] META-INF/NOTICE already added, skipping
+<span class="o">[</span>INFO] Building jar: /home/robin/tmp/thomson-to8-game-engine/java-generator/target/game-engine-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+<span class="o">[</span>INFO] META-INF/MANIFEST.MF already added, skipping
+<span class="o">[</span>INFO] META-INF/ already added, skipping
+<span class="o">[</span>INFO] org/ already added, skipping
+<span class="o">[</span>INFO] org/apache/ already added, skipping
+<span class="o">[</span>INFO] org/apache/logging/ already added, skipping
+<span class="o">[</span>INFO] org/apache/logging/log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/logging/ already added, skipping
+<span class="o">[</span>INFO] META-INF/versions/9/org/apache/logging/log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/services/ already added, skipping
+<span class="o">[</span>INFO] META-INF/maven/ already added, skipping
+<span class="o">[</span>INFO] META-INF/maven/org.apache.logging.log4j/ already added, skipping
+<span class="o">[</span>INFO] META-INF/LICENSE already added, skipping
+<span class="o">[</span>INFO] META-INF/DEPENDENCIES already added, skipping
+<span class="o">[</span>INFO] META-INF/NOTICE already added, skipping
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+<span class="o">[</span>INFO] BUILD SUCCESS
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
+<span class="o">[</span>INFO] Total <span class="nb">time</span>:  5.379 s
+<span class="o">[</span>INFO] Finished at: 2022-01-04T11:12:21+01:00
+<span class="o">[</span>INFO] <span class="nt">------------------------------------------------------------------------</span>
 </code></pre></div></div>
 
 <h1 id="file-structure">File Structure</h1>
 
 <p>Enter the <code class="language-plaintext highlighter-rouge">game-projects</code> directory and create a directory named : <code class="language-plaintext highlighter-rouge">tutorial-00-project</code></p>
 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>game-projects
+<span class="nv">$ </span><span class="nb">mkdir </span>tutorial-00-project
+</code></pre></div></div>
+
+<p>On linux, create a new file <code class="language-plaintext highlighter-rouge">config-linux.properties</code> in this newly created folder, with this content :</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># ******************************************************************************
+# BuildDisk - Configuration file
+# ------------------------------------------------------------------------------
+#
+# ******************************************************************************
+
+# Engine ASM source code
+# ******************************************************************************
+
+# Engine loader
+engine.asm.boot.fd=../../Engine/Boot/BootFd.asm
+engine.asm.RAMLoaderManager.fd=../../Engine/Ram/RAMLoaderManagerFd.asm
+engine.asm.RAMLoader.fd=../../Engine/Ram/RAMLoaderFd.asm
+
+engine.asm.boot.t2=../../Engine/Boot/BootT2.asm
+engine.asm.RAMLoaderManager.t2=../../Engine/Ram/RAMLoaderManagerT2.asm
+engine.asm.RAMLoader.t2=../../Engine/Ram/RAMLoaderT2.asm
+
+# T2 Loader for SDDRIVE
+engine.asm.boot.t2Loader=../../Engine/Boot/BootT2Loader.asm
+engine.asm.t2Loader=../../Engine/T2/T2Loader.asm
+
+# Game definition
+# ******************************************************************************
+
+gameModeBoot=infiniteloop
+gameMode.infiniteloop=./game-mode/infinite-loop/infinite-loop.properties
+
+# Build parameters
+# ******************************************************************************
+#
+# Compilated image converter
+# --------------------------
+#
+# builder.compilatedsprite.useCache:
+#    param: N: No cache, Y: use already generated asm, bin and lst files
+#
+# builder.compilatedsprite.maxTries
+#    param: number of maximum random tries for generated code optimization
+#           (default value 500000)
+#
+# ------------------------------------------------------------------------------
+builder.lwasm=../../tools/linux/lwasm
+builder.lwasm.pragma=undefextern
+builder.lwasm.includeDirs=../..
+builder.exobin=../../tools/linux/exomizer
+builder.debug=Y
+builder.logToConsole=Y
+builder.diskName=./dist/empty-project
+builder.generatedCode=./generated-code
+builder.constAnim=./Engine/Graphics/ConstantsAnimation.asm
+builder.to8.memoryExtension=Y
+builder.compilatedSprite.useCache=Y
+builder.compilatedSprite.maxTries=500000
+</code></pre></div></div>
+
+<p>This configuration file will be used by the java builder to produce your Thomson TO8 binaries. These binaries will be produced with the template name defined by the builder.diskName property value.</p>
+
+<p>The builder will generate a TO8 program that will be able to boot from a 3½ Disk or from a Megarom T.2. The program itself will be able to load different sub programs from Disk/Cardtridge to RAM. The sub programs are called <em>game modes</em>.</p>
+
+<p>All games modes have their own property file referenced in the builder main config property file. This is described in the next section</p>
+
 <p>«TO BE CONTINUED»</p>
 
-  </div><a class="u-url" href="/tutorial/2022/01/02/tutorial-00.html" hidden></a>
-</article>
+								</div>	
+								<div class="flex-item-right">
 
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
+									
 
-  <div class="wrapper">
+											
 
-    <div class="footer-col-wrapper">
-      <div class="footer-col">
-        <p class="feed-subscribe">
-          <a href="/feed.xml">
-            <svg class="svg-icon orange">
-              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
-            </svg><span>Subscribe</span>
-          </a>
-        </p>
-      </div>
-      <div class="footer-col">
-        <p>wide-dot is a group which aims to develop an engine to make game creation easier on THOMSON TO8 computer, to show creations (game and demos) and to share the knowledge gathered since our way back to the 6809 microprocessor.</p>
-      </div>
-    </div>
+										
 
-    <div class="social-links"><ul class="social-media-list"></ul>
-</div>
+											
 
-  </div>
+											
+								</div>	
+					        
+							</div>
 
-</footer>
-</body>
+							
+										
+						</section>
+					</div>
+				</div>
 
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Accueil</a></li>
+										<li>
+											<span class="opener">Démos de jeu</span>
+											<ul>
+												<li><a href="sonic2.html">Sonic the Hedgehog 2</a></li>
+												<li><a href="alttp.html">Un lien vers le passé</a></li>
+												<li><a href="cacao.html">Cacao and coffee shop</a></li>
+												<li><a href="dott.html">Day of the Tentacle</a></li>
+												<li><a href="rick.html">Rick Dangerous</a></li>
+												<li><a href="savage.html">Savage</a></li>
+												<li><a href="goldorak.html">Goldorak</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Contact</h2>
+									</header>
+									<p>wide-dot réalise des logiciels pour processeur Motorola 6809.</p>
+                                                                        L'équipe est composée de :
+                                                                        <ul>
+                                                                                <li>adnz</li>
+                                                                                <li>bentoc</li>
+                                                                                <li>fxrobin</li>
+                                                                                <li>__sam__</li>
+																				<li>yoanrhk</li>
+
+                                                                        </ul>
+                                                                        <br>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">contact@wide-dot.com</a></li>
+										<li class="icon solid fa-home">France<br /></li>
+									</ul>
+								</section>
+
+							<!-- Footer -->
+								<footer id="footer">
+									<p class="copyright">&copy; wide-dot. All rights reserved. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+								</footer>
+
+						</div>
+                                        </div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+	</body>
 </html>

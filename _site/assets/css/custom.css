@@ -1,0 +1,61 @@
+
+fieldset 
+{
+    padding : 1em;
+    margin-bottom : 1em;
+    border : none;
+    font-size: 0.90em;
+}
+
+legend
+{
+    color: #3d4449;
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+    line-height: 0.75em;
+    padding-bottom : 1em;
+    padding-right : 1em;
+    border-bottom: solid 3px #f56a6a;
+    text-align: right;
+}
+
+fieldset > ul
+{
+   margin : 0px;
+}
+
+.display_right
+{
+   float : right;
+   width : 30%;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 800px) {
+    .flex-container {
+      flex-direction: column;
+    }
+}
+
+.flex-item-left {
+    
+    padding: 10px;
+    flex: 50%;
+  }
+
+  .flex-item-right {
+    /* background-color: #f1f1f1; */
+    padding: 10px;
+    flex: 5em;
+    /* border-radius: 0.375em; */
+  } 
+
+.subtitle
+{
+  font-weight: bold;
+  margin-bottom: 1em;
+}  

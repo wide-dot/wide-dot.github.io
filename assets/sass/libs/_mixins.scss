@@ -58,6 +58,12 @@
 
 }
 
+@mixin mobile {
+	@media screen and (max-width: 1024px) {
+	  @content;
+	}
+}
+
 /// Encodes a SVG data URL so IE doesn't choke (via codepen.io/jakob-e/pen/YXXBrp).
 /// @param {string} $svg SVG data URL.
 /// @return {string} Encoded SVG data URL.
@@ -76,3 +82,4 @@
 	@return url("data:image/svg+xml;charset=utf8,#{$svg}");
 
 }
+
