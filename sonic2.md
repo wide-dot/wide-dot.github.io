@@ -8,7 +8,7 @@ credits:
   - bentoc (coding, portage 6809)
   - SEGA
 github: hhttps://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/sonic-2
-download: /releases/sonic2/20230128-sonic-2.zip
+download: /releases/sonic2/20230308-sonic-2.zip
 hardwares: 
   - Thomson TO8
   - Thomson TO9+
