@@ -23,7 +23,7 @@ display-instructions: false
 
 Adaptation du jeu R-Type (Arcade) en ASM 6809 avec scrolling horizontal.
 
-La musique est une ré-interpréation de la bande-originale par Adnz et exploite les cartes son SN et YM.
+La musique est une ré-interprétation de la bande-originale par Adnz et exploite les cartes son SN et YM.
 
 "Starfield" en cours d'ingénierie.
 
