@@ -5,7 +5,7 @@ date:   2023-03-16
 categories: game, demo
 banner: /images/r-type/banner.png
 credits:
-  - yoann & bentoc (coding)
+  - yoanrhk & bentoc (coding)
   - adnz (musiques)
   - sam (conseils coding)
   - fxrobin (1 star starfield)
