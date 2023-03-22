@@ -7,7 +7,7 @@ banner: /images/r-type/banner.png
 credits:
   - yoanrhk & bentoc (coding)
   - adnz (musiques)
-  - sam (conseils coding)
+  - sam (kickass optimizations)
   - fxrobin (1 star starfield)
   - IREM
   - Pako (Image Bannière)
