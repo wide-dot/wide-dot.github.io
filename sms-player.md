@@ -15,7 +15,8 @@ hardwares:
   - Thomson TO8/TO8D
   - Thomson TO9+
   - Carte son YM2413 et/ou SN76489
-display-instructions: true
+display-instructions: false
+display-instructions-noT2: true
 ---
  
 
