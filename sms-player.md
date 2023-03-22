@@ -16,7 +16,6 @@ hardwares:
   - Thomson TO9+
   - Carte son YM2413 et/ou SN76489
 display-instructions: false
-display-instructions-noT2: true
 ---
  
 
