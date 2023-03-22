@@ -8,7 +8,7 @@ credits:
   - bentoc (coding)
   - wide-dot (tests)
   - SEGA
-  - @Pineapple.Graphics (Image Bannière)
+  - Pineapple.Graphics (Image Bannière)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/sms-player
 download: /releases/sms-player/20230322-sms-player.zip
 hardwares: 
@@ -47,6 +47,6 @@ La commande au joystick fonctionne également.
 
 ---
 
-Credit spécial pour @Pineapple.Graphics et sa superbe bannière :
+Credit spécial pour Pineapple.Graphics et sa superbe bannière :
 <https://www.reddit.com/r/retrogaming/comments/w05ccb/fan_art_sega_master_system_vector_illustration/>
 							
