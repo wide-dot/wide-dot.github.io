@@ -33,13 +33,10 @@ Le jeu est en phase de réalisation et n'est pas encore téléchargeable.
 
 {% include youtube.html youtube-id="b_c6xt7uE7M" %}
 
----
-
-### Vidéo du 10/02/2023
-
-{% include youtube.html youtube-id="cE5HCY-sdN8" %}
+{% include youtube.html youtube-id="CpXjDvXivig" %}
 
 ---
+
 Credit spécial pour Pako et sa superbe bannière :
 <https://dribbble.com/shots/4212718-R-Type-shmup-retrogame>
 							
