@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  Sega Master System Sound Player
-date:   2023-03-16
+date:   2023-03-22
 categories: game, demo
 banner: /images/sms-player/banner.png
 credits:
