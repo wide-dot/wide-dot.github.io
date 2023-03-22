@@ -31,12 +31,12 @@ Bonne nouvelle, vous n'avez pas besoin de l'extension mémoire pour ce programme
 Le menu permet de choisir entre les deux puces son, si vous choisissez la SN76489 vous pourrez configurer son port.
 
 Lors de la lecture vous disposez des commandes suivantes au clavier :
-P : Pause
-Q : Quitter (reboot)
-Flêche noire (touche RAZ) : Retour menu
-Haut ou Bas : Sélecteur morceau/jeu
-Gauche ou Droite : Défilement sélection
-Entrée : Lecture
+- P : Pause
+- Q : Quitter (reboot)
+- Flêche noire (touche RAZ) : Retour menu
+- Haut ou Bas : Sélecteur morceau/jeu
+- Gauche ou Droite : Défilement sélection
+- Entrée : Lecture
 
 La lecture est automatique et passe au morceau suivant après deux boucles.
 
