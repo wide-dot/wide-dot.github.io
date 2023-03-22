@@ -32,7 +32,7 @@ Le jeu est en phase de réalisation et n'est pas encore téléchargeable.
 ### Vidéo du 21/03/2023
 
 {% include youtube.html youtube-id="b_c6xt7uE7M" %}
-
+-
 {% include youtube.html youtube-id="CpXjDvXivig" %}
 
 ---
