@@ -8,7 +8,7 @@ right-image: /images/front/front.png
 
 Notre groupe travaille actuellement sur 3 projets majeurs de jeux pour Thomson TO8 et TO9+ :
 
-- la conversion/adaptation de [R-Type](/r-type.html), directement depuis la version Arcade de IREM,
+- la conversion/adaptation de [R-Type](/r-type.html), par reverse-engineering de la version arcade de IREM,
 - l'adaptation du célèbre [Battle Squadron](https://www.youtube.com/watch?v=P2Igl7zKvjM), inspiré du jeu d'origine sur Amiga,
 - la création d'un jeu original, [Goldorak](/goldorak.html), fondé sur le [projet initial Amstrad GX4000](https://amigamuseum.emu-france.info/Fichiers/sites/Goldorak_CPC/Goldorak_CPC.html).
 
