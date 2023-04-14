@@ -21,7 +21,7 @@ display-instructions: false
 
 ## Description
 
-Adaptation du jeu R-Type (Arcade) en ASM 6809 avec scrolling horizontal.
+Adaptation du jeu R-Type en ASM 6809 avec scrolling horizontal, par *reverse-engineering* de la version arcade.
 
 La musique est une ré-interprétation de la bande-originale par Adnz et exploite les cartes son SN et YM.
 
