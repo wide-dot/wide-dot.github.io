@@ -1,16 +1,28 @@
 ---
 layout: default
-title:  Sonic the Hedgehog 2 !
-subtitle: Une version jouable sur Thomson TO8/TO9+
-date:   2023-02-16
+title:  Nos projets
+date:   2023-04-14
 categories: front
-right-image: /images/sonic2/sonic2-cart.jpg
+right-image: /images/front/front.png
 ---
 
+Notre groupe travaille actuellement sur 3 projets majeurs de jeux pour Thomson TO8 et TO9+ :
+
+- la conversion/adaptation de [R-Type](/r-type.html), directement depuis la version Arcade de IREM,
+- l'adaptation du célèbre [Battle Squadron](https://www.youtube.com/watch?v=P2Igl7zKvjM), inspiré du jeu d'origine sur Amiga,
+- la création d'un jeu original, [Goldorak](/goldorak.html), fondé sur le [projet initial Amstrad GX4000](https://amigamuseum.emu-france.info/Fichiers/sites/Goldorak_CPC/Goldorak_CPC.html).
+
+Nos développements sont réalisés en Assembleur 6809 (LWASM sur Windows, Linux et MacOS) conjointement avec de l'outillage spécifique réalisé essentiellement en Java.
+Ces projets s'appuient sur un moteur de jeu (sprites, scrollings, musiques, etc.) réalisé 100% en assembleur 6809.
 
 
-Pour célébrer les 30 ans de ce deuxième opus, wide-dot vous propose une version jouable de Sonic 2 sur Thomson. 
+L'ensemble de nos réalisations, développements en cours ou démos techniques :
 
-Biensûr le jeu est loin d'être complet, mais il démontre ce qu'il est désormais possible de faire à l'aide du moteur de jeu wide-dot.
+<!-- <style>
+    .front-demos LI { display : inline ; white-space: nowrap }
+    .front-demos LI:before { content : '/' }
+</style> -->
 
-{% include button.html url="sonic2.html" title="Lire la suite ..." %}
+<div class="front-demos">
+{% include demos.html %}
+</div>
