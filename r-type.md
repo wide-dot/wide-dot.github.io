@@ -29,6 +29,18 @@ La musique est une ré-interprétation de la bande-originale par Adnz et exploit
 
 Le jeu est en phase de réalisation et n'est pas encore téléchargeable.
 
+### Vidéos du 15/09/2023
+
+{% include youtube.html youtube-id="SHCGoUFKxTE" %}
+   
+
+
+### Vidéos du 04/05/2023
+
+{% include youtube.html youtube-id="fPexVvo13MM" %}
+   
+
+
 ### Vidéos du 21/03/2023
 
 {% include youtube.html youtube-id="b_c6xt7uE7M" %}
