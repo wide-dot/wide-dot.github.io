@@ -23,6 +23,10 @@ Cette *preview* utilise les cartes sons YM et SN en cours de développements. Po
 									
 *Aucune exploitation commerciale n'est autorisée.*
 
+Le jeu n'est pas téléchargeable pour le moment.   
+
 {% include youtube.html youtube-id="wXqckUmaoMI" %}
+
+{% include youtube.html youtube-id="P2Igl7zKvjM" %}
 							
-Le jeu n'est pas téléchargeable pour le moment.              
+           
