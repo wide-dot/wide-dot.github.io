@@ -1,15 +1,8 @@
 # Scrolling software en asm 6809
 
-En combinant plusieurs techniques de programmation, on peut réaliser un scrolling performant et 100% logiciel pour le processeur 6809.
+Sur un Thomson, le signal vidéo est transmis de manière progressive par un automate hardware qui effecte une lecture de la RAM vidéo durant le cycle inactif du 6809. Par conséquent, le seul moyen de faire défiler l'écran est de modifier le contenu de cette RAM. Il n'y a pas possibilité de faire varier le point de départ de la lecture effectuée par l'automate, c'est domage car cela aurait permis d'effectuer un scrolling hardware.
 
-
-Le signal vidéo est transmis de manière progressive en effectuant une lecture de la RAM vidéo durant le cycle inactif du 6809. Par conséquent, le seul moyen de faire défiler l'écran est de modifier le contenu de cette RAM.
-
-(EXPLICATIONS/DIAGRAMMES)
-
-La stratégie la plus évidente est la recopie des données en les déplaçant (lecture/écriture en RAM vidéo), mais c'est **extrement lent**.
-
-(DONNER DES EXEMPLES et METRIQUES)
+En combinant plusieurs techniques de programmation, on peut cependant réaliser un scrolling performant et 100% logiciel pour le processeur 6809.
 
 ## Step 1: Stack Blast
 
