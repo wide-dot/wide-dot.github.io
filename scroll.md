@@ -113,7 +113,98 @@ Si variabiliser le point d'entrée de la routine reste relativement simple, il f
 - La routine d'affichage doit boucler sur elle-même
 - Il faut modifier dynamiquement le code pour gérer le retour une fois les 200 lignes de pixels écrites.
 
-***... a continuer***
+Le point de sortie est appliqué dynamiquement dans les 2 routines par modification d’OPCODE, juste après l’un des PSHS qui termine la ligne de scroll. Il s’agit d’écrire un “jmp” qui permet le retour vers l’algorithme qui pilote le scroll, cette adresse étant fixe et connue. Avant de modifier le code on effectue donc une sauvegarde du code écrasé pour pouvoir le repositionner par la suite.
+Ce mécanisme de gestion du retour de la routine vient "obturer" un scroll-chunk de manière temporaire, ce qui rend inopérant l'utilisation de la ligne entière. En conséquence un ensemble de 5 scroll-chunk suppémentaires (une ligne de pixels) doivent être ajouté aux deux routines.
+
+***Routine de scroll finale:***
+
+    @loop   _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.linex8
+            _vscroll.buffer.line
+            jmp   @loop
+
+La mise en oeuvre de ces routines de scroll est pilotée par le code suivant :
+```
+; -----------------------------------------------------------------------------
+; vscroll.do
+; -----------------------------------------------------------------------------
+; input  REG : none
+; -----------------------------------------------------------------------------
+; S register is used to write in video buffer, you should expect irq calls
+; to write 12 bytes into or just before video memory.
+; If it occurs at the end of the buffer routine, before S is retored,
+; it will erase bytes at $9FF4-$9FFF and $BFF4-$BFFF, so leave this aera unsed.
+; -----------------------------------------------------------------------------
+vscroll.do
+        lda   vscroll.obj.bufferB.page
+        ldx   vscroll.obj.bufferB.address
+@loop   _SetCartPageA                  ; mount page that contain buffer code
+        ldb   vscroll.cursor           ; screen start line (0-199)
+        addb  vscroll.viewport.height  ; viewport size (1-200)
+        bcs   @cycle
+        cmpb  #vscroll.BUFFER_LINES
+        bls   >
+@cycle  subb  #vscroll.BUFFER_LINES    ; cycling in buffer
+!       lda   #vscroll.LINE_SIZE
+        mul
+        leau  d,x                      ; set u where a jump should be placed for return to caller
+        pulu  a,y                      ; save 3 bytes in buffer that will be erased by the jmp return
+        stu   @save_u
+        pshs  a,y
+        lda   #m6809.OPCODE_JMP_E      ; build jmp instruction
+        ldy   #@ret                    ; this works even at the end of table because there is 
+        sta   -3,u                     ; already a jmp for looping into the buffer
+        sty   -2,u                     ; no need to have some padding
+        sts   @save_s
+        lds   #$BF40
+vscroll.viewport.ram equ *-2
+        lda   vscroll.cursor
+        ldb   #vscroll.LINE_SIZE
+        mul
+        leax  d,x                      ; set starting position in buffer code
+        jmp   ,x
+@ret    lds   #0
+@save_s equ   *-2
+        ldu   #0
+@save_u equ   *-2
+        puls  a,x
+        pshu  a,x                      ; restore 3 bytes in buffer
+        lda   vscroll.viewport.ram
+        cmpa  #$C0
+        bhs   >                        ; exit if second buffer code as been executed
+        adda  #$20                     ; else execute second buffer code
+        sta   vscroll.viewport.ram
+        lda   vscroll.obj.bufferA.page
+        ldx   vscroll.obj.bufferA.address
+        bra   @loop
+!       lda   vscroll.viewport.ram
+        suba  #$20
+        sta   vscroll.viewport.ram     ; restore to first buffer
+        rts
+```
 
 ## Step 4: Tiles and Tilemap
 
