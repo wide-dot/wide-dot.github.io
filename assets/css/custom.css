@@ -16,7 +16,7 @@ legend
     padding-bottom : 1em;
     padding-right : 1em;
     border-bottom: solid 3px #f56a6a;
-    text-align: right;
+    text-align: left;
 }
 
 fieldset > ul
@@ -85,4 +85,9 @@ code
   font-weight: 350;
   font-size: 10pt;
   line-height: 1.3;
+}
+
+.flex-item-left p 
+{
+  text-align: justify;
 }
