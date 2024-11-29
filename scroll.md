@@ -15,13 +15,13 @@ Les registres D,X,Y,U vont nous permettre de stocker les données “pixels”. 
 
 ***Un “scroll-chunk”:***
 ```
-Opcode/post-bytes | ASM Code                             | Cycles
------------------ | ------------------------------------ | ---------
-CC xx xx          | LDD #$[xx xx : pixels data 16 bits]  | 3 cycles
-8E xx xx          | LDX #$[xx xx : pixels data 16 bits]  | 3 cycles
-10 8E xx xx       | LDY #$[xx xx : pixels data 16 bits]  | 4 cycles
-CE xx xx          | LDU #$[xx xx : pixels data 16 bits]  | 3 cycles
-34 76             | PSHS U,Y,X,D                         | 13 cycles
+Opcode/post-bytes | ASM Code                              | Cycles
+----------------- | ------------------------------------- | ---------
+CC xx xx          | ldd   #$[xx xx : pixels data 16 bits] | 3 cycles
+8E xx xx          | ldx   #$[xx xx : pixels data 16 bits] | 3 cycles
+10 8E xx xx       | ldy   #$[xx xx : pixels data 16 bits] | 4 cycles
+CE xx xx          | ldu   #$[xx xx : pixels data 16 bits] | 3 cycles
+34 76             | pshs  u,y,x,d                         | 13 cycles
 ```
 
 Sur un Thomson TO8 en mode BM16, en plaçant le registre S en fin de RAM vidéo, on peut ainsi peupler l’ensemble des données d'un écran 160x200 au moyen de seulement 2000 scroll-chunk comme celui ci dessus (8000 octets en Ram A et 8000 octets en Ram B) pour un total de 52000 cycles.
