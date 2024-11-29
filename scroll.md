@@ -37,7 +37,7 @@ Opcode/post-bytes   | ASM Code                                | Cycles
 
 > Notez que LDY consomme 1 cycle de plus que les autres instructions de chargement de registre. 
 
-Un scroll chunk, qui représente alors 64 bits utiles, c'est à dire 16 pixels, occupe dont 15 octets en mémoires, c'est à 120 bits. 
+Un scroll chunk, qui représente alors 64 bits utiles, c'est à dire 16 pixels, occupe dont 15 octets en mémoires, c'est à dire 120 bits. 
 
 **Sur un Thomson TO8 en mode BM16, en plaçant le registre S en fin de RAM vidéo, on peut ainsi peupler l’ensemble des données d'un écran 160x200 au moyen de seulement 2000 scroll-chunk comme celui ci dessus (8000 octets en Ram A et 8000 octets en Ram B) pour un total de 16000 octets et l'usage de 52000 cycles.**
 
