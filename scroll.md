@@ -1,4 +1,13 @@
-# Scrolling software en asm 6809
+---
+layout: default
+title:  Scrolling software en asm 6809
+date:   2024-11-29
+categories: article
+banner: /images/r-type/banner.png
+display-instructions: false
+---
+
+## Introduction
 
 Sur un Thomson MO/TO, le signal vidéo est transmis de manière progressive par un automate hardware qui effecte une lecture de la RAM vidéo durant le cycle inactif du 6809. Par conséquent, le seul moyen de faire défiler l'écran est de modifier le contenu de cette RAM. Il n'y a pas possibilité de faire varier le point de départ de la lecture effectuée par l'automate, c'est domage car cela aurait permis d'effectuer un scrolling hardware.
 
