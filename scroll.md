@@ -3,7 +3,7 @@ layout: default
 title:  Scrolling software en asm 6809
 date:   2024-11-29
 categories: article
-banner: /images/r-type/banner.png
+banner: /images/articles/scroll/banner.png
 display-instructions: false
 ---
 
