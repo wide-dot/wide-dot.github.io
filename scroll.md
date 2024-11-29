@@ -121,7 +121,7 @@ A ce stade des explications, l'usage de la RAM est donc le suivant :
 - 2 pages de 16Ko de RAM vidéo A/B sont utilisées pour le double buffering 
 - 2 pages de 16Ko de RAM sont utilisées pour les routines de scroll
 
-## Step 3: Self-modifying code
+## Etape 3 : Self-modifying code
 
 > L'assembleur nous permet des libertés de programmation comme l'auto modification de code. cela consiste à remplacer des instructions ou des données lors de l'exécution du programme. 
 
@@ -261,7 +261,7 @@ vscroll.viewport.ram equ *-2
         rts
 ```
 
-## Step 4: Tiles and Tilemap
+## Etape 4 : Tiles and Tilemap
 
 Maintenant que le scroll est opérationnel il suffit d'implémenter un système de tilemap classique pour mettre à jour les données des scroll-chunks.
 
@@ -501,7 +501,7 @@ vscroll.computeBufferWAddress
         rts
 ```
 
-## Step 5: Frame Drop conpensation
+## Etape 5 : Frame Drop conpensation
 
 Pour obtenir un défilement stable, au travers d'une IRQ à 50Hz, on compte le nombre de frame drop avéré et on compense ainsi le nombre de lignes à scroller.
 
