@@ -139,23 +139,23 @@ Le point de sortie est appliqué dynamiquement dans les 2 routines par modificat
 
                           @loop
 
- ...                                                    ; some scroll-chunks
+ ...                                                  ; some scroll-chunks
 
- CC 00 00                 ldd   #$0000                  ; last scroll-chunck
+ CC 00 00                 ldd   #$0000                ; last scroll-chunck
  8E 00 00                 ldx   #$0000    
  10 8E 00 00              ldy   #$0000    
  CE 00 00                 ldu   #$0000    
  34 76                    pshs  u,y,x,d   
 
-(CC 00 00) -> 7E 77 77   (ldd   #$0000) -> jmp   #$7777 ; return to caller without using S
- 8E 00 00                 ldx   #$0000                  ; unusable scroll-chunck
- 10 8E 00 00              ldy   #$0000                  ; ...
- CE 00 00                 ldu   #$0000                  ; ...
- 34 76                    pshs  u,y,x,d                 ; ...
+(CC 00 00) -> 7E 77 77   (ldd   #$0000) -> jmp #$7777 ; return to caller without using S
+ 8E 00 00                 ldx   #$0000                ; unusable scroll-chunck
+ 10 8E 00 00              ldy   #$0000                ; ...
+ CE 00 00                 ldu   #$0000                ; ...
+ 34 76                    pshs  u,y,x,d               ; ...
 
- ...                                                    ; 4x unusable scroll-chunck (whole pixel line)
+ ...                                                  ; 4x unusable scroll-chunck (whole pixel line)
 
- CC 00 00                 ldd   #$0000                  ; first scroll-chunck (routine entry)
+ CC 00 00                 ldd   #$0000                ; first scroll-chunck (routine entry)
  8E 00 00                 ldx   #$0000    
  10 8E 00 00              ldy   #$0000    
  CE 00 00                 ldu   #$0000    
@@ -409,7 +409,8 @@ vscroll.updateTileCache
         _lsrd                          ; line number in map
         _lsrd                          ; divide line in map by two
         bcc   >                        ; branch if line in map is even
-        leax  30,x                     ; if line in map is odd, offset position in map by 30 bytes (12bits id * 20 tiles)
+        leax  30,x                     ; if line in map is odd, offset position in 
+                                       ; map by 30 bytes (12bits id * 20 tiles)
 !       lda   #60                      ; 2 lines of 30 bytes (12bits id * 20 tiles)
         mul                            ; mult by line/2
         leax  d,x                      ; x point to desired data map line
@@ -461,7 +462,8 @@ vscroll.computeBufferWAddress
         std   <vscroll.skippedLines        ; init tmp value
         ldb   vscroll.speed
         bpl   >
-        comb                               ; by truncating, negative is floor and positive is ceil, so make it ceil also for negative
+        comb                               ; by truncating, negative is floor and positive is ceil, 
+                                           ; so make it ceil also for negative
 !       cmpb  vscroll.viewport.height      ; compare to viewport height
         bls   >
         subb  vscroll.viewport.height
@@ -485,8 +487,8 @@ vscroll.computeBufferWAddress
         bmi   @loop
         bra   >
 @goUp
-        negb                           ; substract it to cursor + viewport height
-        sex                            ; omg !
+        negb   ; substract it to cursor + viewport height
+        sex    ; omg !
         addd  vscroll.cursor.w
         addd  vscroll.viewport.height.w
         addd  <vscroll.skippedLines
@@ -553,10 +555,12 @@ vscroll.move
         ; compute position in map
         ldx   vscroll.camera.y
         stx   vscroll.camera.lastY
-        ldb   vscroll.speed                  ; get int part of 8.8
+        ldb   vscroll.speed  ; get int part of 8.8
         bpl   >
-        incb                                 ; by truncating, negative is floor and positive is ceil, so make it ceil also for negative
-!       leax  b,x                            ; do not use abx, b is signed, speed is implicitly caped to a choppy 127px by frame
+        incb                 ; by truncating, negative is floor and positive is ceil, 
+                             ; so make it ceil also for negative
+!       leax  b,x            ; do not use abx, b is signed, speed is implicitly caped 
+                             ; to a choppy 127px by frame
 
         ; wrap camera position in map (infinite level loop)
         tfr   x,d
