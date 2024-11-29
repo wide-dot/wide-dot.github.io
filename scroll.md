@@ -167,7 +167,7 @@ Le point de sortie est appliqué dynamiquement dans les 2 routines par modificat
 
 ```
 
-Ce mécanisme de gestion du retour de la routine vient "obturer" un scroll-chunk de manière temporaire, ce qui rend inopérant l'utilisation de la ligne entière. En conséquence un ensemble de 5 scroll-chunk suppémentaires (une ligne de pixels) doivent être ajouté aux deux routines.
+Ce mécanisme de gestion du retour de la routine vient "obturer" un scroll-chunk de manière temporaire, ce qui rend inopérant l'utilisation de la ligne entière. En conséquence un ensemble de 5 scroll-chunks supplémentaires (une ligne de pixels) doit être ajouté aux deux routines.
 
 **Routine de scroll finale :**
 ```
