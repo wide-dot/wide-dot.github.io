@@ -9,7 +9,7 @@ display-instructions: false
 
 ## Introduction
 
-Sur un Thomson MO/TO, le signal vidéo est transmis de manière progressive par un automate hardware qui effecte une lecture de la RAM vidéo durant le cycle inactif du 6809. Par conséquent, le seul moyen de faire défiler l'écran est de modifier le contenu de cette RAM. 
+Sur un Thomson MO/TO, le signal vidéo est transmis de manière progressive par un automate hardware qui effectue une lecture de la RAM vidéo durant le cycle inactif du 6809. Par conséquent, le seul moyen de faire défiler l'écran est de modifier le contenu de cette RAM. 
 
 Il n'y a pas possibilité de faire varier le point de départ de la lecture effectuée par l'automate : c'est dommage car cela aurait permis d'effectuer un scrolling hardware comme cela peut exister sur d'autres machines telles que le commodore 64, les Amstrad CPC, l'Amiga, l'Atari ST pour lesquelles il suffit de modifier un registre mémoire pour décaler l'affichage.
 
