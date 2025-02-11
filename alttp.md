@@ -7,7 +7,7 @@ banner: /images/alttp/banner.png
 credits:
   - bentoc (coding)
   - adnz (musique)
-github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/cacao-and-coffee-shop
+github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/zeldo
 download: /releases/alttp/alttp-v0.1.zip
 hardwares: 
   - Thomson TO8
