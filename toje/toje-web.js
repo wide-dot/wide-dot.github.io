@@ -663,9 +663,16 @@ function start(toje, store) {
     $('keyboard').hidden = !on;
     document.body.classList.toggle('kb', on);
     setPressed($('kb-mode'), on);
+    setPressed($('kb-quick'), on);
     prefs.set('keyboard', on);
   }
   $('kb-mode').addEventListener('click', () => setKeyboard(!keyboardOn));
+  // Bouton rapide de l'en-tête : déplie le clavier et l'amène à l'écran.
+  $('kb-quick').addEventListener('click', () => {
+    setKeyboard(!keyboardOn);
+    if (keyboardOn) $('keyboard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    canvas.focus({ preventScroll: true });
+  });
 
   // « Turbo disque » du pilote desktop : délais moteur du lecteur supprimés.
   function setDiskTurbo(on) {

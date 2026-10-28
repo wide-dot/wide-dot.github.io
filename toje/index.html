@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=2ea4e1b">
+  <link rel="stylesheet" href="toje-web.css?v=bdbb65f">
 </head>
 <body>
   <main class="chassis">
@@ -24,16 +24,23 @@
       <span class="sub">TOJE · WebAssembly</span>
       <span id="build" class="build" title="Version, heure du build et commit"></span>
       <span id="status" class="status">chargement…</span>
-      <button id="ff" class="ff-btn" aria-label="Accélérer tant qu'on appuie (F7 au clavier)"
-              title="Accélérer tant qu'on appuie (F7 au clavier)">
-        <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 1l10 7-10 7zM12 1l10 7-10 7z"/></svg>
-      </button>
-      <button id="pointer-mode" class="ff-btn mode-btn" aria-pressed="false"
-              title="Port 1 : manette ou souris Thomson à deux boutons">
-        <svg class="icon-joy" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="4"/><path d="M11 9h2v8h-2z"/><rect x="4" y="16" width="16" height="6" rx="2"/></svg>
-        <svg class="icon-mouse" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7v6a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7zm-1 2.1V10H7V9a5 5 0 0 1 4-4.9zm2 0A5 5 0 0 1 17 9v1h-4z"/></svg>
-        <span class="mode-label">Manette</span>
-      </button>
+      <span class="quick-btns">
+        <button id="ff" class="ff-btn" aria-label="Accélérer tant qu'on appuie (F7 au clavier)"
+                title="Accélérer tant qu'on appuie (F7 au clavier)">
+          <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 1l10 7-10 7zM12 1l10 7-10 7z"/></svg>
+        </button>
+        <button id="pointer-mode" class="ff-btn mode-btn" aria-pressed="false"
+                title="Port 1 : manette ou souris Thomson à deux boutons">
+          <svg class="icon-joy" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="4"/><path d="M11 9h2v8h-2z"/><rect x="4" y="16" width="16" height="6" rx="2"/></svg>
+          <svg class="icon-mouse" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7v6a7 7 0 0 0 14 0V9a7 7 0 0 0-7-7zm-1 2.1V10H7V9a5 5 0 0 1 4-4.9zm2 0A5 5 0 0 1 17 9v1h-4z"/></svg>
+          <span class="mode-label">Manette</span>
+        </button>
+        <button id="kb-quick" class="ff-btn mode-btn kb-quick" aria-pressed="false"
+                title="Afficher ou replier le clavier du TO8 à l’écran">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm3 1v2h2V7zm4 0v2h2V7zm4 0v2h2V7zm4 0v2h2V7zM5 11v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zm4 0v2h2v-2zM7 15v1h10v-1z"/></svg>
+          <span class="mode-label">Clavier</span>
+        </button>
+      </span>
       <span class="drive" title="Lecteur de disquette : vert en lecture, rouge en écriture, jaune quand la tête se déplace">
         <i id="drive-led" class="drive-led"></i>Disque
       </span>
@@ -234,28 +241,28 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=2ea4e1b",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=2ea4e1b",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=2ea4e1b",
-        "./menu.js": "./menu.js?v=2ea4e1b",
-        "./build-info.js": "./build-info.js?v=2ea4e1b",
-        "./library.js": "./library.js?v=2ea4e1b",
-        "./crt-screen.js": "./crt-screen.js?v=2ea4e1b",
-        "./save-store.js": "./save-store.js?v=2ea4e1b",
-        "./game-saves.js": "./game-saves.js?v=2ea4e1b",
-        "./touch-keys.js": "./touch-keys.js?v=2ea4e1b",
-        "./titles.js": "./titles.js?v=2ea4e1b",
-        "./my-disks.js": "./my-disks.js?v=2ea4e1b",
-        "./mouse-pointer.js": "./mouse-pointer.js?v=2ea4e1b",
-        "./screenshot.js": "./screenshot.js?v=2ea4e1b",
-        "./screen-scaler.js": "./screen-scaler.js?v=2ea4e1b",
-        "./input-bindings.js": "./input-bindings.js?v=2ea4e1b",
-        "./gamepads.js": "./gamepads.js?v=2ea4e1b",
-        "./bindings-panel.js": "./bindings-panel.js?v=2ea4e1b"
+        "./touch-pad.js": "./touch-pad.js?v=bdbb65f",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=bdbb65f",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=bdbb65f",
+        "./menu.js": "./menu.js?v=bdbb65f",
+        "./build-info.js": "./build-info.js?v=bdbb65f",
+        "./library.js": "./library.js?v=bdbb65f",
+        "./crt-screen.js": "./crt-screen.js?v=bdbb65f",
+        "./save-store.js": "./save-store.js?v=bdbb65f",
+        "./game-saves.js": "./game-saves.js?v=bdbb65f",
+        "./touch-keys.js": "./touch-keys.js?v=bdbb65f",
+        "./titles.js": "./titles.js?v=bdbb65f",
+        "./my-disks.js": "./my-disks.js?v=bdbb65f",
+        "./mouse-pointer.js": "./mouse-pointer.js?v=bdbb65f",
+        "./screenshot.js": "./screenshot.js?v=bdbb65f",
+        "./screen-scaler.js": "./screen-scaler.js?v=bdbb65f",
+        "./input-bindings.js": "./input-bindings.js?v=bdbb65f",
+        "./gamepads.js": "./gamepads.js?v=bdbb65f",
+        "./bindings-panel.js": "./bindings-panel.js?v=bdbb65f"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=2ea4e1b"></script>
-  <script type="module" src="toje-web.js?v=2ea4e1b"></script>
+  <script src="classes.wasm-runtime.js?v=bdbb65f"></script>
+  <script type="module" src="toje-web.js?v=bdbb65f"></script>
 </body>
 </html>
