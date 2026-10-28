@@ -1,16 +1,16 @@
-// Mise à l'échelle de l'écran du TO8, nette et régulière (« sharp bilinear »).
+import { createPixelShader } from './pixel-shader.js';
+
+// Mise à l'échelle de l'écran du TO8.
 //
-// Agrandie d'un facteur non entier en « plus proche voisin », l'image donnait à
-// des points égaux 1 pixel ou 2 selon leur place : sur un téléphone, 704 points
-// tombent sur ~890 pixels réels, et le texte du menu paraissait inégal. Un
-// facteur entier pur est impossible : la correction 59:64 rend le facteur
-// vertical fractionnaire de toute façon.
+// Lissé (par défaut) : pixel-shader.js, en WebGL — le canvas a la taille
+// exacte de l'affichage en pixels réels, et chaque pixel prend la couleur du
+// point qu'il couvre, les seuls pixels à cheval sur deux points les mêlant au
+// prorata. Proportions 59:64 exactes, bords adoucis sur un pixel au plus.
 //
-// D'où deux temps. L'image est recopiée, en plus proche voisin, à un multiple
-// ENTIER de sa taille, juste au-dessus de la taille affichée en pixels réels :
-// tous les points y sont égaux. Le navigateur réduit ensuite ce canvas à la
-// taille affichée, avec lissage : chaque point garde sa largeur, seul son bord
-// est adouci sur un pixel. Mesuré par src/test/node/sharpness-check.cjs.
+// Sans WebGL, repli en 2D : l'image est recopiée en plus proche voisin à un
+// multiple entier de sa taille, juste au-dessus de l'affichage, et le
+// navigateur la réduit avec lissage — points égaux, mais bords plus flous.
+// Mesuré par src/test/node/sharpness-check.cjs.
 //
 // « Pixels nets » (setPixelPerfect) : chaque point du TO8 couvre un nombre
 // ENTIER de pixels réels, en largeur et en hauteur, sans aucun lissage — le
@@ -28,9 +28,11 @@ export function createScreenScaler(canvas, width, height, aspect) {
   source.height = height;
   const sourceCtx = source.getContext('2d');
   const image = sourceCtx.createImageData(width, height);
-  const ctx = canvas.getContext('2d');
+  const shader = createPixelShader(canvas, width, height);
+  const ctx = shader ? null : canvas.getContext('2d');
 
   function redraw() {
+    if (shader) { shader.draw(); return; }
     ctx.imageSmoothingEnabled = false;   // l'agrandissement entier reste en plus proche voisin
     ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
   }
@@ -91,11 +93,18 @@ export function createScreenScaler(canvas, width, height, aspect) {
   // Manette, clavier, menu : la place de l'écran change sans que la fenêtre change.
   new MutationObserver(refit).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-  /** Taille affichée en pixels réels → multiple entier du canvas, juste au-dessus. */
+  /** Taille affichée en pixels réels → canvas à cette taille (WebGL), ou multiple entier juste au-dessus (2D). */
   let lastBox = [width, height];
   function fit(deviceWidth, deviceHeight) {
     lastBox = [deviceWidth, deviceHeight];
     if (perfect) return;
+    if (shader) {
+      if (canvas.width === deviceWidth && canvas.height === deviceHeight) return;
+      canvas.width = deviceWidth;
+      canvas.height = deviceHeight;
+      redraw();
+      return;
+    }
     const fx = Math.max(1, Math.ceil(deviceWidth / width - SLACK));
     const fy = Math.max(1, Math.ceil(deviceHeight / height - SLACK));
     if (canvas.width === width * fx && canvas.height === height * fy) return;
@@ -107,8 +116,11 @@ export function createScreenScaler(canvas, width, height, aspect) {
   const observer = new ResizeObserver(entries => {
     const entry = entries[0];
     const box = entry.devicePixelContentBoxSize && entry.devicePixelContentBoxSize[0];
-    if (box) fit(box.inlineSize, box.blockSize);
-    else fit(entry.contentRect.width * devicePixelRatio, entry.contentRect.height * devicePixelRatio);
+    // Taille en pixels réels ; déduite de la taille CSS quand le navigateur ne
+    // la donne pas (Safari) ou la donne en pixels CSS (Chromium émulé).
+    const w = Math.round(entry.contentRect.width * devicePixelRatio);
+    const h = Math.round(entry.contentRect.height * devicePixelRatio);
+    fit(Math.max(w, box ? box.inlineSize : 0), Math.max(h, box ? box.blockSize : 0));
   });
   try {
     observer.observe(canvas, { box: 'device-pixel-content-box' });
@@ -131,12 +143,15 @@ export function createScreenScaler(canvas, width, height, aspect) {
       canvas.width = 0;
       fit(...lastBox);
     },
-    /** L'image du TO8 à sa taille d'origine (704 × 464), pour une capture. */
+    /** Lissage WebGL actif (sinon repli 2D). */
+    webgl: Boolean(shader),
+    /** L'image du TO8 à sa taille d'origine (704 × 464) : capture, vignettes, recettes. */
     source,
     /** Une trame : pixels RGBA du wasm. */
     draw(pixels) {
       image.data.set(pixels);
       sourceCtx.putImageData(image, 0, 0);
+      if (shader) shader.upload(pixels);
       redraw();
     },
   };

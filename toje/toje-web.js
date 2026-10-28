@@ -100,6 +100,9 @@ function start(toje, store) {
   document.documentElement.style.setProperty('--screen-aspect', String(aspect));
   // Agrandissement net et régulier : points égaux quelle que soit l'échelle.
   const screen = createScreenScaler(canvas, width, height, aspect);
+  canvas.classList.toggle('gl', screen.webgl);
+  // L'image du TO8 telle quelle (704 × 464) : un canvas WebGL ne se relit pas en 2D.
+  window.tojeScreen = screen.source;
 
   // ── Son ────────────────────────────────────────────────────────────────
   let audio = null;      // { ctx, gain, next }
@@ -935,7 +938,7 @@ function start(toje, store) {
 
   // Parties sauvegardées.
   const saves = createGameSaves({
-    toje, store, media: gameMedia, canvas,
+    toje, store, media: gameMedia, canvas: screen.source,
     ui: { slots: $('saves'), resume: $('resume'), resumeTitle: $('resume-title'),
           resumeWhen: $('resume-when'), resumeThumb: $('resume-thumb'),
           resumeYes: $('resume-yes'), resumeNo: $('resume-no') },

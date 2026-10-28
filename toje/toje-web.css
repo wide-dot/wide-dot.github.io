@@ -132,6 +132,8 @@ button, label { touch-action: manipulation; }
   touch-action: none;
 }
 /* Pixels nets (screen-scaler.js) : taille imposée en pixels réels, centrée, sans lissage. */
+/* WebGL : le canvas a déjà la taille exacte de l'affichage, le lissage est dans le shader. */
+#screen.gl { image-rendering: pixelated; }
 #screen.pixel-perfect { image-rendering: pixelated; margin: 0 auto; aspect-ratio: auto; }
 /* Écran plus large que son cadre (téléphone, facteur supérieur) : bord à bord, sans cadre. */
 .screen-frame.bleed { padding-left: 0; padding-right: 0; background: none; border-color: transparent; box-shadow: none; }
