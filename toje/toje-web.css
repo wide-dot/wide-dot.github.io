@@ -660,6 +660,52 @@ button, label { touch-action: manipulation; }
   .touch-stick, .touch-fire { align-self: end; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
 }
 
+/*
+ * Téléphone, paysage, clavier ouvert : l'écran à gauche sur toute la hauteur,
+ * à droite l'en-tête en ligne puis le clavier (bloc principal et pavé empilés).
+ * Sous l'écran, le clavier ne laissait à l'image que la moitié de la hauteur.
+ * Le stick et les boutons A/B cèdent la place : le clavier a ses flèches.
+ */
+@media (orientation: landscape) and (max-height: 540px) {
+  body.kb .chassis {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 10px;
+    min-height: 100dvh;
+  }
+  body.kb .stage { grid-column: 1; grid-row: 1 / span 2; align-self: center; display: block; }
+  body.kb .touch-stick, body.kb .touch-fire, body.kb .mouse-pad { display: none; }
+  body.kb #screen { width: min(50vw, calc((100dvh - 24px) * var(--screen-aspect, 1.4))); }
+  body.kb .brand {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 10px;
+    max-width: none;
+    padding-right: 56px;     /* le bouton ☰ du menu, en haut à droite */
+    pointer-events: auto;
+  }
+  /* Une seule ligne : boutons rapides et voyants ; le logo est déjà à l'écran du TO8. */
+  body.kb .brand .build, body.kb .brand .status, body.kb .brand .logo { display: none; }
+  body.kb .brand .drive { font-size: 0; gap: 0; }   /* voyants seuls ; libellé en infobulle */
+  body.kb .keyboard { grid-column: 2; grid-row: 2; align-self: center; margin: 4px 0 0; }
+  body.kb .kb-inner { flex-wrap: wrap; width: calc(100% * var(--kb-zoom)); min-width: 0; }
+  /* Les deux blocs, même échelle, se partagent la hauteur restante (en-tête,
+     barre de loupe et marges ôtées) ; trop larges, ils se réduisent. */
+  body.kb .keyboard { padding: 4px 6px 6px; }
+  body.kb .kb-zoom { margin-bottom: 2px; }
+  body.kb .keyboard .kb-main, body.kb .keyboard .kb-side {
+    flex: none;
+    height: calc((100dvh - 104px) / 2 * var(--kb-zoom));
+    width: auto;
+    max-width: calc(100% * var(--kb-zoom));
+  }
+}
+
 /* ── Menu des options : panneau en ligne au bureau, tiroir ☰ au téléphone ── */
 .menu-toggle, .menu-backdrop, .menu-head { display: none; }
 
