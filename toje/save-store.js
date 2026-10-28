@@ -22,10 +22,11 @@ function memoryStore() {
     get: async key => map.get(key),
     put: async (key, value) => { map.set(key, value); },
     remove: async key => { map.delete(key); },
+    keys: async prefix => [...map.keys()].filter(k => k.startsWith(prefix)),
   };
 }
 
-/** Magasin clé → partie : { get, put, remove }, toutes asynchrones. */
+/** Magasin clé → partie : { get, put, remove, keys(préfixe) }, toutes asynchrones. */
 export async function openSaveStore() {
   try {
     const open = indexedDB.open(DB, 1);
@@ -36,6 +37,7 @@ export async function openSaveStore() {
       get: key => run('readonly', s => s.get(key)),
       put: (key, value) => run('readwrite', s => s.put(value, key)),
       remove: key => run('readwrite', s => s.delete(key)),
+      keys: async prefix => (await run('readonly', s => s.getAllKeys())).filter(k => String(k).startsWith(prefix)),
     };
   } catch {
     return memoryStore();

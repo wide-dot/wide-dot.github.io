@@ -349,6 +349,7 @@ button, label { touch-action: manipulation; }
 .menu-section .disk-line { margin: 8px 0 2px; }
 .game-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
 .game-actions:not(:has(> :not([hidden]))) { display: none; }
+.keycap[hidden] { display: none; }
 .lib-search {
   width: 100%;
   min-height: 38px;
@@ -769,3 +770,18 @@ button, label { touch-action: manipulation; }
   cursor: pointer;
 }
 .remap-add { width: auto; align-self: flex-start; }
+
+/* ── Mes disquettes (my-disks.js) ── */
+.menu-note { margin: 4px 0 8px; font-size: 13px; font-weight: 500; color: var(--ink-dim); }
+.menu-note[hidden] { display: none; }
+.my-disk-list { display: flex; flex-direction: column; }
+.my-disk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(166, 160, 136, .45);
+}
+.my-disk-name { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-wrap: anywhere; }
+.my-disk-name small { font-size: 12px; font-weight: 500; color: var(--ink-dim); }
+.my-disk .keycap.small { margin: 0; padding: 4px 9px; }

@@ -15,7 +15,7 @@ import { openSaveStore } from './save-store.js';
 import { createGameSaves } from './game-saves.js';
 import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
-import { createDiskCopies } from './disk-copies.js';
+import { createMyDisks } from './my-disks.js';
 import { saveScreenshot } from './screenshot.js';
 import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
@@ -362,7 +362,7 @@ function start(toje, store) {
   function showMedia() {
     const parts = [];
     media.disks.forEach((d, i) => {
-      if (d) parts.push(`lecteur ${i + 1} : ${titleOf(d.name)}${d.modified ? ' (modifiée)' : ''}`);
+      if (d) parts.push(`lecteur ${i + 1} : ${d.label || titleOf(d.name)}${d.myDisk ? ' (inscriptible)' : ''}`);
     });
     if (media.cart) parts.push(`cartouche : ${titleOf(media.cart.name)}`);
     if (media.sd) parts.push(`carte SD : ${titleOf(media.sd.name)}`);
@@ -370,33 +370,37 @@ function start(toje, store) {
     const first = media.disks[0];
     $('copy-link').hidden = !gameMedia.fromLibrary();
     $('disk-download').hidden = !first;
-    $('disk-revert').hidden = !(first && first.modified);
+    // Copie de travail : du premier lecteur qui porte un original .fd.
+    copyDrive = media.disks.findIndex(d => d && !d.myDisk && formatOf(d.name) === 'fd');
+    $('disk-copy').hidden = copyDrive < 0;
+    $('disk-copy').textContent = `Copie de travail (lecteur ${copyDrive + 1})`;
   }
+  let copyDrive = -1;
 
-  // Les réglages d'un jeu (touches tactiles, écriture sur disquette) suivent le
-  // jeu démarré ; une disquette glissée dans un lecteur en fait partie.
+  // Les réglages d'un jeu (touches tactiles et du clavier) suivent le jeu
+  // démarré ; une disquette glissée dans un lecteur en fait partie.
   function gameChanged() {
     touchKeys.forGame(gameMedia.key());
     bindings.forGame(gameMedia.key());
     bindingsPanel.render();
-    setPressed($('disk-write'), copies.forGame(gameMedia.key()));
+    myDisks.apply();
     showMedia();
+    renderMyDisks();
     saves.renderSlots();
   }
 
-  async function mount(name, bytes, { fromLibrary = false } = {}) {
+  // myDisk / label : une disquette de « Mes disquettes » (my-disks.js), la seule
+  // inscriptible ; un original reste languette posée.
+  async function mount(name, bytes, { fromLibrary = false, myDisk = null, label = null, drive = null } = {}) {
     const format = formatOf(name) || 'fd';
     const isDisk = format !== 'rom' && format !== 'sd';
-    const swap = isDisk && target !== 'boot';
-    // Le réglage d'écriture du jeu décide si l'on monte sa copie modifiée.
-    if (!swap) copies.forGame(baseName(name));
-    const disk = isDisk ? await copies.bytesFor(name, bytes) : { bytes, modified: false };
-    const entry = { name, bytes: disk.bytes, original: bytes, modified: disk.modified, fromLibrary };
+    const swap = isDisk && (drive !== null || target !== 'boot');
+    const entry = { name, bytes, fromLibrary, myDisk, label };
     if (swap) {
-      const drive = Number(target);
+      if (drive === null) drive = Number(target);
       toje.swapDisk(drive, entry.bytes, name);
       media.disks[drive] = entry;
-      status.textContent = `${titleOf(name)} → lecteur ${drive + 1}`;
+      status.textContent = `${label || titleOf(name)} → lecteur ${drive + 1}`;
       setTarget('boot');
     } else {
       let ok = true;
@@ -406,7 +410,7 @@ function start(toje, store) {
       media = { disks: [isDisk ? entry : null, null],
                 cart: format === 'rom' ? entry : null,
                 sd: format === 'sd' && ok ? entry : null };
-      status.textContent = ok ? titleOf(name) : 'carte SDDrive non activée';
+      status.textContent = ok ? label || titleOf(name) : 'carte SDDrive non activée';
       if (fromLibrary) prefs.set('lastGame', name);
     }
     gameChanged();
@@ -435,7 +439,7 @@ function start(toje, store) {
     },
     title() {
       const first = this.list()[0];
-      return first ? titleOf(first.name) : 'TO8';
+      return first ? first.label || titleOf(first.name) : 'TO8';
     },
     fromLibrary() {
       const first = this.list()[0];
@@ -463,13 +467,63 @@ function start(toje, store) {
   const bindings = createBindings(prefs);
   const bindingsPanel = createBindingsPanel($('bindings'), bindings, choices);
 
-  // Disquettes modifiées par les jeux qui sauvegardent, gardées par jeu.
-  const copies = createDiskCopies({
-    toje, store, prefs,
+  // Mes disquettes : vierges et copies de travail, inscriptibles, dans le navigateur.
+  const myDisks = createMyDisks({
+    toje, store,
     drives: () => media.disks,
     busy: () => driveHeld !== 0,
     onStatus: text => { status.textContent = text; },
+    onChange: () => renderMyDisks(),
   });
+
+  async function renderMyDisks() {
+    const list = $('my-disks');
+    const disks = await myDisks.list();
+    list.replaceChildren(...disks.map(d => {
+      const row = document.createElement('div');
+      row.className = 'my-disk';
+      const mountedIn = media.disks.findIndex(m => m && m.myDisk === d.id);
+      const name = document.createElement('span');
+      name.className = 'my-disk-name';
+      name.textContent = d.label;
+      const when = document.createElement('small');
+      when.textContent = (mountedIn >= 0 ? `au lecteur ${mountedIn + 1} · ` : '')
+        + new Date(d.updated).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      name.append(when);
+      const button = (text, title, action) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'keycap small';
+        b.textContent = text;
+        b.title = title;
+        b.addEventListener('click', action);
+        return b;
+      };
+      row.append(name,
+        button('Insérer', 'Suit « Disquette choisie » : redémarre dessus, ou entre dans le lecteur choisi', async () => {
+          const r = await myDisks.load(d.id);
+          if (r) await mount(r.source, r.bytes, { myDisk: d.id, label: r.label });
+        }),
+        button('⤓', 'Télécharger en .fd', () => myDisks.download({ id: d.id })),
+        button('✎', 'Renommer', async () => {
+          const label = prompt('Nom de la disquette :', d.label);
+          if (!label || !label.trim()) return;
+          await myDisks.rename(d.id, label.trim());
+          for (const m of media.disks) if (m && m.myDisk === d.id) m.label = label.trim();
+          showMedia();
+        }),
+        button('×', 'Supprimer', async () => {
+          if (!confirm(`Supprimer « ${d.label} » de ce navigateur ?`)) return;
+          // Restée au lecteur, elle n'est plus rangée nulle part : on la protège.
+          for (const m of media.disks) if (m && m.myDisk === d.id) m.myDisk = null;
+          myDisks.apply();
+          await myDisks.remove(d.id);
+          showMedia();
+        }));
+      return row;
+    }));
+    $('my-disks-empty').hidden = disks.length > 0;
+  }
 
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
@@ -518,21 +572,29 @@ function start(toje, store) {
     }
   });
 
-  // Sauvegardes sur disquette, par jeu (disk-copies.js).
-  $('disk-write').addEventListener('click', e => {
-    const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
-    copies.setWritable(on);
-    setPressed(e.currentTarget, on);
-    status.textContent = on ? 'la disquette de ce jeu accepte l’écriture' : 'disquette protégée';
+  // Mes disquettes (my-disks.js). La copie de travail prend la place de
+  // l'original dans son lecteur, sans redémarrer : le jeu a déjà passé son
+  // contrôle anti-copie sur l'original, il écrit désormais sur la copie.
+  $('disk-download').addEventListener('click', () => myDisks.download({ drive: 0 }));
+  $('disk-copy').addEventListener('click', async () => {
+    const drive = copyDrive;
+    const original = media.disks[drive];
+    const id = await myDisks.copyOf(drive);
+    if (!id) return;
+    const r = await myDisks.load(id);
+    await mount(r.source, r.bytes, { myDisk: id, label: r.label, drive, fromLibrary: original.fromLibrary });
+    status.textContent = `copie de travail au lecteur ${drive + 1} — l’original est intact`;
   });
-  $('disk-download').addEventListener('click', () => copies.download(0));
-  $('disk-revert').addEventListener('click', async () => {
-    const first = media.disks[0];
-    if (!first || !confirm(`Effacer les sauvegardes de ${titleOf(first.name)} et redémarrer sur la disquette d’origine ?`)) return;
-    await copies.forget(first.name);
+  $('disk-new').addEventListener('click', async () => {
+    const label = prompt('Nom de la nouvelle disquette :', 'Disquette vierge');
+    if (!label || !label.trim()) return;
+    const id = await myDisks.blank(label.trim());
+    const r = await myDisks.load(id);
+    // Dans le lecteur choisi ; sinon le premier libre, le 2 si le 1 porte le jeu.
+    const drive = target !== 'boot' ? Number(target) : media.disks[0] ? 1 : 0;
+    await mount(r.source, r.bytes, { myDisk: id, label: r.label, drive });
     setTarget('boot');
-    await mount(first.name, first.original, { fromLibrary: first.fromLibrary });
-    status.textContent = 'disquette d’origine';
+    status.textContent = `${r.label} : vierge, au lecteur ${drive + 1}`;
   });
 
   // Dernier jeu de la bibliothèque, proposé au retour quand aucune partie n'est en cours.
@@ -808,6 +870,7 @@ function start(toje, store) {
     },
   });
   gameChanged();
+  myDisks.migrate().then(renderMyDisks);
 
   // Au démarrage, dans l'ordre : un lien direct (?jeu=…) lance son jeu ; sinon
   // la partie en cours est proposée ; sinon le dernier jeu de la bibliothèque.
