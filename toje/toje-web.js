@@ -706,21 +706,17 @@ function start(toje, store) {
     setPressed($('crt-mode'), on);
     prefs.set('crt', on);
   }
-  // Rendu de l'image : lissé (par couverture), adouci (Scale2x ×2 puis lissé),
-  // pixels nets (entiers, sans lissage). Cf. pixel-shader.js, screen-scaler.js.
-  function setRender(mode) {
-    if (mode === 'soft' && !screen.webgl) mode = 'smooth';   // Adouci exige WebGL
-    screen.setPixelPerfect(mode === 'perfect');
-    screen.setSoft(mode === 'soft');
-    for (const b of document.querySelectorAll('.render-btn')) setPressed(b, b.dataset.render === mode);
-    prefs.set('render', mode);
+  // Pixels nets : points sur un nombre entier de pixels réels, sans lissage.
+  function setPixelPerfect(on) {
+    screen.setPixelPerfect(on);
+    setPressed($('pixel-mode'), on);
+    prefs.set('pixelPerfect', on);
   }
-  for (const b of document.querySelectorAll('.render-btn')) {
-    b.addEventListener('click', () => { setRender(b.dataset.render); canvas.focus(); });
-  }
-  if (!screen.webgl) document.querySelector('.render-btn[data-render="soft"]').disabled = true;
-  // L'ancien interrupteur « Pixels nets » devient l'un des trois rendus.
-  setRender(prefs.get('render', prefs.get('pixelPerfect', false) ? 'perfect' : 'smooth'));
+  $('pixel-mode').addEventListener('click', e => {
+    setPixelPerfect(e.currentTarget.getAttribute('aria-pressed') !== 'true');
+    canvas.focus();
+  });
+  setPixelPerfect(prefs.get('pixelPerfect', false));
 
   $('crt-mode').addEventListener('click', e => {
     setCrt(e.currentTarget.getAttribute('aria-pressed') !== 'true');

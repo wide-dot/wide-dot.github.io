@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=7a9d016">
+  <link rel="stylesheet" href="toje-web.css?v=4519f0d">
 </head>
 <body>
   <main class="chassis">
@@ -183,14 +183,9 @@
           <button id="sound" class="opt toggle" aria-pressed="true">
             <span class="opt-text">Son</span><i class="switch" aria-hidden="true"></i>
           </button>
-          <div class="opt-row">
-            <span class="opt-text">Rendu de l’image<small id="render-note">Lissé : points nets, bords adoucis d’un pixel. Adouci : diagonales et courbes arrondies (Scale2x ×2). Pixels nets : sans lissage, points presque carrés</small></span>
-            <span class="segmented" role="group" aria-label="Rendu de l’image">
-              <button class="seg-item render-btn" data-render="smooth" aria-pressed="true">Lissé</button>
-              <button class="seg-item render-btn" data-render="soft" aria-pressed="false">Adouci</button>
-              <button class="seg-item render-btn" data-render="perfect" aria-pressed="false">Pixels nets</button>
-            </span>
-          </div>
+          <button id="pixel-mode" class="opt toggle" aria-pressed="false">
+            <span class="opt-text">Pixels nets<small>Chaque point sur un nombre entier de pixels, sans lissage ; points presque carrés, image un peu plus petite</small></span><i class="switch" aria-hidden="true"></i>
+          </button>
           <button id="crt-mode" class="opt toggle" aria-pressed="false">
             <span class="opt-text">Écran cathodique<small>Lignes de balayage et coins assombris</small></span><i class="switch" aria-hidden="true"></i>
           </button>
@@ -257,30 +252,30 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=7a9d016",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=7a9d016",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=7a9d016",
-        "./menu.js": "./menu.js?v=7a9d016",
-        "./build-info.js": "./build-info.js?v=7a9d016",
-        "./library.js": "./library.js?v=7a9d016",
-        "./crt-screen.js": "./crt-screen.js?v=7a9d016",
-        "./save-store.js": "./save-store.js?v=7a9d016",
-        "./game-saves.js": "./game-saves.js?v=7a9d016",
-        "./touch-keys.js": "./touch-keys.js?v=7a9d016",
-        "./titles.js": "./titles.js?v=7a9d016",
-        "./my-disks.js": "./my-disks.js?v=7a9d016",
-        "./mouse-pointer.js": "./mouse-pointer.js?v=7a9d016",
-        "./phone-keyboard.js": "./phone-keyboard.js?v=7a9d016",
-        "./screenshot.js": "./screenshot.js?v=7a9d016",
-        "./screen-scaler.js": "./screen-scaler.js?v=7a9d016",
-        "./pixel-shader.js": "./pixel-shader.js?v=7a9d016",
-        "./input-bindings.js": "./input-bindings.js?v=7a9d016",
-        "./gamepads.js": "./gamepads.js?v=7a9d016",
-        "./bindings-panel.js": "./bindings-panel.js?v=7a9d016"
+        "./touch-pad.js": "./touch-pad.js?v=4519f0d",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=4519f0d",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=4519f0d",
+        "./menu.js": "./menu.js?v=4519f0d",
+        "./build-info.js": "./build-info.js?v=4519f0d",
+        "./library.js": "./library.js?v=4519f0d",
+        "./crt-screen.js": "./crt-screen.js?v=4519f0d",
+        "./save-store.js": "./save-store.js?v=4519f0d",
+        "./game-saves.js": "./game-saves.js?v=4519f0d",
+        "./touch-keys.js": "./touch-keys.js?v=4519f0d",
+        "./titles.js": "./titles.js?v=4519f0d",
+        "./my-disks.js": "./my-disks.js?v=4519f0d",
+        "./mouse-pointer.js": "./mouse-pointer.js?v=4519f0d",
+        "./phone-keyboard.js": "./phone-keyboard.js?v=4519f0d",
+        "./screenshot.js": "./screenshot.js?v=4519f0d",
+        "./screen-scaler.js": "./screen-scaler.js?v=4519f0d",
+        "./pixel-shader.js": "./pixel-shader.js?v=4519f0d",
+        "./input-bindings.js": "./input-bindings.js?v=4519f0d",
+        "./gamepads.js": "./gamepads.js?v=4519f0d",
+        "./bindings-panel.js": "./bindings-panel.js?v=4519f0d"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=7a9d016"></script>
-  <script type="module" src="toje-web.js?v=7a9d016"></script>
+  <script src="classes.wasm-runtime.js?v=4519f0d"></script>
+  <script type="module" src="toje-web.js?v=4519f0d"></script>
 </body>
 </html>
