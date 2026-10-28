@@ -18,6 +18,9 @@ import { titleOf, baseName } from './titles.js';
 import { createDiskCopies } from './disk-copies.js';
 import { saveScreenshot } from './screenshot.js';
 import { createScreenScaler } from './screen-scaler.js';
+import { createBindings } from './input-bindings.js';
+import { connectedPads, padName, readPad } from './gamepads.js';
+import { createBindingsPanel } from './bindings-panel.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -144,7 +147,8 @@ function start(toje, store) {
 
   // Diagnostic de cadence, lisible depuis la console ou une recette Playwright :
   // trames émulées, coupures du son (file audio vidée), plus grosse rafale.
-  const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now() };
+  // joy : dernier état envoyé à chaque port ; lastRemap : dernière touche TO8 redirigée.
+  const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now(), joy: ['', ''], lastRemap: null };
   window.tojeStats = stats;
 
   function step(withSound = true) {
@@ -373,6 +377,8 @@ function start(toje, store) {
   // jeu démarré ; une disquette glissée dans un lecteur en fait partie.
   function gameChanged() {
     touchKeys.forGame(gameMedia.key());
+    bindings.forGame(gameMedia.key());
+    bindingsPanel.render();
     setPressed($('disk-write'), copies.forGame(gameMedia.key()));
     showMedia();
     saves.renderSlots();
@@ -449,8 +455,13 @@ function start(toje, store) {
   };
 
   // Touches du TO8 à côté de A et B, réglées pour chaque jeu.
-  const touchKeys = createTouchKeys($('touch-keys'), $('touch-keys-settings'), keyChoices(toje),
+  const choices = keyChoices(toje);
+  const touchKeys = createTouchKeys($('touch-keys'), $('touch-keys-settings'), choices,
     (code, down) => toje.pressKey(code, down), prefs, noteInput);
+
+  // Touches de jeu et redirections vers le TO8, au clavier comme à la manette.
+  const bindings = createBindings(prefs);
+  const bindingsPanel = createBindingsPanel($('bindings'), bindings, choices);
 
   // Disquettes modifiées par les jeux qui sauvegardent, gardées par jeu.
   const copies = createDiskCopies({
@@ -631,6 +642,10 @@ function start(toje, store) {
   });
 
   // ── Clavier du PC et manettes ─────────────────────────────────────────
+  // input-bindings.js dit ce que fait chaque touche et chaque bouton ;
+  // bindings-panel.js les fait régler. Ordre de lecture d'une touche du PC :
+  // case du panneau en attente, touche du TO8 redirigée pour ce jeu, touche de
+  // jeu (si « Clavier = manette »), enfin la touche TO8 à la même position.
   let keyboardJoystick = true;
   const keyJoy = { dirs: 0, a: false, b: false };
   $('joy-mode').addEventListener('click', e => {
@@ -641,8 +656,11 @@ function start(toje, store) {
   });
 
   let joyPort = 0;
+  let lastJoy = ['', ''];          // dernier état envoyé à chaque port
   function setPort(port) {
-    toje.joystick(joyPort, 0, false, false);   // relâche l'ancien port
+    toje.joystick(0, 0, false, false);         // relâche les deux ports
+    toje.joystick(1, 0, false, false);
+    lastJoy = ['', ''];
     joyPort = port;
     for (const o of document.querySelectorAll('.seg-btn')) setPressed(o, Number(o.dataset.port) === port);
     prefs.set('port', port);
@@ -651,68 +669,120 @@ function start(toje, store) {
     b.addEventListener('click', () => { setPort(Number(b.dataset.port)); canvas.focus(); });
   }
 
-  const JOY_KEYS = {
-    ArrowLeft: JOY.left, ArrowRight: JOY.right, ArrowUp: JOY.up, ArrowDown: JOY.down,
-  };
-
-  function joystickKey(code, down) {
-    if (!keyboardJoystick) return false;
-    if (code in JOY_KEYS) {
-      keyJoy.dirs = down ? keyJoy.dirs | JOY_KEYS[code] : keyJoy.dirs & ~JOY_KEYS[code];
-    } else if (code === 'Space') {
-      keyJoy.a = down;
-    } else if (code === 'AltLeft' || code === 'AltRight') {
-      keyJoy.b = down;
-    } else {
-      return false;
+  // Touche du TO8 frappée par une source redirigée, et tenue jusqu'au relâché.
+  const remapHeld = new Map();     // source (+ manette) → code TO8
+  function remapPress(held, source, down) {
+    if (!down) {
+      if (!remapHeld.has(held)) return false;
+      toje.pressKey(remapHeld.get(held), false);
+      stats.lastRemap = { code: remapHeld.get(held), down: false };
+      remapHeld.delete(held);
+      return true;
     }
+    const code = bindings.remapOf(source);
+    if (code === null) return false;
+    remapHeld.set(held, code);
+    toje.pressKey(code, true);
+    stats.lastRemap = { code, down: true };
     return true;
   }
 
+  function joystickKey(source, down) {
+    if (!keyboardJoystick) return false;
+    const action = bindings.joyOf(source);
+    if (!action) return false;
+    if (action.id === 'a' || action.id === 'b') keyJoy[action.id] = down;
+    else keyJoy.dirs = down ? keyJoy.dirs | JOY[action.id] : keyJoy.dirs & ~JOY[action.id];
+    return true;
+  }
+
+  const swallowed = new Set();     // touches prises par le panneau : leur relâché aussi
   function onKey(e, down) {
     if (e.ctrlKey && e.code === 'KeyR') return;     // laisse recharger la page
-    if (e.target instanceof HTMLInputElement) return;
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return;
+    const source = `key:${e.code}`;
+    if (down && !e.repeat && bindingsPanel.offer(source, e.key)) {
+      swallowed.add(e.code);
+      e.preventDefault();
+      return;
+    }
+    if (!down && swallowed.delete(e.code)) { e.preventDefault(); return; }
     firstGesture();
     if (e.code === 'F7') { turboHeld = down; e.preventDefault(); return; }
     if (e.code === 'Pause') { if (down) setUserPaused(!userPaused); e.preventDefault(); return; }
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
     noteInput();
-    if (joystickKey(e.code, down) || toje.key(e.code, down)) e.preventDefault();
+    if (remapPress(source, source, down) || joystickKey(source, down) || toje.key(e.code, down)) e.preventDefault();
   }
   window.addEventListener('keydown', e => onKey(e, true));
   window.addEventListener('keyup', e => onKey(e, false));
   window.addEventListener('blur', () => {
     keyJoy.dirs = 0; keyJoy.a = false; keyJoy.b = false;
+    for (const held of [...remapHeld.keys()]) remapPress(held, null, false);
     touchPad.reset();
   });
 
-  function gamepadState() {
-    const pad = navigator.getGamepads ? [...navigator.getGamepads()].find(p => p) : null;
-    if (!pad) return { dirs: 0, a: false, b: false };
-    const ax = pad.axes[0] || 0;
-    const ay = pad.axes[1] || 0;
-    const btn = i => Boolean(pad.buttons[i] && pad.buttons[i].pressed);
-    let dirs = 0;
-    if (ax < -0.5 || btn(14)) dirs |= JOY.left;
-    else if (ax > 0.5 || btn(15)) dirs |= JOY.right;
-    if (ay < -0.5 || btn(12)) dirs |= JOY.up;
-    else if (ay > 0.5 || btn(13)) dirs |= JOY.down;
-    return { dirs, a: btn(0) || btn(2), b: btn(1) || btn(3) };
+  // Manettes réelles : la première sur le port choisi, la seconde sur l'autre.
+  const padPressed = new Map();    // index de manette → boutons enfoncés à la lecture précédente
+  let padsShown = null;
+  function showPads(pads, active) {
+    const names = pads.map((p, i) => `${padName(p.id)} → port ${(i === 0 ? joyPort : 1 - joyPort) + 1}`);
+    const text = names.join(' · ');
+    const led = pads.length === 0 ? 'off' : active ? 'seek' : 'read';
+    if ($('pad-led').dataset.state !== led) {
+      for (const id of ['pad-led', 'pad-led-menu']) $(id).dataset.state = led;
+    }
+    if (text === padsShown) return;
+    if (padsShown !== null && pads.length > 0 && text !== padsShown) status.textContent = `manette : ${padName(pads[pads.length - 1].id)}`;
+    padsShown = text;
+    $('pad-list').textContent = text || 'aucune — en brancher une, puis appuyer sur un de ses boutons';
+    $('pad-indicator').title = text || 'Aucune manette : en brancher une, puis appuyer sur un de ses boutons';
+    $('pad-indicator').classList.toggle('on', pads.length > 0);
   }
 
-  // Trois sources pour une seule manette TO8 : clavier du PC, manette USB, écran tactile.
-  let lastJoy = '';
+  function readPads() {
+    const pads = connectedPads().slice(0, 2);
+    const seen = new Set();
+    const states = pads.map(pad => {
+      seen.add(pad.index);
+      const state = readPad(pad, source => bindings.joyOf(source), JOY);
+      const before = padPressed.get(pad.index) || [];
+      for (const i of state.pressed) {
+        if (before.includes(i)) continue;
+        firstGesture();
+        noteInput();
+        if (!bindingsPanel.offer(`pad:${i}`)) remapPress(`${pad.index}:${i}`, `pad:${i}`, true);
+      }
+      for (const i of before) if (!state.pressed.includes(i)) remapPress(`${pad.index}:${i}`, null, false);
+      padPressed.set(pad.index, state.pressed);
+      return state;
+    });
+    // Manette débranchée : ses touches redirigées sont relâchées.
+    for (const [index, pressed] of padPressed) {
+      if (seen.has(index)) continue;
+      for (const i of pressed) remapPress(`${index}:${i}`, null, false);
+      padPressed.delete(index);
+    }
+    showPads(pads, states.some(s => s.pressed.length > 0 || s.dirs !== 0));
+    return states;
+  }
+
+  // Trois sources pour la manette du port choisi : clavier du PC, manette réelle,
+  // écran tactile. La seconde manette réelle joue seule sur l'autre port.
+  const NO_PAD = { dirs: 0, a: false, b: false };
+  function sendJoy(port, dirs, a, b) {
+    const state = `${dirs},${a},${b}`;
+    if (state === lastJoy[port]) return;
+    if (lastJoy[port] !== '') noteInput();
+    lastJoy[port] = state;
+    stats.joy[port] = state;
+    toje.joystick(port, dirs, a, b);
+  }
   function pollJoystick() {
-    const pad = gamepadState();
+    const [first = NO_PAD, second = NO_PAD] = readPads();
     const touch = touchPad.state();
-    const dirs = keyJoy.dirs | pad.dirs | touch.dirs;
-    const a = keyJoy.a || pad.a || touch.a;
-    const b = keyJoy.b || pad.b || touch.b;
-    const state = `${dirs}${a}${b}`;
-    if (state === lastJoy) return;
-    lastJoy = state;
-    noteInput();
-    toje.joystick(joyPort, dirs, a, b);
+    sendJoy(joyPort, keyJoy.dirs | first.dirs | touch.dirs, keyJoy.a || first.a || touch.a, keyJoy.b || first.b || touch.b);
+    sendJoy(1 - joyPort, second.dirs, second.a, second.b);
   }
 
   setTouch(prefs.get('touch', coarsePointer));

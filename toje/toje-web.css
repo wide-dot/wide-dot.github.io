@@ -723,3 +723,49 @@ button, label { touch-action: manipulation; }
   #menu .menu-actions .keycap { flex: 1 1 auto; justify-content: center; }
   #menu .lib-list { max-height: none; grid-template-columns: 1fr; }
 }
+
+/* ── Manettes réelles et touches de jeu (gamepads.js, bindings-panel.js) ── */
+.pad-indicator:not(.on) { opacity: .55; }
+.bindings summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 40px; cursor: pointer; list-style: none; }
+.bindings summary::-webkit-details-marker { display: none; }
+.bindings summary::after { content: '▸'; color: var(--ink-dim); }
+.bindings[open] summary::after { content: '▾'; }
+.bind-title { margin: 12px 0 6px; font-weight: 700; }
+.bind-note, .bind-hint { margin: 0 0 8px; font-size: 13px; font-weight: 500; color: var(--ink-dim); }
+.bind-hint:empty { display: none; }
+.bind-hint { color: var(--green); font-weight: 600; }
+.bind-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+.bind-table th { text-align: left; font-weight: 600; font-size: 14px; padding: 2px 6px 2px 0; }
+.bind-table thead th { font-size: 13px; color: var(--ink-dim); font-weight: 500; }
+.bind-table td { padding: 3px 4px; width: 40%; }
+.bind-btn {
+  width: 100%;
+  min-height: 34px;
+  padding: 2px 8px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: #F2EFE2;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bind-btn:hover { background: var(--hover); }
+.bind-btn.waiting { background: var(--yellow); color: #332A00; border-color: #9A7414; }
+.remap-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.remap-row { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto; align-items: center; gap: 6px; }
+.remap-row .key-select { width: 100%; }
+.remap-arrow { color: var(--ink-dim); }
+.remap-del {
+  width: 34px; height: 34px;
+  font: 700 18px Rajdhani, system-ui, sans-serif;
+  color: var(--ink-dim);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.remap-add { width: auto; align-self: flex-start; }

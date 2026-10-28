@@ -48,6 +48,23 @@ export function keyChoices(toje) {
   return choices;
 }
 
+/** Liste de choix d'une touche du TO8, par groupes ; onChange(code ou null). */
+export function keySelect(choices, code, label, onChange) {
+  const s = document.createElement('select');
+  s.className = 'key-select';
+  s.setAttribute('aria-label', label);
+  s.append(new Option('—', ''));
+  for (const group of GROUPS) {
+    const og = document.createElement('optgroup');
+    og.label = group;
+    for (const c of choices.filter(k => k.group === group)) og.append(new Option(c.label, String(c.code)));
+    if (og.children.length) s.append(og);
+  }
+  s.value = code === null || code === undefined ? '' : String(code);
+  s.addEventListener('change', () => onChange(s.value === '' ? null : Number(s.value)));
+  return s;
+}
+
 function labelOf(choices, code) {
   const c = choices.find(k => k.code === code);
   return c ? c.label.replace(' (pavé)', '') : '?';
@@ -90,23 +107,11 @@ export function createTouchKeys(container, settings, choices, press, store, onIn
   }
 
   function select(slot) {
-    const s = document.createElement('select');
-    s.className = 'key-select';
-    s.setAttribute('aria-label', `Bouton ${slot + 1}`);
-    s.append(new Option('—', ''));
-    for (const group of GROUPS) {
-      const og = document.createElement('optgroup');
-      og.label = group;
-      for (const c of choices.filter(k => k.group === group)) og.append(new Option(c.label, String(c.code)));
-      if (og.children.length) s.append(og);
-    }
-    s.value = codes[slot] === null ? '' : String(codes[slot]);
-    s.addEventListener('change', () => {
-      codes[slot] = s.value === '' ? null : Number(s.value);
+    return keySelect(choices, codes[slot], `Bouton ${slot + 1}`, code => {
+      codes[slot] = code;
       store.set(`touchKeys.${game}`, codes);
       render();
     });
-    return s;
   }
 
   return {
