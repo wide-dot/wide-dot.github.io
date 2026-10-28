@@ -56,12 +56,10 @@ export function createPhoneKeyboard({ toje, input, button, press, key, onInput }
     pump();
   }
 
-  // Le TO8 n'a pas de retour arrière : ← recule le curseur, EFF efface le
-  // caractère dessous. (La touche 0x14 que le pilote associe à ⌫ est ACC, une
-  // touche morte d'accent : elle avalait la frappe suivante.)
+  // Le TO8 n'a pas de retour arrière : la touche « Backspace » du domaine
+  // frappe ← puis EFF (ThomsonTypist.SCANCODE_BACKSPACE).
   function backspace() {
-    type({ name: 'ArrowLeft' });
-    type({ name: 'Delete' });
+    type({ name: 'Backspace' });
   }
 
   function typeChar(ch) {
