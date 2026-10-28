@@ -1,0 +1,15 @@
+{
+  "name": "TOJE — Thomson TO8",
+  "short_name": "TOJE",
+  "description": "Émulateur Thomson TO8 en WebAssembly",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#CFC9B2",
+  "theme_color": "#CFC9B2",
+  "icons": [
+    { "src": "toje.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

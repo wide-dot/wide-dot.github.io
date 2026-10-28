@@ -1,0 +1,724 @@
+/* Châssis crème TO8 pour le chrome, écran encastré pour les données
+   (cf. transmission-ui-design.md, palettes ChassisColors / ThomsonColors). */
+:root {
+  --chassis: #CFC9B2;
+  --cap: #ECE8D6;
+  --cap-special: #BAB6A6;   /* pavé numérique, gris sur le TO8 */
+  --yellow: #E8C84A;
+  --ink: #2E2A20;
+  --ink-dim: #6A6350;
+  --rule: #A6A088;
+  --green: #1B5E20;
+  --amber: #6B4A00;
+  --hover: #DDD8C4;
+  --shadow: #3A3424;
+  --crt: #08080C;
+  --led-on: #3CD03C;
+  --led-off: #5A5A50;
+  --page: #8F8A76;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --page: #2A2720; }
+}
+:root[data-theme="dark"] { --page: #2A2720; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font: 600 15px/1.35 Rajdhani, "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+button, label { touch-action: manipulation; }
+
+.chassis {
+  width: 100%;
+  max-width: 920px;
+  background: var(--chassis);
+  border-radius: 10px;
+  padding: 14px 16px 16px;
+  box-shadow: 0 2px 0 #E4DFCB inset, 0 10px 30px rgba(0, 0, 0, .35);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.logo { font-size: 20px; letter-spacing: .12em; }
+.logo b { color: var(--green); }
+.sub { color: var(--ink-dim); }
+.build { color: var(--ink-dim); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
+.status { margin-left: auto; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+
+/* Accélérer tant qu'on appuie : allumé aussi quand « Chargements rapides » agit seul. */
+.ff-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: linear-gradient(#F4F1E4, var(--cap));
+  box-shadow: 0 2px 0 var(--shadow);
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.ff-btn svg { width: 20px; height: 14px; fill: var(--ink-dim); }
+.ff-btn.on { background: var(--yellow); }
+.ff-btn.on svg { fill: #332A00; }
+
+/* Voyant du lecteur, comme sur la façade : couleurs du pilote desktop (DriveLeds). */
+.drive { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-dim); font-size: 13px; }
+.drive-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--led-off);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4);
+}
+.drive-led[data-state="read"]  { background: #3CD03C; box-shadow: 0 0 6px #3CD03C; }
+.drive-led[data-state="write"] { background: #FF2A1F; box-shadow: 0 0 6px #FF3B2F; }
+.drive-led[data-state="seek"]  { background: #F2C230; box-shadow: 0 0 6px #F2C230; }
+
+/* ── Scène : écran, et de part et d'autre la manette tactile ─────────── */
+.stage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "screen screen" "stick fire";
+  gap: 14px 10px;
+  align-items: center;
+}
+.screen-frame { grid-area: screen; }
+.touch-stick { grid-area: stick; }
+.touch-fire { grid-area: fire; }
+.touch-stick[hidden], .touch-fire[hidden] { display: none; }
+
+.screen-frame {
+  position: relative;
+  background: var(--crt);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0 0 0 4px #BDB69C, inset 0 0 18px #000;
+}
+/*
+ * Proportions : le pixel TO8 est un peu plus haut que large (59:64), le canvas
+ * 704 × 464 s'affiche donc au rapport --screen-aspect (1,3987), posé par le
+ * script depuis le domaine — comme ScreenGeometry côté libGDX. La LARGEUR est
+ * toujours fixée et la hauteur en découle : imposer les deux déformerait
+ * l'image dès qu'une contrainte en rogne une seule (constaté : −26 % en
+ * paysage 640 × 360). Avant le chargement, le rapport natif du canvas.
+ */
+#screen {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--screen-aspect, auto);
+  image-rendering: pixelated;
+  outline: none;
+  touch-action: none;
+}
+.screen-frame:fullscreen { display: flex; align-items: center; justify-content: center; border-radius: 0; }
+.screen-frame:fullscreen #screen {
+  /* La plus grande largeur qui tient aussi en hauteur (ScreenGeometry.contentRect). */
+  width: min(calc(100vw - 24px), calc((100vh - 24px) * var(--screen-aspect, 1.4)));
+}
+
+/*
+ * Écran cathodique (crt-screen.js) : une bande sombre et douce par ligne TO8,
+ * coins assombris, et l'image un peu relevée pour compenser. Calque posé sur
+ * le canvas par le script, transparent aux touchers.
+ */
+.crt-overlay {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .30) 50%, transparent 100%)
+      0 0 / 100% calc(100% / var(--scan-lines, 232));
+}
+.crt-overlay.no-scan {
+  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%);
+}
+.crt-overlay[hidden] { display: none; }
+#screen.crt { filter: brightness(1.1) saturate(1.08); border-radius: 3px; }
+
+.drop-hint, .overlay-start {
+  position: absolute;
+  inset: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  color: #00FF00;
+  font: 700 22px Rajdhani, system-ui, sans-serif;
+  background: rgba(8, 8, 12, .78);
+  border: 2px dashed #00C800;
+  border-radius: 4px;
+}
+.overlay-start { cursor: pointer; border-style: solid; }
+.drop-hint[hidden], .overlay-start[hidden] { display: none; }
+
+/* ── Manette tactile ─────────────────────────────────────────────────── */
+.touch-stick, .touch-fire { touch-action: none; user-select: none; -webkit-user-select: none; }
+.touch-stick { display: flex; justify-content: center; }
+.stick-base {
+  position: relative;
+  width: min(38vw, 150px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #BDB69C 0 30%, #A9A288 31% 100%);
+  border: 1px solid var(--rule);
+  box-shadow: inset 0 3px 8px rgba(58, 52, 36, .45);
+}
+.stick-knob {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #4A453A, #1E1B15 70%);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .45);
+  pointer-events: none;
+}
+.touch-fire { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; }
+.fire-pair { display: flex; justify-content: center; align-items: center; gap: 18px; }
+
+/* Touches du TO8 choisies pour ce jeu (touch-keys.js) : petites, au-dessus de A et B. */
+.touch-keys { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 190px; }
+.touch-keys[hidden] { display: none; }
+.key-btn {
+  min-width: 52px;
+  min-height: 40px;
+  padding: 2px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: linear-gradient(#F4F1E4, var(--cap));
+  color: var(--ink);
+  font: 700 15px Rajdhani, system-ui, sans-serif;
+  box-shadow: 0 3px 0 var(--shadow), 0 4px 6px rgba(58, 52, 36, .3);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.key-btn.down { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); filter: brightness(.94); }
+.key-selects { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 12px; }
+.key-select {
+  min-height: 36px;
+  min-width: 0;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: #F2EFE2;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+}
+.lib-head small { color: var(--ink-dim); font-weight: 500; }
+.fire-btn {
+  width: min(20vw, 76px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  /* Jaune de la touche ENT du TO8. */
+  border: 1px solid #9A7414;
+  background: radial-gradient(circle at 35% 30%, #FFE07A, #E8B521 70%);
+  color: #3A2C00;
+  font: 700 22px Rajdhani, system-ui, sans-serif;
+  box-shadow: 0 4px 0 #8A6410, 0 6px 8px rgba(0, 0, 0, .35);
+  touch-action: none;
+}
+.fire-btn.fire-a { transform: translateY(-14px); }
+.fire-btn.down { box-shadow: 0 1px 0 #8A6410; filter: brightness(.92); }
+.fire-btn.fire-a.down { transform: translateY(-11px); }
+.fire-btn.fire-b.down { transform: translateY(3px); }
+
+/* ── Clavier du TO8 (SVG) : boîtier, cadres noirs, touches sculptées ── */
+.keyboard {
+  margin-top: 14px;
+  padding: 6px 10px 10px;
+  background: linear-gradient(#ECEFE6, #DCE0D4);
+  border: 1px solid #B9BDB0;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 #F7F9F3, 0 3px 8px rgba(0, 0, 0, .25);
+  /* Pincement à deux doigts permis (zoom de la page) ; un doigt seul tape. */
+  touch-action: pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+  --kb-zoom: 1;
+}
+.keyboard[hidden] { display: none; }
+.kb-viewport { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+.kb-inner {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+  width: calc(100% * var(--kb-zoom));
+}
+.kb-zoom { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-bottom: 4px; }
+.kb-zoom-btn {
+  width: 30px; height: 26px; padding: 0;
+  font: 700 18px/1 Rajdhani, system-ui, sans-serif; color: var(--ink);
+  background: linear-gradient(#F4F1E4, var(--cap)); border: 1px solid var(--rule); border-radius: 4px;
+  box-shadow: 0 2px 0 var(--shadow);
+}
+.kb-zoom-btn:disabled { opacity: .4; }
+.kb-zoom-level { min-width: 46px; text-align: center; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.kb-pan { order: -1; flex: 1; max-width: 60%; margin-right: auto; accent-color: var(--green); }
+.kb-pan[hidden] { display: none; }
+/* Largeurs proportionnelles à leurs viewBox de même hauteur : même échelle. */
+.keyboard svg { display: block; height: auto; min-width: 0; }
+.keyboard .kb-head { flex: 0 0 100%; }
+.keyboard .kb-main { flex: var(--kb-main) 1 0; }
+.keyboard .kb-side { flex: var(--kb-side) 1 0; }
+.keyboard .vent { fill: #A9AE9F; }
+.keyboard .badge {
+  fill: none; stroke: var(--ink); stroke-width: 1.2;
+  font: 700 34px Rajdhani, system-ui, sans-serif; letter-spacing: 3px;
+}
+.keyboard .maker { fill: var(--ink); font: 700 13px Rajdhani, system-ui, sans-serif; letter-spacing: 1.5px; }
+.keyboard .bed { fill: #2C2D29; }
+.keyboard .key .side { fill: #BFC4B7; }
+.keyboard .key .face { fill: #EEF1EA; }
+.keyboard .key.pad .side { fill: #85897F; }
+.keyboard .key.pad .face { fill: #AEB2A7; }
+.keyboard .key.yellow .side { fill: #C1931A; }
+.keyboard .key.yellow .face { fill: #F0C232; }
+.keyboard .key .top { transition: transform .04s; }
+.keyboard .key.down .top { transform: translateY(1.6px); }
+.keyboard .key.down .face { filter: brightness(.9); }
+.keyboard .caps-led { fill: #4A1C1A; stroke: #2A100F; stroke-width: .5; }
+.keyboard .key.caps-on .caps-led { fill: #FF2A1F; stroke: #B3120B; filter: drop-shadow(0 0 2px #FF3B2F); }
+.keyboard text {
+  fill: var(--ink);
+  font: 700 10px Rajdhani, system-ui, sans-serif;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+/* Légende verte des touches, comme sur le TO8 : le caractère obtenu avec SHIFT. */
+.keyboard text.shift { fill: #2E9E3A; font-size: 9px; }
+
+.panel { margin-top: 14px; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
+.disk-line { color: var(--ink-dim); margin: 0 0 6px; }
+.disk-line b { color: var(--ink); }
+/* Bibliothèque : badges aux couleurs du pilote desktop (DiskSelectorPanel). */
+.library { margin: 4px 0 10px; }
+.lib-head { display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  border-bottom: 1px solid var(--rule); padding-bottom: 6px; margin-bottom: 6px; }
+.chip { min-height: 28px; padding: 2px 10px; font: inherit; font-size: 13px; color: var(--ink);
+  background: var(--cap); border: 1px solid var(--rule); border-radius: 14px; }
+.chip[aria-pressed="true"] { background: var(--yellow); color: #332A00; }
+.lib-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px;
+  max-height: 260px; overflow-y: auto; color: var(--ink-dim); }
+.lib-item { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 4px 6px;
+  font: inherit; text-align: left; color: var(--ink); background: none; border: 0; border-radius: 4px; }
+.lib-item:hover, .lib-item:focus-visible { background: var(--hover); }
+.lib-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge { flex: none; width: 40px; padding: 2px 0; text-align: center; font-size: 12px; font-weight: 700;
+  color: #FFF; border-radius: 3px; }
+.badge-fd { background: #2E7D32; }
+.badge-sd { background: #6A1B9A; }
+.badge-rom { background: #C62828; }
+/* ── Options : barre d'actions, sections, lignes à interrupteur ─────── */
+.menu-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+/* Colonnes plutôt que grille : les sections s'empilent sans trou, une seule au téléphone. */
+.menu-grid { columns: 2 300px; column-gap: 28px; }
+.menu-section { margin-bottom: 14px; break-inside: avoid; }
+.menu-title {
+  margin: 0 0 2px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.lib-head .menu-title { margin: 0; padding: 0; border: 0; }
+.menu-section .disk-line { margin: 8px 0 2px; }
+.game-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+.game-actions:not(:has(> :not([hidden]))) { display: none; }
+.lib-search {
+  width: 100%;
+  min-height: 38px;
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--ink);
+  background: #F2EFE2;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+}
+.keycap[aria-pressed="true"]#pause { background: var(--yellow); color: #332A00; }
+
+/* Une option = une ligne : libellé (et son explication) à gauche, réglage à droite. */
+.opt, .opt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(166, 160, 136, .45);
+}
+.opt-row { flex-wrap: wrap; }
+.opt {
+  margin: 0;
+  border-width: 0 0 1px;
+  background: none;
+  font: inherit;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.opt:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.opt-text { display: flex; flex-direction: column; font-weight: 600; line-height: 1.2; }
+.opt-text small { margin-top: 2px; font-size: 13px; font-weight: 500; color: var(--ink-dim); }
+.opt-block { padding: 8px 0; border-bottom: 1px solid rgba(166, 160, 136, .45); }
+.opt-block .key-selects { margin: 8px 0 0; }
+
+/* Interrupteur : glissière verte quand l'option est active. */
+.switch {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: #B4AE96;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .3);
+  transition: background .15s;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FBF9F1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+  transition: transform .15s;
+}
+.toggle[aria-pressed="true"] .switch { background: #3C9A3C; }
+.toggle[aria-pressed="true"] .switch::after { transform: translateX(18px); }
+
+/* Choix exclusif : boutons accolés, le choix courant en jaune. */
+.segmented { display: inline-flex; }
+.seg-item {
+  min-height: 34px;
+  min-width: 40px;
+  padding: 4px 12px;
+  margin-left: -1px;
+  border: 1px solid var(--rule);
+  background: linear-gradient(#F4F1E4, var(--cap));
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink);
+}
+.seg-item:first-child { margin-left: 0; border-radius: 6px 0 0 6px; }
+.seg-item:last-child { border-radius: 0 6px 6px 0; }
+.seg-item[aria-pressed="true"] { position: relative; background: var(--yellow); color: #332A00; font-weight: 700; }
+
+.help { color: var(--ink-dim); font-weight: 500; margin: 4px 0 0; }
+.help summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.help p { margin: 8px 0 0; }
+.help code { font-weight: 700; color: var(--ink); }
+
+/* Touche TO8 : capuchon plus clair que le châssis, ombre portée, enfoncement au clic. */
+.keycap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 6px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: linear-gradient(#F4F1E4, var(--cap));
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  box-shadow: 0 3px 0 var(--shadow), 0 4px 6px rgba(58, 52, 36, .35);
+  cursor: pointer;
+  user-select: none;
+  transition: transform .05s, box-shadow .05s;
+}
+.keycap:hover { background: linear-gradient(#F8F6EC, var(--hover)); }
+.keycap:active, .keycap[aria-pressed="true"].seg-btn {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--shadow), 0 1px 2px rgba(58, 52, 36, .35);
+}
+.keycap:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.keycap.action { color: var(--green); }
+.keycap.amber { color: var(--amber); }
+.seg { display: inline-flex; gap: 6px; }
+.seg-btn[aria-pressed="true"], .target-btn[aria-pressed="true"] { background: var(--yellow); color: #332A00; }
+.keycap:disabled { opacity: .45; cursor: default; }
+.keycap.small { min-height: 32px; padding: 4px 10px; font-size: 14px; }
+
+/* « Disquette choisie » : où va la prochaine disquette. */
+.target-label { color: var(--ink-dim); }
+
+/* Parties sauvegardées : vignette, titre et date, Sauver / Charger. */
+
+.save-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+.save-thumb {
+  width: 66px;
+  aspect-ratio: var(--screen-aspect, 1.4);
+  flex: none;
+  background: var(--crt);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  object-fit: fill;            /* la vignette est au format du canvas : on lui rend ses proportions */
+}
+.save-thumb:not([src]) { background: transparent; border-style: dashed; }   /* emplacement vide */
+.save-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.save-info b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.save-info small { color: var(--ink-dim); font-size: 13px; }
+
+/* Reprise proposée à l'ouverture, sur l'écran du TO8. */
+.overlay-resume {
+  position: absolute;
+  inset: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  text-align: center;
+  color: #E8F5E8;
+  background: rgba(8, 8, 12, .86);
+  border: 2px solid #00C800;
+  border-radius: 4px;
+}
+.overlay-resume[hidden] { display: none; }
+.overlay-resume p { margin: 0; font-size: 20px; }
+.overlay-resume small { color: #9FBF9F; }
+.overlay-resume .row { margin: 4px 0 0; justify-content: center; }
+.resume-thumb {
+  width: min(40%, 220px);
+  aspect-ratio: var(--screen-aspect, 1.4);
+  object-fit: fill;
+  border: 1px solid #00C800;
+  border-radius: 3px;
+}
+
+.led {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--led-off);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .4);
+}
+.toggle[aria-pressed="true"] .led { background: var(--led-on); box-shadow: 0 0 6px var(--led-on); }
+
+/* ── Téléphone, portrait ─────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  body { padding: 0; }
+  .chassis { border-radius: 0; padding: 10px 16px 14px; min-height: 100vh; }
+  .brand .sub { display: none; }
+  .brand { flex-wrap: wrap; row-gap: 2px; }
+  .build { order: 3; flex-basis: 100%; font-size: 12px; }   /* sous le logo : la ligne serait trop longue */
+  .keycap { padding: 6px 10px; }
+  .screen-frame { padding: 6px; }
+  /*
+ * Écran cathodique (crt-screen.js) : une bande sombre et douce par ligne TO8,
+ * coins assombris, et l'image un peu relevée pour compenser. Calque posé sur
+ * le canvas par le script, transparent aux touchers.
+ */
+.crt-overlay {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .30) 50%, transparent 100%)
+      0 0 / 100% calc(100% / var(--scan-lines, 232));
+}
+.crt-overlay.no-scan {
+  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%);
+}
+.crt-overlay[hidden] { display: none; }
+#screen.crt { filter: brightness(1.1) saturate(1.08); border-radius: 3px; }
+
+.drop-hint, .overlay-start { inset: 6px; font-size: 18px; }
+  .keyboard { margin-left: -12px; margin-right: -12px; padding: 5px 4px; border-radius: 0; }
+  /* Empilés : le bloc principal prend toute la largeur, le pavé garde la même échelle. */
+  .keyboard .kb-main { flex: 0 0 100%; }
+  .keyboard .kb-side { flex: 0 0 calc(100% * var(--kb-side) / var(--kb-main)); }
+  .keyboard .kb-head { display: none; }   /* superflu au téléphone : la place va aux touches */
+  /* On tape ou on joue : le clavier ouvert prend la place de la manette, sous l'écran. */
+  body.kb .touch-stick, body.kb .touch-fire { display: none; }
+}
+
+/* ── Téléphone, paysage : stick | écran | boutons, le jeu tient l'écran ── */
+@media (orientation: landscape) and (max-height: 540px) {
+  body { padding: 0; }
+  .chassis {
+    max-width: none;
+    border-radius: 0;
+    padding: max(6px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right))
+             8px max(10px, env(safe-area-inset-left));
+  }
+  /* L'en-tête passe dans le coin haut gauche, libre depuis que le stick est en bas. */
+  .brand {
+    position: fixed;
+    top: max(6px, env(safe-area-inset-top));
+    left: max(10px, env(safe-area-inset-left));
+    z-index: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    pointer-events: none;
+  }
+  .brand .logo { font-size: 13px; }
+  /* Tient dans la colonne du stick, même en paysage étroit : la version passe à la ligne. */
+  .brand { max-width: 118px; }
+  .brand .ff-btn { pointer-events: auto; margin: 4px 0; }   /* l'en-tête ignore les touchers, pas ce bouton */
+  .brand .sub { display: none; }
+  .brand .status { margin-left: 0; font-size: 12px; }
+  .build { font-size: 11px; }
+  /* Colonnes réservées au stick et aux boutons de part et d'autre de l'écran. */
+  .stage { --pad-col: 0px; }
+  body.touch .stage {
+    --pad-col: 112px;
+    grid-template-columns: minmax(var(--pad-col), 1fr) auto minmax(var(--pad-col), 1fr);
+    grid-template-areas: "stick screen fire";
+    gap: 8px;
+  }
+  .screen-frame { padding: 4px; justify-self: center; align-self: center; }
+  /* Toute la hauteur : l'écran au centre, stick et boutons en bas, sous les pouces,
+     même quand l'écran, limité en largeur, ne remplit pas la hauteur. */
+  body.touch:not(.kb) .stage { min-height: calc(100dvh - 14px); }
+  /*
+ * Écran cathodique (crt-screen.js) : une bande sombre et douce par ligne TO8,
+ * coins assombris, et l'image un peu relevée pour compenser. Calque posé sur
+ * le canvas par le script, transparent aux touchers.
+ */
+.crt-overlay {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%),
+    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .30) 50%, transparent 100%)
+      0 0 / 100% calc(100% / var(--scan-lines, 232));
+}
+.crt-overlay.no-scan {
+  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, .38) 100%);
+}
+.crt-overlay[hidden] { display: none; }
+#screen.crt { filter: brightness(1.1) saturate(1.08); border-radius: 3px; }
+
+.drop-hint, .overlay-start { inset: 4px; font-size: 18px; }
+  /* La hauteur décide : l'écran prend tout ce qui reste, largeur déduite du ratio. */
+  /* La plus grande largeur qui tient à la fois entre les colonnes et en hauteur. */
+  #screen { width: min(calc(100vw - 2 * var(--pad-col) - 60px),
+                       calc((100dvh - 24px) * var(--screen-aspect, 1.4))); }
+  body.kb #screen { width: min(calc(100vw - 2 * var(--pad-col) - 60px),
+                               calc((52dvh - 16px) * var(--screen-aspect, 1.4))); }
+  body.kb .stage { grid-template-areas: "stick screen fire"; }
+  .keyboard { margin-top: 8px; }
+  .kb-inner { flex-wrap: nowrap; width: max-content; min-width: 100%; }
+  .keyboard .kb-head { display: none; }
+  .keyboard .kb-main, .keyboard .kb-side { flex: none; height: calc((46dvh - 54px) * var(--kb-zoom)); width: auto; }
+  .kb-zoom { margin-bottom: 2px; }
+  .stick-base { width: min(30vh, 150px); }
+  .fire-btn { width: min(17vh, 72px); }
+  .touch-keys { max-width: 112px; gap: 6px; }
+  .key-btn { min-width: 50px; min-height: 34px; font-size: 14px; padding: 2px 6px; }
+  .touch-fire { gap: 8px; }
+  /* En bas de chaque côté, là où tombent les pouces quand on tient le téléphone. */
+  .touch-stick, .touch-fire { align-self: end; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
+}
+
+/* ── Menu des options : panneau en ligne au bureau, tiroir ☰ au téléphone ── */
+.menu-toggle, .menu-backdrop, .menu-head { display: none; }
+
+@media (max-width: 760px), (orientation: landscape) and (max-height: 540px) {
+  .menu-toggle {
+    position: fixed;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 42px;
+    height: 38px;
+    padding: 0 10px;
+    background: linear-gradient(#F4F1E4, var(--cap));
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: 0 3px 0 var(--shadow), 0 4px 6px rgba(58, 52, 36, .35);
+  }
+  .menu-toggle span { display: block; height: 3px; border-radius: 2px; background: var(--ink); }
+  .brand { padding-right: 52px; }   /* le ☰ se pose en haut à droite */
+
+  .menu-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(20, 18, 12, .45);
+  }
+  #menu.panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    width: min(340px, 88vw);
+    margin: 0;
+    padding: max(12px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+             max(14px, env(safe-area-inset-bottom)) 14px;
+    overflow-y: auto;
+    background: var(--chassis);
+    box-shadow: -6px 0 18px rgba(0, 0, 0, .35);
+    transform: translateX(105%);
+    transition: transform .18s ease-out;
+    visibility: hidden;
+  }
+  body.menu-open #menu.panel { transform: none; visibility: visible; }
+  .menu-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    letter-spacing: .08em;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .menu-close {
+    width: 36px; height: 36px;
+    font: 700 26px/1 Rajdhani, system-ui, sans-serif;
+    color: var(--ink);
+    background: none;
+    border: 0;
+  }
+  #menu .menu-actions .keycap { flex: 1 1 auto; justify-content: center; }
+  #menu .lib-list { max-height: none; grid-template-columns: 1fr; }
+}
