@@ -17,6 +17,7 @@ import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
 import { createMyDisks } from './my-disks.js';
 import { createMousePointer } from './mouse-pointer.js';
+import { createPhoneKeyboard } from './phone-keyboard.js';
 import { saveScreenshot } from './screenshot.js';
 import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
@@ -673,6 +674,16 @@ function start(toje, store) {
     if (keyboardOn) $('keyboard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     canvas.focus({ preventScroll: true });
   });
+
+  // Clavier du téléphone (phone-keyboard.js) : sur les écrans tactiles seulement.
+  $('phone-kb').hidden = !coarsePointer;
+  const phoneKeyboard = createPhoneKeyboard({
+    toje, input: $('phone-kb-input'), button: $('phone-kb'),
+    press: (code, down) => toje.pressKey(code, down),
+    key: (name, down) => toje.key(name, down),
+    onInput: () => { firstGesture(); noteInput(); },
+  });
+  stats.phoneTyped = () => phoneKeyboard.typed();
 
   // « Turbo disque » du pilote desktop : délais moteur du lecteur supprimés.
   function setDiskTurbo(on) {

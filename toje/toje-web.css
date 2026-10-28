@@ -601,7 +601,7 @@ button, label { touch-action: manipulation; }
   /* Les trois boutons rapides (», manette/souris, clavier) sur une ligne, en icônes :
      empilés, la colonne débordait sur le clavier déplié. */
   .brand .quick-btns { display: flex; gap: 4px; }
-  .brand .ff-btn, .brand .mode-btn { width: 32px; padding: 0; }
+  .brand .ff-btn, .brand .mode-btn { width: 28px; padding: 0; }
   .brand .mode-label { display: none; }
   .brand .sub { display: none; }
   .brand .status { margin-left: 0; font-size: 12px; }
@@ -839,6 +839,21 @@ button, label { touch-action: manipulation; }
 
 /* ── Port 1 : manette ou souris (mouse-pointer.js) ── */
 .quick-btns { display: contents; }
+.mode-btn[hidden] { display: none; }
+/* Champ du clavier du téléphone : invisible mais focalisable (display: none ne
+   l'est pas) ; 16 px pour qu'iOS ne zoome pas la page à son focus. */
+.phone-kb-input {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  font-size: 16px;
+  pointer-events: none;
+}
 .mode-btn { width: auto; gap: 4px; padding: 0 8px; font: 600 13px Rajdhani, system-ui, sans-serif; color: var(--ink-dim); }
 .mode-btn svg { width: 16px; height: 16px; }
 .mode-btn .icon-mouse, .mode-btn[aria-pressed="true"] .icon-joy { display: none; }
