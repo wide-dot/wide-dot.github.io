@@ -17,6 +17,7 @@ import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
 import { createDiskCopies } from './disk-copies.js';
 import { saveScreenshot } from './screenshot.js';
+import { createScreenScaler } from './screen-scaler.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -25,7 +26,6 @@ const JOY = { left: 1, right: 2, up: 4, down: 8 };   // IoHandler.JOYSTICK_*
 
 const $ = id => document.getElementById(id);
 const canvas = $('screen');
-const ctx2d = canvas.getContext('2d');
 const status = $('status');
 const coarsePointer = matchMedia('(pointer: coarse)').matches;
 
@@ -93,7 +93,8 @@ function start(toje, store) {
   // Proportions d'affichage du domaine (pixel TO8 59:64) : la feuille de style
   // n'en porte aucune copie.
   document.documentElement.style.setProperty('--screen-aspect', String(aspect));
-  const image = ctx2d.createImageData(width, height);
+  // Agrandissement net et régulier : points égaux quelle que soit l'échelle.
+  const screen = createScreenScaler(canvas, width, height);
 
   // ── Son ────────────────────────────────────────────────────────────────
   let audio = null;      // { ctx, gain, next }
@@ -164,8 +165,7 @@ function start(toje, store) {
   }
 
   function present() {
-    image.data.set(new Uint8ClampedArray(toje.pixels().buffer));
-    ctx2d.putImageData(image, 0, 0);
+    screen.draw(new Uint8ClampedArray(toje.pixels().buffer));
     updateCapsLed();
     updateDriveLed();
   }
@@ -493,7 +493,7 @@ function start(toje, store) {
   $('reset').addEventListener('click', () => { toje.reset(); menu.close(); canvas.focus(); });
 
   $('pause').addEventListener('click', () => { setUserPaused(!userPaused); canvas.focus(); });
-  $('capture').addEventListener('click', () => saveScreenshot(canvas, aspect, gameMedia.title()));
+  $('capture').addEventListener('click', () => saveScreenshot(screen.source, aspect, gameMedia.title()));
 
   // Un lien qui lance ce jeu de la bibliothèque, à partager.
   $('copy-link').addEventListener('click', async () => {

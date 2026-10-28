@@ -126,7 +126,8 @@ button, label { touch-action: manipulation; }
   width: 100%;
   height: auto;
   aspect-ratio: var(--screen-aspect, auto);
-  image-rendering: pixelated;
+  /* Lissage voulu : le canvas est déjà agrandi d'un facteur entier (screen-scaler.js). */
+  image-rendering: auto;
   outline: none;
   touch-action: none;
 }
