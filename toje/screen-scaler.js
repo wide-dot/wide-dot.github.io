@@ -143,6 +143,10 @@ export function createScreenScaler(canvas, width, height, aspect) {
       canvas.width = 0;
       fit(...lastBox);
     },
+    /** Adouci : Scale2x deux fois puis lissage (WebGL seulement ; sinon sans effet). */
+    setSoft(on) {
+      if (shader) { shader.setSoft(on); redraw(); }
+    },
     /** Lissage WebGL actif (sinon repli 2D). */
     webgl: Boolean(shader),
     /** L'image du TO8 à sa taille d'origine (704 × 464) : capture, vignettes, recettes. */
