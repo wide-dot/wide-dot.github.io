@@ -16,6 +16,7 @@ import { createGameSaves } from './game-saves.js';
 import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
 import { createMyDisks } from './my-disks.js';
+import { createMousePointer } from './mouse-pointer.js';
 import { saveScreenshot } from './screenshot.js';
 import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
@@ -90,7 +91,7 @@ function registerOffline() {
 }
 
 function start(toje, store) {
-  const [width, height, aspect, scanLines, sampleRate] = toje.displayInfo();
+  const [width, height, aspect, scanLines, sampleRate, ...windowRect] = toje.displayInfo();
   canvas.width = width;
   canvas.height = height;
   // Proportions d'affichage du domaine (pixel TO8 59:64) : la feuille de style
@@ -147,8 +148,8 @@ function start(toje, store) {
 
   // Diagnostic de cadence, lisible depuis la console ou une recette Playwright :
   // trames émulées, coupures du son (file audio vidée), plus grosse rafale.
-  // joy : dernier état envoyé à chaque port ; lastRemap : dernière touche TO8 redirigée.
-  const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now(), joy: ['', ''], lastRemap: null };
+  // joy : dernier état envoyé à chaque port ; lastRemap : dernière touche TO8 redirigée ; mouse : x,y,boutons.
+  const stats = { frames: 0, underruns: 0, maxBurst: 0, start: performance.now(), joy: ['', ''], lastRemap: null, mouse: null };
   window.tojeStats = stats;
 
   function step(withSound = true) {
@@ -384,6 +385,7 @@ function start(toje, store) {
     bindings.forGame(gameMedia.key());
     bindingsPanel.render();
     myDisks.apply();
+    setMouseMode(prefs.get(`mouse.${gameMedia.key()}`, false));
     showMedia();
     renderMyDisks();
     saves.renderSlots();
@@ -403,6 +405,8 @@ function start(toje, store) {
       status.textContent = `${label || titleOf(name)} → lecteur ${drive + 1}`;
       setTarget('boot');
     } else {
+      // Souris retenue pour ce jeu : branchée avant le démarrage, le moniteur la détecte.
+      toje.setMouse(prefs.get(`mouse.${baseName(name)}`, false));
       let ok = true;
       if (format === 'rom') toje.insertCartridge(bytes);
       else if (format === 'sd') ok = toje.insertSdCard(bytes, name);
@@ -636,8 +640,8 @@ function start(toje, store) {
   let touchOn = false;
   function setTouch(on) {
     touchOn = on;
-    $('stick').hidden = !on;
     $('fire').hidden = !on;
+    showPointerMode();
     document.body.classList.toggle('touch', on);
     setPressed($('touch-mode'), on);
     if (!on) touchPad.reset();
@@ -702,6 +706,48 @@ function start(toje, store) {
     setFastLoad(e.currentTarget.getAttribute('aria-pressed') !== 'true');
     canvas.focus();
   });
+
+  // ── Port 1 : manette ou souris Thomson (mouse-pointer.js) ─────────────
+  // Retenu pour chaque jeu. Brancher la souris demande un redémarrage la
+  // première fois (le moniteur ne la détecte qu'au démarrage) ; la débrancher,
+  // non : la manette est rendue à l'instant.
+  const mouse = createMousePointer({ toje, canvas, pad: $('mouse-pad'), windowRect, onInput: noteInput });
+  let mouseOn = false;
+  function showPointerMode() {
+    $('stick').hidden = !touchOn || mouseOn;
+    $('mouse-pad').hidden = !touchOn || !mouseOn;
+    setPressed($('pointer-mode'), mouseOn);
+    $('pointer-mode').querySelector('.mode-label').textContent = mouseOn ? 'Souris' : 'Manette';
+    for (const b of document.querySelectorAll('.ptr-btn')) setPressed(b, String(mouseOn) === b.dataset.mouse);
+    for (const b of document.querySelectorAll('.fire-btn')) b.textContent = mouseOn ? b.dataset.mouse : b.dataset.joy;
+  }
+  /** Mode du port 1, sans redémarrer ; rend vrai si le moniteur doit encore détecter la souris. */
+  function setMouseMode(on) {
+    const reboot = toje.setMouse(on);
+    mouseOn = on;
+    mouse.setActive(on);
+    showPointerMode();
+    return reboot;
+  }
+  async function chooseMouse(on) {
+    if (on === mouseOn) return;
+    const first = gameMedia.list()[0];
+    if (on && first && !confirm(`Brancher la souris redémarre le TO8 (le moniteur ne la détecte qu’au démarrage). Redémarrer ${gameMedia.title()} ?`)) return;
+    prefs.set(`mouse.${gameMedia.key()}`, on);
+    if (!setMouseMode(on)) { status.textContent = on ? 'souris au port 1' : 'manette au port 1'; return; }
+    // Redémarrage sur le même média : mount rebranche la souris avant le reset.
+    if (first) {
+      setTarget('boot');
+      await mount(first.name, first.bytes, { fromLibrary: first.fromLibrary, myDisk: first.myDisk, label: first.label });
+    } else {
+      toje.reset();
+    }
+    status.textContent = 'souris branchée : le TO8 redémarre';
+  }
+  $('pointer-mode').addEventListener('click', () => { firstGesture(); chooseMouse(!mouseOn); canvas.focus(); });
+  for (const b of document.querySelectorAll('.ptr-btn')) {
+    b.addEventListener('click', () => chooseMouse(b.dataset.mouse === 'true'));
+  }
 
   // ── Clavier du PC et manettes ─────────────────────────────────────────
   // input-bindings.js dit ce que fait chaque touche et chaque bouton ;
@@ -842,7 +888,10 @@ function start(toje, store) {
   }
   function pollJoystick() {
     const [first = NO_PAD, second = NO_PAD] = readPads();
-    const touch = touchPad.state();
+    const pad = touchPad.state();
+    // Souris : les boutons tactiles deviennent ses boutons (B gauche, A droit).
+    stats.mouse = mouse.poll(mouseOn ? (pad.b ? 1 : 0) | (pad.a ? 2 : 0) : 0);
+    const touch = mouseOn ? { dirs: pad.dirs, a: false, b: false } : pad;
     sendJoy(joyPort, keyJoy.dirs | first.dirs | touch.dirs, keyJoy.a || first.a || touch.a, keyJoy.b || first.b || touch.b);
     sendJoy(1 - joyPort, second.dirs, second.a, second.b);
   }
