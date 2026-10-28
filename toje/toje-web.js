@@ -99,7 +99,7 @@ function start(toje, store) {
   // n'en porte aucune copie.
   document.documentElement.style.setProperty('--screen-aspect', String(aspect));
   // Agrandissement net et régulier : points égaux quelle que soit l'échelle.
-  const screen = createScreenScaler(canvas, width, height);
+  const screen = createScreenScaler(canvas, width, height, aspect);
 
   // ── Son ────────────────────────────────────────────────────────────────
   let audio = null;      // { ctx, gain, next }
@@ -703,6 +703,18 @@ function start(toje, store) {
     setPressed($('crt-mode'), on);
     prefs.set('crt', on);
   }
+  // Pixels nets : points sur un nombre entier de pixels réels, sans lissage.
+  function setPixelPerfect(on) {
+    screen.setPixelPerfect(on);
+    setPressed($('pixel-mode'), on);
+    prefs.set('pixelPerfect', on);
+  }
+  $('pixel-mode').addEventListener('click', e => {
+    setPixelPerfect(e.currentTarget.getAttribute('aria-pressed') !== 'true');
+    canvas.focus();
+  });
+  setPixelPerfect(prefs.get('pixelPerfect', false));
+
   $('crt-mode').addEventListener('click', e => {
     setCrt(e.currentTarget.getAttribute('aria-pressed') !== 'true');
     canvas.focus();

@@ -131,6 +131,10 @@ button, label { touch-action: manipulation; }
   outline: none;
   touch-action: none;
 }
+/* Pixels nets (screen-scaler.js) : taille imposée en pixels réels, centrée, sans lissage. */
+#screen.pixel-perfect { image-rendering: pixelated; margin: 0 auto; aspect-ratio: auto; }
+/* Écran plus large que son cadre (téléphone, facteur supérieur) : bord à bord, sans cadre. */
+.screen-frame.bleed { padding-left: 0; padding-right: 0; background: none; border-color: transparent; box-shadow: none; }
 .screen-frame:fullscreen { display: flex; align-items: center; justify-content: center; border-radius: 0; }
 .screen-frame:fullscreen #screen {
   /* La plus grande largeur qui tient aussi en hauteur (ScreenGeometry.contentRect). */

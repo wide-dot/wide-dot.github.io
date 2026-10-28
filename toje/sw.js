@@ -9,7 +9,7 @@
 // Filtré par Maven (src/main/webapp-filtered) pour porter le commit : pas de
 // gabarit JavaScript à dollar-accolade ici, il serait réécrit.
 
-const VERSION = 'c03adab';
+const VERSION = '125a782';
 const CACHE = 'toje';
 
 self.addEventListener('install', () => self.skipWaiting());
