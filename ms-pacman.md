@@ -19,13 +19,13 @@ display-instructions: false
 
 ## Description
 
-Ms. Pac-Man est arrivée dans les salles d'arcade en 1982. Quarante-quatre ans plus tard, on l'a fait venir sur Thomson TO8, et c'est bien la borne qui tourne sur votre machine.
+Ms. Pac-Man, la vraie, celle de la borne, tourne sur TO8.
 
-On a traduit en 6809 chaque routine du programme Z80 d'origine, puis on a rejoué les parties côte à côte avec MAME jusqu'à ce que les deux écrans ne s'écartent plus d'une seule image. Blinky, Pinky, Inky et Sue vous traquent avec leurs vraies règles, les fruits rebondissent sur leurs vrais trajets, et les quatre labyrinthes s'enchaînent jusqu'au tableau 142. C'est là que la borne plante, et le TO8 plante avec elle, à l'identique.
+On a repris le code Z80 de l'arcade et on l'a réécrit en 6809, routine par routine. Puis on a fait tourner MAME à côté, frame par frame, jusqu'à ce que tout colle. Les fantômes ont leur vraie IA, les fruits leurs vrais trajets, et ça va jusqu'au tableau 142… là où la borne plante. Le TO8 plante aussi, pareil.
 
-Pour les graphismes, on a repris ceux de la version Atari 7800 : son écran de 160 pixels de large tient exactement dans le mode 16 couleurs du TO8. Les musiques et les bruitages sont ceux de l'arcade, note pour note, sur une carte son SN76489.
+Pour les graphismes, on a pris ceux de la version Atari 7800 : 160 pixels de large, pile la largeur du mode 16 couleurs du TO8. Le son, c'est le driver de la borne, sur une carte SN76489.
 
-La borne affiche 60 images par seconde, le TO8 n'en a que 50. Pour que Ms. Pac-Man file à la bonne vitesse, on calcule six images de la borne pendant que le TO8 en affiche cinq.
+La borne tourne à 60 Hz, le TO8 à 50. Pour garder la bonne vitesse, on fait 6 frames arcade pour 5 frames TO8.
 
 <div class="row">
     <img src="images/ms-pacman/ms-pacman-01.gif" alt="" />
@@ -34,17 +34,17 @@ La borne affiche 60 images par seconde, le TO8 n'en a que 50. Pour que Ms. Pac-M
 
 ## Jouer
 
-Un appui sur le bouton de la manette met une pièce, un second lance la partie.
+Fire pour mettre une pièce, fire pour lancer la partie.
 
-Pas de son ? Une touche du clavier change le port de la carte son, affiché en haut à droite de l'écran. Le choix est retenu au bout de deux secondes.
+Pas de son ? Une touche du clavier change le port de la carte son (affiché en haut à droite). Le choix est validé au bout de 2 secondes.
 
-## Et en bonus
+## Le bonus
 
-La borne n'avait pas ça, alors on l'a ajouté. Sur la manette, faites haut, bas, gauche, droite, puis tir : Ms. Pac-Man se met à jouer toute seule, avec des vies infinies.
+Haut, bas, gauche, droite, fire… et Ms. Pac-Man joue toute seule, vies infinies.
 
-Aux commandes, un petit réseau de neurones. On l'a entraîné dans un simulateur de la borne écrit en C, pendant des nuits entières de calcul, puis on l'a réécrit pour le 6809. À chaque case, il choisit sa route en 7,7 ms en moyenne, et il perd à peine plus d'une vie par niveau. Refaites la même combinaison pour reprendre la main.
+Aux commandes, un petit réseau de neurones. Entraîné en C dans un simulateur de la borne, puis porté en 6809. 7,7 ms par décision en moyenne, à peine plus d'une vie perdue par niveau. Même combinaison pour reprendre la main.
 
-Pas de TO8 sous la main ? Le jeu tourne aussi [dans votre navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
+Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
 
 *Aucune exploitation commerciale n'est autorisée.*
 
