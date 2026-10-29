@@ -3,11 +3,12 @@ layout: default
 title:  Ms. Pac-Man
 date:   2026-10-29
 categories: game
-banner: /images/ms-pacman/banner.png
+banner: /images/ms-pacman/banner.jpg
 credits:
   - bentoc (portage 6809)
   - GCC (graphismes de la version Atari 7800)
   - Namco / Bally-Midway / GCC
+  - Cameron Hickling (Image Bannière)
 download: /releases/ms-pacman/ms-pacman-v1.0.0.zip
 hardwares:
   - Thomson TO8/TO8D
@@ -51,5 +52,10 @@ Le réseau a été entraîné dans un simulateur en C de la logique de la borne,
 Vous pouvez aussi [jouer dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
 
 *Aucune exploitation commerciale n'est autorisée.*
+
+---
+
+Credit spécial pour Cameron Hickling et sa superbe salle d'arcade :
+<https://www.artstation.com/artwork/GvXlk1>
 
 {% include instructions-noT2.html %}
