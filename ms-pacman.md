@@ -19,37 +19,32 @@ display-instructions: false
 
 ## Description
 
-Le Ms. Pac-Man de l'arcade sur Thomson TO8, en ASM 6809, routine par routine : le code Z80 de la borne a été relu dans son désassemblage commenté puis réécrit en 6809, et le portage a été comparé trame par trame à MAME.
+Ms. Pac-Man est arrivée dans les salles d'arcade en 1982. Quarante-quatre ans plus tard, elle débarque sur Thomson TO8, et c'est bien la borne qui tourne sur votre machine.
 
-La partie à un joueur est complète, jusqu'à la fin du tableau 142 :
+Chaque routine du programme Z80 d'origine a été traduite en 6809. Les parties ont été rejouées côte à côte avec MAME, jusqu'à ce que les deux écrans ne s'écartent plus d'une seule image. Blinky, Pinky, Inky et Sue vous traquent avec leurs vraies règles, les fruits rebondissent sur leurs vrais trajets, et les quatre labyrinthes s'enchaînent jusqu'au tableau 142. C'est là que la borne plante, et le TO8 plante avec elle, à l'identique.
 
-- les quatre labyrinthes et leurs couleurs,
-- les règles des fantômes : phases, cibles, maison, Elroy, ralentissement dans les tunnels, et jusqu'aux virages au hasard des fantômes apeurés,
-- les fruits et leurs trajets,
-- les trois intermèdes,
-- le mode démo, avec le chapiteau lumineux et la parade.
+Les graphismes viennent de la version Atari 7800 : son écran de 160 pixels de large tient exactement dans le mode 16 couleurs du TO8. Les musiques et les bruitages sont ceux de l'arcade, note pour note, sur une carte son SN76489.
 
-Les graphismes reprennent ceux de la version Atari 7800 : un écran de 160 pixels de large, qui tombe pile sur le mode 16 couleurs du TO8. La borne tourne à 60 Hz et le TO8 à 50 Hz : le jeu calcule donc 6 trames arcade toutes les 5 trames TO8, pour garder la vitesse d'origine. L'écran est redessiné aussi souvent que le processeur le permet, entre 25 et 30 images par seconde.
-
-Le pilote sonore de la borne est porté à l'identique et joue sur une carte SN76489.
+La borne affiche 60 images par seconde, le TO8 n'en a que 50. Pour que Ms. Pac-Man file à la bonne vitesse, le jeu calcule six images de la borne pendant que le TO8 en affiche cinq.
 
 <div class="row">
     <img src="images/ms-pacman/ms-pacman-01.gif" alt="" />
     <img src="images/ms-pacman/ms-pacman-02.gif" alt="" />
 </div>
 
-## Commandes
+## Jouer
 
-- **Bouton de tir** : insère une pièce, puis lance la partie depuis l'écran de départ.
-- **N'importe quelle touche** : choisit le port de la carte son, affiché en haut à droite. Chaque appui passe au suivant avec une note de test, et le choix s'applique après 2 secondes sans appui. Une carte Musique PLUS est reconnue toute seule au démarrage.
+Un appui sur le bouton de la manette met une pièce, un second lance la partie.
 
-## Le pilote
+Pas de son ? Appuyez sur une touche du clavier pour changer le port de la carte son, affiché en haut à droite de l'écran. Le choix est retenu au bout de deux secondes. Une Musique PLUS est trouvée toute seule au démarrage.
 
-Haut, bas, gauche, droite, puis tir, dans cet ordre : le jeu se met à jouer tout seul. Un petit réseau de neurones insère une pièce, lance la partie et la joue, avec des vies infinies. Il perd en moyenne 1,2 vie par niveau sur les niveaux 1 à 21, et prend environ 13 % du processeur. La même séquence lui rend la main.
+## Laissez-la jouer
 
-Le réseau a été entraîné dans un simulateur en C de la logique de la borne, identique à MAME, avant d'être converti en arithmétique entière 6809.
+Sur la manette, faites haut, bas, gauche, droite, puis tir. Ms. Pac-Man se met à jouer toute seule, avec des vies infinies.
 
-Vous pouvez aussi [jouer dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
+C'est un petit réseau de neurones qui tient la manette. Il a appris à jouer dans un simulateur de la borne écrit en C, pendant des nuits entières de calcul, puis il a été réécrit pour le 6809. Il ne prend qu'un huitième du processeur et perd à peine plus d'une vie par niveau. Refaites la même combinaison pour reprendre la main.
+
+Pas de TO8 sous la main ? Le jeu tourne aussi [dans votre navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
 
 *Aucune exploitation commerciale n'est autorisée.*
 
