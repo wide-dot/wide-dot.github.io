@@ -13,6 +13,8 @@ lotus.rom
 ms-pacman.fd
 ms-pacman.sd
 mspacman.sd
+prince-of-persia.fd
+prince-of-persia.sd
 r-type-last.rom
 r-type.fd
 r-type.rom

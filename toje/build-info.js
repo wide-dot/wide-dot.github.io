@@ -3,7 +3,7 @@
 // autres contiennent des gabarits ${…} JavaScript que le filtrage réécrirait.
 export const BUILD = {
   version: '1.3.0',
-  time: '2026-10-29T09:10:24Z',      // ISO 8601, UTC
-  commit: 'd035a5f',
+  time: '2026-10-29T22:01:00Z',      // ISO 8601, UTC
+  commit: '5e3c1ba',
   dirty: 'false' === 'true',
 };
