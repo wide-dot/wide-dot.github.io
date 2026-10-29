@@ -34,7 +34,7 @@ Le pilote sonore de la borne est porté à l'identique et joue sur une carte SN7
 
 <div class="row">
     <img src="images/ms-pacman/ms-pacman-01.gif" alt="" />
-    <img src="images/ms-pacman/ms-pacman-02.png" alt="" />
+    <img src="images/ms-pacman/ms-pacman-02.gif" alt="" />
 </div>
 
 ## Commandes
