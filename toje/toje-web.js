@@ -555,7 +555,6 @@ function start(toje, store) {
     document.title = `${locked.title} — TOJE`;
     $('brand-sub').textContent = locked.title;
     for (const id of ['open-file', 'library-box', 'help']) $(id).hidden = true;
-    $('full-toje').hidden = false;
   }
 
   $('disk-input').addEventListener('change', e => {
@@ -979,6 +978,8 @@ function start(toje, store) {
     if (locked) { await startLocked(); return; }
     const wanted = new URLSearchParams(location.search).get('jeu');
     const { files, load } = await library;
+    // La build web n'embarque plus de médias : sans liste, pas de bibliothèque.
+    if (files.length === 0) $('library-box').hidden = true;
     if (wanted && files.includes(wanted)) { await load(wanted); return; }
     if (await saves.offerResume()) { startHint.hidden = true; return; }
     const last = prefs.get('lastGame', null);
