@@ -15,6 +15,8 @@ hardwares:
   - RAM ext. 256 Ko (sauf Mégarom T.2)
   - Carte son YM2413 (option)
 display-instructions: true  
+toje:
+  - /releases/alttp/alttp.fd
 ---
 
 ### Description

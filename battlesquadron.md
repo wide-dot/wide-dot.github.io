@@ -12,6 +12,8 @@ hardwares:
   - Thomson TO8
   - Thomson TO9+
 display-instructions: false  
+toje:
+  - /releases/battlesquadron/battlesquadron.rom
 ---
  
 

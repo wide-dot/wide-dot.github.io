@@ -71,6 +71,14 @@
 						
 									{% endif %}
 
+									{% if page.toje %}
+									<fieldset>
+										<legend>Jouer</legend>
+										<a href="/toje/?{% for media in page.toje %}media={{ media | url_encode }}&amp;{% endfor %}titre={{ page.title | url_encode }}" class="button primary">Jouer dans le navigateur</a>
+										<p><small>Émulateur TO8 TOJE, sans rien installer{% if page.toje.size > 1 %} — {{ page.toje.size }} disquettes{% endif %}.</small></p>
+									</fieldset>
+									{% endif %}
+
 									{% if page.download %}
 									<fieldset>
 										<legend>Téléchargement</legend>

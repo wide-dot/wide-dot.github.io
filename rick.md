@@ -13,6 +13,8 @@ hardwares:
   - Thomson TO8
   - Thomson TO9+
 display-instructions: true  
+toje:
+  - /releases/rick/rick-dangerous.fd
 ---
 
 ### Description

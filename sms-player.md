@@ -16,6 +16,8 @@ hardwares:
   - Thomson TO9+
   - Carte son YM2413 et/ou SN76489
 display-instructions: false
+toje:
+  - /releases/sms-player/sms-player.fd
 ---
  
 

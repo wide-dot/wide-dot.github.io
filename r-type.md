@@ -16,6 +16,8 @@ hardwares:
   - Thomson TO8
   - Thomson TO9+
 display-instructions: false
+toje:
+  - /releases/r-type/r-type.fd
 ---
  
 

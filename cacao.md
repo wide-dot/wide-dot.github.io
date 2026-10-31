@@ -17,6 +17,8 @@ hardwares:
   - RAM ext. 256 Ko (sauf Mégarom T.2)
   - Carte son SN76489 (option)
 display-instructions: true  
+toje:
+  - /releases/cacao/cacao-and-coffee-shop.fd
 ---
 
 ### Description

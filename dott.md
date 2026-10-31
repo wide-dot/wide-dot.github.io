@@ -15,6 +15,8 @@ hardwares:
   - Carte Midi
   - Roland MT-32
 display-instructions: true  
+toje:
+  - /releases/dott/dott.fd
 ---
 
 ### Description
