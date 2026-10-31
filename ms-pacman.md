@@ -9,7 +9,7 @@ credits:
   - GCC (graphismes de la version Atari 7800)
   - Namco / Bally-Midway / GCC
   - Cameron Hickling (Image Bannière)
-download: /releases/ms-pacman/ms-pacman-v1.0.0.zip
+download: /releases/ms-pacman/ms-pacman-v1.0.1.zip
 hardwares:
   - Thomson TO8/TO8D
   - Manette dans le premier port
