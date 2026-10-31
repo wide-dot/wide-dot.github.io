@@ -356,6 +356,10 @@ button, label { touch-action: manipulation; }
 .game-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
 .game-actions:not(:has(> :not([hidden]))) { display: none; }
 .keycap[hidden] { display: none; }
+/* Jeu verrouillé (?media=…) : ce qui sert à choisir un autre jeu disparaît. */
+.library[hidden], .help[hidden], .game-disks[hidden] { display: none; }
+a.keycap { text-decoration: none; display: inline-flex; align-items: center; }
+.game-disks { margin-top: 8px; }
 .lib-search {
   width: 100%;
   min-height: 38px;

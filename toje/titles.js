@@ -7,6 +7,7 @@ const EXCEPTIONS = {
   'hcl-mega-demo': 'HCL Mega Demo',
   'l-aigle-d-or': 'L’Aigle d’Or',
   'ms-pacman': 'Ms. Pac-Man',
+  'mspacman': 'Ms. Pac-Man',
   'prince-of-persia': 'Prince of Persia',
   'r-type': 'R-Type',
   'r-type-last': 'R-Type Last',

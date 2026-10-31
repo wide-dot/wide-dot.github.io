@@ -3,13 +3,13 @@
 // Les fichiers de la page portent le commit du build (?v=…) : une même adresse
 // ne change jamais, on la sert du cache d'abord. Seule la page (index.html)
 // passe d'abord par le réseau — c'est elle qui désigne la génération du reste —
-// et retombe sur le cache hors ligne. Les médias de la bibliothèque, joués une
-// fois, restent jouables.
+// et retombe sur le cache hors ligne, comme tout fichier non versionné (médias
+// d'un jeu verrouillé, ?media=…). Les médias joués une fois restent jouables.
 //
 // Filtré par Maven (src/main/webapp-filtered) pour porter le commit : pas de
 // gabarit JavaScript à dollar-accolade ici, il serait réécrit.
 
-const VERSION = '000dc35';
+const VERSION = '240f956';
 const CACHE = 'toje';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -58,6 +58,10 @@ async function cacheFirst(request) {
 
 self.addEventListener('fetch', event => {
   const request = event.request;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-  event.respondWith(request.mode === 'navigate' ? networkFirst(request) : cacheFirst(request));
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  // Sans ?v= (la page, les médias d'un jeu verrouillé pris sur le site) :
+  // l'adresse peut changer de contenu, le réseau d'abord.
+  const versioned = url.searchParams.has('v');
+  event.respondWith(request.mode === 'navigate' || !versioned ? networkFirst(request) : cacheFirst(request));
 });

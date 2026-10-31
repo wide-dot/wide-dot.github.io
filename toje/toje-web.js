@@ -23,6 +23,7 @@ import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
 import { connectedPads, padName, readPad } from './gamepads.js';
 import { createBindingsPanel } from './bindings-panel.js';
+import { lockedGame, scopedStore, fetchMedia, renderGameDisks, isDisk } from './locked-game.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -32,6 +33,8 @@ const JOY = { left: 1, right: 2, up: 4, down: 8 };   // IoHandler.JOYSTICK_*
 const $ = id => document.getElementById(id);
 const canvas = $('screen');
 const status = $('status');
+// Page verrouillée sur un jeu (?media=…), cf. locked-game.js ; sinon null.
+const locked = lockedGame(location.search, location.href);
 const coarsePointer = matchMedia('(pointer: coarse)').matches;
 
 // Réglages de confort du visiteur, dans son navigateur seulement.
@@ -330,6 +333,11 @@ function start(toje, store) {
   function firstGesture() {
     startHint.hidden = true;
     openAudio();
+    // Contexte créé sans geste (jeu lancé par l'adresse) : le navigateur l'a
+    // laissé suspendu, ce premier geste le réveille.
+    if (audio && soundOn && !isPaused() && audio.ctx.state === 'suspended') {
+      audio.ctx.resume().then(() => { audio.next = audio.ctx.currentTime + 0.03; });
+    }
     keepScreenAwake();
   }
   document.addEventListener('pointerdown', firstGesture, { capture: true });
@@ -397,7 +405,7 @@ function start(toje, store) {
 
   // myDisk / label : une disquette de « Mes disquettes » (my-disks.js), la seule
   // inscriptible ; un original reste languette posée.
-  async function mount(name, bytes, { fromLibrary = false, myDisk = null, label = null, drive = null } = {}) {
+  async function mount(name, bytes, { fromLibrary = false, myDisk = null, label = null, drive = null, gesture = true } = {}) {
     const format = formatOf(name) || 'fd';
     const isDisk = format !== 'rom' && format !== 'sd';
     const swap = isDisk && (drive !== null || target !== 'boot');
@@ -423,7 +431,7 @@ function start(toje, store) {
     }
     gameChanged();
     menu.close();
-    firstGesture();
+    if (gesture) firstGesture();   // sans geste (adresse), l'invite au son reste affichée
     canvas.focus();
   }
 
@@ -442,10 +450,12 @@ function start(toje, store) {
     },
     /** Clé stable des réglages du jeu : le fichier démarré. */
     key() {
+      if (locked) return locked.key;   // une disquette 2 au lecteur 1 reste le même jeu
       const first = this.list()[0];
       return first ? baseName(first.name) : 'TO8';
     },
     title() {
+      if (locked) return locked.title;
       const first = this.list()[0];
       return first ? first.label || titleOf(first.name) : 'TO8';
     },
@@ -538,8 +548,15 @@ function start(toje, store) {
   }
 
   const menu = createMenu($('menu-toggle'), $('menu'), $('menu-backdrop'), $('menu-close'));
-  const library = createLibrary($('library'), [...document.querySelectorAll('.lib-chips .chip')],
+  // Jeu verrouillé : ni bibliothèque ni fichier à ouvrir, seulement ses médias.
+  const library = locked ? null : createLibrary($('library'), [...document.querySelectorAll('.lib-chips .chip')],
     $('lib-search'), BUILD.commit, mount, text => { status.textContent = text; });
+  if (locked) {
+    document.title = `${locked.title} — TOJE`;
+    $('brand-sub').textContent = locked.title;
+    for (const id of ['open-file', 'library-box', 'help']) $(id).hidden = true;
+    $('full-toje').hidden = false;
+  }
 
   $('disk-input').addEventListener('change', e => {
     const file = e.target.files[0];
@@ -549,11 +566,12 @@ function start(toje, store) {
 
   const frame = $('screen-frame');
   const hint = $('drop-hint');
-  frame.addEventListener('dragover', e => { e.preventDefault(); hint.hidden = false; });
+  frame.addEventListener('dragover', e => { e.preventDefault(); hint.hidden = Boolean(locked); });
   frame.addEventListener('dragleave', () => { hint.hidden = true; });
   frame.addEventListener('drop', e => {
     e.preventDefault();
     hint.hidden = true;
+    if (locked) return;
     const file = e.dataTransfer.files[0];
     if (file) openFile(file);
   });
@@ -938,7 +956,8 @@ function start(toje, store) {
 
   // Parties sauvegardées.
   const saves = createGameSaves({
-    toje, store, media: gameMedia, canvas: screen.source,
+    toje, store: locked ? scopedStore(store, `jeu:${locked.key}:`) : store,
+    media: gameMedia, canvas: screen.source,
     ui: { slots: $('saves'), resume: $('resume'), resumeTitle: $('resume-title'),
           resumeWhen: $('resume-when'), resumeThumb: $('resume-thumb'),
           resumeYes: $('resume-yes'), resumeNo: $('resume-no') },
@@ -957,6 +976,7 @@ function start(toje, store) {
   // Au démarrage, dans l'ordre : un lien direct (?jeu=…) lance son jeu ; sinon
   // la partie en cours est proposée ; sinon le dernier jeu de la bibliothèque.
   (async () => {
+    if (locked) { await startLocked(); return; }
     const wanted = new URLSearchParams(location.search).get('jeu');
     const { files, load } = await library;
     if (wanted && files.includes(wanted)) { await load(wanted); return; }
@@ -967,4 +987,28 @@ function start(toje, store) {
   status.textContent = 'prêt';
   canvas.focus();
   requestAnimationFrame(tick);
+
+  // Jeu verrouillé : ses médias téléchargés, le premier démarre, la disquette 2
+  // attend au lecteur 2 ; puis sa partie en cours, s'il en a une, est proposée.
+  async function startLocked() {
+    status.textContent = `chargement de ${locked.title}…`;
+    let entries;
+    try {
+      entries = await fetchMedia(locked);
+    } catch (e) {
+      status.textContent = `échec du chargement : ${e.message}`;
+      console.error(e);
+      return;
+    }
+    const [first, ...rest] = entries;
+    await mount(first.name, first.bytes, { label: first.label, gesture: false });
+    const second = rest.find(e => isDisk(e.name));
+    if (isDisk(first.name) && second) {
+      await mount(second.name, second.bytes, { label: second.label, drive: 1, gesture: false });
+    }
+    renderGameDisks($('game-disks'), entries,
+      (e, drive) => mount(e.name, e.bytes, { label: e.label, drive }));
+    status.textContent = locked.title;
+    if (await saves.offerResume()) startHint.hidden = true;
+  }
 }
