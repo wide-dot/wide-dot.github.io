@@ -15,6 +15,8 @@ hardwares:
   - Manette dans le premier port
   - Carte son SN76489 (facultative)
 display-instructions: false
+toje:
+  - /releases/ms-pacman/ms-pacman.fd
 ---
 
 ## Description
@@ -37,7 +39,7 @@ Fire pour mettre une pièce, fire pour lancer la partie.
 
 Pas de son ? Une touche du clavier change le port de la carte son (affiché en haut à droite). Le choix est validé au bout de 2 secondes.
 
-Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
+Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2Freleases%2Fms-pacman%2Fms-pacman.fd&titre=Ms.+Pac-Man) avec TOJE.
 
 ***Aucune exploitation commerciale n'est autorisée.***
 
