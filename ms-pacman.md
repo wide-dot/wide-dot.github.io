@@ -19,38 +19,36 @@ display-instructions: false
 
 ## Description
 
-Ms. Pac-Man, la vraie, celle de la borne, tourne sur TO8.
+Ms. Pac-Man débarque enfin sur TO8 ... à 30fps !
 
-On a repris le code Z80 de l'arcade et on l'a réécrit en 6809, routine par routine. Puis on a fait tourner MAME à côté, frame par frame, jusqu'à ce que tout colle. Les fantômes ont leur vraie IA, les fruits leurs vrais trajets, et ça va jusqu'au tableau 142… là où la borne plante. Le TO8 plante aussi, pareil.
+Il s'agit de la version arcade, avec les graphismes empruntés à la version Atari 7800. Le son a été adapté pour la carte SN76489.
 
-Pour les graphismes, on a pris ceux de la version Atari 7800 : 160 pixels de large, pile la largeur du mode 16 couleurs du TO8. Le son, c'est le driver de la borne, sur une carte SN76489.
+## Réseau de neurones
 
-La borne tourne à 60 Hz, le TO8 à 50. Pour garder la bonne vitesse, on fait 6 frames arcade pour 5 frames TO8.
+On voulait apporter un petit twist à cette version arcade, alors on a ajouté un petit réseau de neurones qui joue en temps réel à 25fps !
+
+Pour l'activer, durant l'intro: Haut, bas, gauche, droite, fire ...
+et Ms. Pac-Man joue toute seule, vies infinies.
+
+## Jouer
+
+Le jeu se joue à la manette:
+Fire pour mettre une pièce, fire pour lancer la partie.
+
+Pas de son ? Une touche du clavier change le port de la carte son (affiché en haut à droite). Le choix est validé au bout de 2 secondes.
+
+Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
+
+***Aucune exploitation commerciale n'est autorisée.***
 
 <div class="row">
     <img src="images/ms-pacman/ms-pacman-01.gif" alt="" />
     <img src="images/ms-pacman/ms-pacman-02.gif" alt="" />
 </div>
 
-## Jouer
-
-Fire pour mettre une pièce, fire pour lancer la partie.
-
-Pas de son ? Une touche du clavier change le port de la carte son (affiché en haut à droite). Le choix est validé au bout de 2 secondes.
-
-## Le bonus
-
-Haut, bas, gauche, droite, fire… et Ms. Pac-Man joue toute seule, vies infinies.
-
-Aux commandes, un petit réseau de neurones. Entraîné en C dans un simulateur de la borne, puis porté en 6809. 7,7 ms par décision en moyenne, à peine plus d'une vie perdue par niveau. Même combinaison pour reprendre la main.
-
-Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?jeu=ms-pacman.fd) avec TOJE.
-
-*Aucune exploitation commerciale n'est autorisée.*
-
 ---
 
-Credit spécial pour Cameron Hickling et sa superbe salle d'arcade :
+Credit spécial pour Cameron Hickling et sa superbe salle d'arcade en banner :
 <https://www.artstation.com/artwork/GvXlk1>
 
 {% include instructions-noT2.html %}
