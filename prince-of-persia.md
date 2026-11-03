@@ -46,7 +46,7 @@ Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2F
 
 ***Aucune exploitation commerciale n'est autorisée.***
 
-<div class="row">
+<div class="row previews">
     <img src="images/prince-of-persia/prince-of-persia-01.gif" alt="" />
     <img src="images/prince-of-persia/prince-of-persia-02.gif" alt="" />
 </div>
