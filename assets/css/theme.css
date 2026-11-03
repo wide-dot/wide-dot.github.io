@@ -1,0 +1,609 @@
+/*
+	wide-dot — thème 2026
+	Palette dérivée du logo : jaune, or, magenta, périwinkle, cyan sur tuile noire.
+	Deux thèmes : clair (défaut) et sombre, via [data-theme] sur <html>.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---------------------------------------------------------------- Variables */
+
+:root {
+	--c-yellow:      #ffff00;
+	--c-gold:        #e2c100;
+	--c-magenta:     #ff00ff;
+	--c-periwinkle:  #8e8edb;
+	--c-cyan:        #03ffff;
+
+	--rainbow: linear-gradient(90deg,
+		var(--c-yellow) 0%, var(--c-yellow) 20%,
+		var(--c-gold) 20%, var(--c-gold) 40%,
+		var(--c-magenta) 40%, var(--c-magenta) 60%,
+		var(--c-periwinkle) 60%, var(--c-periwinkle) 80%,
+		var(--c-cyan) 80%, var(--c-cyan) 100%);
+
+	/* Thème clair */
+	--bg:            #ffffff;
+	--bg-alt:        #f5f5f1;
+	--bg-elev:       #ffffff;
+	--fg:            #4c5258;
+	--fg-bold:       #121215;
+	--fg-light:      #8a9099;
+	--border:        rgba(18, 18, 21, 0.12);
+	--border-strong: rgba(18, 18, 21, 0.24);
+
+	--link:          #bf008c;
+	--link-hover:    #ff00e6;
+	--accent:        #ff00ff;
+	--accent-2:      #00b3bd;
+	--accent-3:      #e2c100;
+
+	--btn-bg:        #121215;
+	--btn-fg:        #ffffff;
+	--btn-bg-hover:  #ff00ff;
+	--btn-fg-hover:  #0a0a0c;
+
+	--shadow:        0 12px 34px rgba(18, 18, 21, 0.10);
+	--glow:          0 0 0 3px rgba(255, 0, 255, 0.16), 0 8px 28px rgba(255, 0, 255, 0.28);
+
+	color-scheme: light;
+}
+
+[data-theme="dark"] {
+	--bg:            #0b0b0e;
+	--bg-alt:        #14141a;
+	--bg-elev:       #17171f;
+	--fg:            #b7b7c4;
+	--fg-bold:       #f7f7fb;
+	--fg-light:      #7d7d8c;
+	--border:        rgba(255, 255, 255, 0.12);
+	--border-strong: rgba(255, 255, 255, 0.26);
+
+	--link:          #ff6bff;
+	--link-hover:    #03ffff;
+	--accent:        #ff3dff;
+	--accent-2:      #03ffff;
+	--accent-3:      #ffff00;
+
+	--btn-bg:        #ff00ff;
+	--btn-fg:        #0a0a0c;
+	--btn-bg-hover:  #03ffff;
+	--btn-fg-hover:  #0a0a0c;
+
+	--shadow:        0 12px 34px rgba(0, 0, 0, 0.55);
+	--glow:          0 0 0 3px rgba(3, 255, 255, 0.18), 0 8px 30px rgba(255, 0, 255, 0.35);
+
+	color-scheme: dark;
+}
+
+/* --------------------------------------------------------------------- Base */
+
+html {
+	scroll-behavior: smooth;
+}
+
+body,
+input,
+select,
+textarea {
+	color: var(--fg);
+	font-family: "Inter", "Open Sans", sans-serif;
+}
+
+body {
+	background: var(--bg);
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+	background: var(--accent);
+	color: #0a0a0c;
+}
+
+:focus-visible {
+	outline: 2px solid var(--accent-2);
+	outline-offset: 2px;
+}
+
+a {
+	color: var(--link);
+	border-bottom-color: var(--border-strong);
+}
+
+a:hover {
+	color: var(--link-hover) !important;
+	border-bottom-color: currentColor;
+}
+
+strong,
+b {
+	color: var(--fg-bold);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	color: var(--fg-bold);
+	font-family: "Space Grotesk", "Roboto Slab", serif;
+	font-weight: 600;
+	letter-spacing: -0.015em;
+}
+
+h1 {
+	font-weight: 700;
+	letter-spacing: -0.03em;
+}
+
+hr {
+	border-bottom-color: var(--border);
+}
+
+blockquote {
+	border-left-color: var(--accent);
+	color: var(--fg-light);
+}
+
+code {
+	font-family: "Roboto Mono", "Courier New", monospace;
+	background: var(--bg-alt);
+	border: solid 1px var(--border);
+	border-radius: 0.3em;
+	padding: 0.1em 0.35em;
+}
+
+pre {
+	background: var(--bg-alt);
+	border: solid 1px var(--border);
+	border-radius: 0.5em;
+}
+
+/* -------------------------------------------------------------------- Header */
+
+#header {
+	border-bottom: 0;
+	padding-bottom: 1.4em;
+}
+
+#header::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 5px;
+	border-radius: 3px;
+	background: var(--rainbow);
+}
+
+#header .logo {
+	display: flex;
+	align-items: center;
+	border-bottom: 0;
+}
+
+#header .logo img {
+	display: block;
+	width: auto;
+	height: 4em;
+	transition: transform 0.25s ease;
+}
+
+#header .logo:hover img {
+	transform: rotate(-3deg) scale(1.03);
+}
+
+#header .icons {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+#header .icons li {
+	line-height: 1;
+}
+
+/* Bouton de bascule clair / sombre */
+#theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.35em;
+	height: 2.35em;
+	border: solid 1px var(--border-strong);
+	border-radius: 50%;
+	color: var(--fg-bold) !important;
+	background: transparent;
+	transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease,
+		transform 0.2s ease;
+}
+
+#theme-toggle:hover {
+	color: var(--accent) !important;
+	border-color: var(--accent);
+	transform: rotate(-15deg);
+}
+
+#theme-toggle:before {
+	font-size: 1.15em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#header .logo img,
+	#theme-toggle,
+	.button {
+		transition: none;
+	}
+}
+
+/* --------------------------------------------------------- Section / titres */
+
+header.major > :last-child {
+	border-bottom: solid 3px transparent;
+	border-image: var(--rainbow) 1;
+	letter-spacing: 0.02em;
+}
+
+.subtitle {
+	color: var(--fg-bold);
+	border-left: 4px solid var(--accent);
+	padding-left: 0.75em;
+	line-height: 1.4;
+}
+
+/* -------------------------------------------------------------- Encadrés */
+
+fieldset {
+	background: var(--bg-alt);
+	border: solid 1px var(--border);
+	border-radius: 0.75em;
+	padding: 1.15em 1.3em 1.3em 1.3em;
+	margin-bottom: 1.25em;
+}
+
+legend {
+	color: var(--fg-bold);
+	font-family: "Space Grotesk", "Roboto Slab", serif;
+	font-size: 0.95em;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 0 0 0.55em 0;
+	border-bottom: solid 3px transparent;
+	border-image: var(--rainbow) 1;
+}
+
+fieldset > ul {
+	margin: 0;
+}
+
+.flex-item-right .button.primary {
+	display: block;
+	width: 100%;
+}
+
+.flex-item-right .toje-more {
+	margin-top: -1.1em;
+	margin-bottom: 1.2em;
+}
+
+/* --------------------------------------------------- Jeu complet (accueil) */
+
+.highlight-game {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+	background: var(--bg-alt);
+	border: solid 1px var(--border);
+	border-radius: 0.9em;
+	overflow: hidden;
+	margin: 0 0 2.5em 0;
+	box-shadow: var(--shadow);
+}
+
+.highlight-game .highlight-media {
+	display: block;
+	border-bottom: 0;
+	line-height: 0;
+}
+
+.highlight-game .highlight-media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0;
+	transition: transform 0.4s ease;
+}
+
+.highlight-game .highlight-media:hover img {
+	transform: scale(1.03);
+}
+
+.highlight-game .highlight-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 1.7em 1.8em;
+}
+
+.highlight-kicker {
+	align-self: flex-start;
+	color: var(--link);
+	font-family: "Space Grotesk", "Roboto Slab", serif;
+	font-size: 0.72em;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	padding-bottom: 0.35em;
+	margin-bottom: 0.7em;
+	border-bottom: solid 3px transparent;
+	border-image: var(--rainbow) 1;
+}
+
+.highlight-game h3 {
+	font-size: 1.6em;
+	margin-bottom: 0.35em;
+}
+
+.highlight-game p {
+	margin-bottom: 1.2em;
+	text-align: left;
+}
+
+.highlight-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6em;
+}
+
+.highlight-actions .button {
+	margin: 0;
+}
+
+@media screen and (max-width: 800px) {
+	.highlight-game {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* --------------------------------------------------------------- Boutons */
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button,
+.button {
+	border-radius: 0.5em;
+	box-shadow: inset 0 0 0 2px var(--border-strong);
+	color: var(--fg-bold) !important;
+	font-family: "Space Grotesk", "Roboto Slab", serif;
+	transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+button:hover,
+.button:hover {
+	background-color: var(--bg-alt);
+	color: var(--fg-bold) !important;
+}
+
+input[type="submit"]:active,
+input[type="reset"]:active,
+input[type="button"]:active,
+button:active,
+.button:active {
+	background-color: var(--bg-alt);
+	transform: translateY(1px);
+}
+
+.button.primary {
+	background: var(--btn-bg);
+	box-shadow: none;
+	color: var(--btn-fg) !important;
+}
+
+.button.primary:hover {
+	background: var(--btn-bg-hover);
+	box-shadow: var(--glow);
+	color: var(--btn-fg-hover) !important;
+}
+
+.button.primary:active {
+	background: var(--btn-bg-hover);
+	box-shadow: none;
+}
+
+/* ---------------------------------------------------------------- Sidebar */
+
+#sidebar {
+	background-color: var(--bg-alt);
+	border-right: solid 1px var(--border);
+}
+
+#sidebar > .inner > * {
+	border-bottom: solid 1px var(--border);
+}
+
+#sidebar > .inner > .alt {
+	background-color: var(--bg-elev);
+}
+
+#sidebar .toggle {
+	color: var(--fg-bold);
+}
+
+/* Sidebar visible en permanence : le bouton menu n'a pas lieu d'être. */
+@media screen and (min-width: 1281px) {
+	#sidebar .toggle {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 736px) {
+	#sidebar .toggle:after {
+		background: var(--bg-alt);
+		border: solid 1px var(--border);
+		border-radius: 0.5em;
+	}
+
+	#sidebar .toggle:before {
+		color: var(--fg-bold);
+	}
+}
+
+#menu ul {
+	color: var(--fg-bold);
+	font-family: "Space Grotesk", "Roboto Slab", serif;
+}
+
+#menu ul a:hover,
+#menu ul span:hover {
+	color: var(--accent);
+}
+
+#menu ul a.opener:before,
+#menu ul span.opener:before {
+	color: var(--fg-light);
+}
+
+#menu ul a.opener:hover:before,
+#menu ul span.opener:hover:before {
+	color: var(--accent);
+}
+
+#menu > ul > li {
+	border-top: solid 1px var(--border);
+}
+
+#menu > ul > li > ul {
+	color: var(--fg-light);
+}
+
+ul.contact li {
+	border-top: solid 1px var(--border);
+}
+
+ul.contact li:before {
+	color: var(--accent);
+}
+
+/* --------------------------------------------------------------- Contenu */
+
+.toje-figure {
+	max-width: 44em;
+	margin: 0 auto 2.5em auto;
+}
+
+.toje-figure img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: solid 1px var(--border);
+	border-radius: 0.6em;
+	box-shadow: var(--shadow);
+}
+
+.toje-figure figcaption {
+	margin-top: 0.7em;
+	color: var(--fg-light);
+	font-size: 0.8em;
+}
+
+#main > .inner > section {
+	border-top: solid 1px var(--border);
+}
+
+#main > .inner > section:first-of-type {
+	border-top: 0 !important;
+}
+
+.image img {
+	border-radius: 0.5em;
+}
+
+.banner .image img {
+	box-shadow: var(--shadow);
+}
+
+table tbody tr {
+	border-color: var(--border);
+}
+
+table tbody tr:nth-child(2n + 1) {
+	background-color: var(--bg-alt);
+}
+
+table th {
+	color: var(--fg-bold);
+}
+
+label {
+	color: var(--fg-bold);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="search"],
+input[type="url"],
+select,
+textarea {
+	background: var(--bg-elev);
+	border: solid 1px var(--border-strong);
+	color: var(--fg);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 1px var(--accent);
+}
+
+select option {
+	background: var(--bg-elev);
+	color: var(--fg-bold);
+}
+
+::-webkit-input-placeholder { color: var(--fg-light) !important; }
+:-moz-placeholder { color: var(--fg-light) !important; }
+::-moz-placeholder { color: var(--fg-light) !important; }
+:-ms-input-placeholder { color: var(--fg-light) !important; }
+
+#footer .copyright {
+	color: var(--fg-light);
+}
+
+/* Défilement */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--bg-alt);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--border-strong);
+	border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--accent);
+}
+
+/* --------------------------------------------------------------- Responsive */
+
+@media screen and (max-width: 736px) {
+	#header .logo img {
+		height: 3.25em;
+		border-radius: 0.85em;
+	}
+}
