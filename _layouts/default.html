@@ -92,7 +92,9 @@
 									{% if page.toje %}
 									<fieldset>
 										<legend>Jouer</legend>
-										<a href="/toje/?{% for media in page.toje %}media={{ media | url_encode }}&amp;{% endfor %}titre={{ page.title | url_encode }}" class="button primary">Jouer dans le navigateur</a>
+										{% capture toje_url %}/toje/?{% for media in page.toje %}media={{ media | url_encode }}&amp;{% endfor %}titre={{ page.title | url_encode }}{% endcapture %}
+										{% if page.toje-image %}<a href="{{ toje_url }}" class="toje-preview"><img src="{{ page.toje-image }}" alt="Jouer dans le navigateur" /></a>{% endif %}
+										<a href="{{ toje_url }}" class="button primary">Jouer dans le navigateur</a>
 										{% if page.toje.size > 1 %}<p class="toje-more"><small>{{ page.toje.size }} disquettes.</small></p>{% endif %}
 										<p class="toje-more"><small><a href="/toje-web.html">En savoir plus sur notre émulateur</a></small></p>
 									</fieldset>

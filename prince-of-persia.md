@@ -17,6 +17,7 @@ hardwares:
 display-instructions: false
 toje:
   - /releases/prince-of-persia/prince-of-persia.fd
+toje-image: /images/prince-of-persia/prince-of-persia-03.gif
 ---
 
 ## Description
@@ -48,7 +49,6 @@ Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2F
 <div class="row">
     <img src="images/prince-of-persia/prince-of-persia-01.gif" alt="" />
     <img src="images/prince-of-persia/prince-of-persia-02.gif" alt="" />
-    <img src="images/prince-of-persia/prince-of-persia-03.gif" alt="" />
 </div>
 
 ---
