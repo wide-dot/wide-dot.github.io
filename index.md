@@ -21,6 +21,21 @@ right-image: /images/front/front.png
 	</div>
 </div>
 
+<div class="highlight-game">
+	<a class="highlight-media" href="prince-of-persia.html">
+		<img src="/images/prince-of-persia/banner.jpg" alt="Prince of Persia sur Thomson TO8" />
+	</a>
+	<div class="highlight-body">
+		<span class="highlight-kicker">Jeu complet</span>
+		<h3>Prince of Persia</h3>
+		<p>Le jeu de Jordan Mechner sur TO8, porté depuis son code source Apple II, avec son éditeur de niveaux en bonus.</p>
+		<div class="highlight-actions">
+			<a href="prince-of-persia.html" class="button primary">La fiche du jeu</a>
+			<a href="/toje/?media=%2Freleases%2Fprince-of-persia%2Fprince-of-persia.fd&amp;titre=Prince+of+Persia" class="button">Jouer dans le navigateur</a>
+		</div>
+	</div>
+</div>
+
 Notre groupe travaille actuellement sur 3 projets majeurs de jeux pour Thomson TO8 et TO9+ :
 
 - la conversion/adaptation de [R-Type](/r-type.html), par reverse-engineering de la version arcade de IREM,
