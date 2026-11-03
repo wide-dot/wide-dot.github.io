@@ -22,9 +22,9 @@ toje-image: /images/prince-of-persia/prince-of-persia-03.gif
 
 ## Description
 
-Prince of Persia débarque sur TO8 !
+Prince of Persia enfin sur TO8 !
 
-Le code 6502 de Jordan Mechner a été porté routine par routine en 6809, et comparé au cycle près à la version Apple II. Les graphismes viennent de la version PC en 4 couleurs, le son passe par le CNA du TO8.
+Le code 6502 de Jordan Mechner a été porté routine par routine en 6809, et comparé a l'exécution à la version Apple II. Les graphismes viennent de la version PC en 4 couleurs, le son passe par le CNA du TO8.
 
 ## L'éditeur de Mechner
 
@@ -39,8 +39,6 @@ J et L pour courir, I pour sauter, K pour se baisser, U et O pour sauter en avan
 La manette marche aussi, pad Mega Drive compris.
 
 CNT-G sauvegarde la partie à partir du niveau 3, CNT-L sur l'écran titre la reprend.
-
-C'est une version de test : vos retours sur vrai TO8 nous intéressent.
 
 Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2Freleases%2Fprince-of-persia%2Fprince-of-persia.fd&titre=Prince+of+Persia) avec TOJE.
 
