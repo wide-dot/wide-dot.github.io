@@ -612,3 +612,11 @@ select option {
 		border-radius: 0.85em;
 	}
 }
+
+.made-in-france {
+	display: block;
+	width: 180px;
+	max-width: 100%;
+	height: auto;
+	margin: 0.5em 0 0 0;
+}
