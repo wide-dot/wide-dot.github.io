@@ -8,6 +8,7 @@ credits:
   - adnz (coding + graphics + musics)
   - bentoc, yoann & sam (conseils coding)
   - Cope-Com, Innerprise Software
+download: /releases/battlesquadron/battlesquadron.zip
 hardwares: 
   - Thomson TO8
   - Thomson TO9+
