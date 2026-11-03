@@ -259,4 +259,24 @@
 
 			});
 
+		// Current page: highlight its link and keep its section open.
+			var pageName = function(path) {
+				return path.replace(/\/$/, '/index').split('/').pop().replace(/\.html$/, '');
+			};
+
+			var current = pageName(window.location.pathname);
+
+			$menu.find('a[href]').each(function() {
+
+				var $link = $(this);
+
+				if (this.hostname !== window.location.hostname
+				||	pageName(this.pathname) !== current)
+					return;
+
+				$link.addClass('current').attr('aria-current', 'page');
+				$link.closest('ul').prev('.opener').addClass('active');
+
+			});
+
 })(jQuery);

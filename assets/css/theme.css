@@ -479,6 +479,11 @@ button:active,
 	color: var(--fg-light);
 }
 
+#menu ul a.current {
+	color: var(--accent);
+	font-weight: 700;
+}
+
 ul.contact li {
 	border-top: solid 1px var(--border);
 }
