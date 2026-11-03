@@ -12,7 +12,7 @@ credits:
   - Toei Animation Co. Ltd
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/goldorak
 download: /releases/goldorak/goldorak-dist-20230214.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
 display-instructions: true  

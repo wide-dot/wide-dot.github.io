@@ -9,7 +9,7 @@ credits:
   - SEGA
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/sonic-2
 download: /releases/sonic2/20230308-sonic-2.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
   - RAM ext. 256 Ko (sauf Mégarom T.2)

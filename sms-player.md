@@ -11,7 +11,7 @@ credits:
   - Pineapple.Graphics (Image Bannière)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/sms-player
 download: /releases/sms-player/20230322-sms-player.zip
-hardwares: 
+hardware: 
   - Thomson TO8/TO8D
   - Thomson TO9+
   - Carte son YM2413 et/ou SN76489

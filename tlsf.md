@@ -8,7 +8,7 @@ credits:
   - bentoc (coding)
   - TLSF Research Group
 github: https://github.com/bhrousseau/6809-tlsf
-hardwares: 
+hardware: 
   - All 6809 computers
 display-instructions: false
 ---

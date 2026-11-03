@@ -11,7 +11,7 @@ credits:
   - adnz (musique)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/cacao-and-coffee-shop
 download: /releases/cacao/20230128-cacao-and-coffee-shop.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
   - RAM ext. 256 Ko (sauf Mégarom T.2)

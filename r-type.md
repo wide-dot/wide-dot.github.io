@@ -12,7 +12,7 @@ credits:
   - IREM
   - Pako (Image Bannière)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/r-type
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
 display-instructions: false

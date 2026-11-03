@@ -9,7 +9,7 @@ credits:
   - bentoc (coding)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/day-of-the-tentacle
 download: /releases/dott/dott-v0.1.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
   - Carte Midi

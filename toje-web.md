@@ -6,7 +6,7 @@ date:   2026-11-03
 categories: article
 ---
 
-TOJE est l'émulateur Thomson TO8 que nous utilisons pour développer et tester nos jeux en assembleur 6809. Sa version web, **TOJE Web**, fait tourner la même machine dans une page, sans rien installer : le cœur d'émulation est écrit en Java et compilé en WebAssembly.
+TOJE (TO Java Emulator) est l'émulateur Thomson TO8 que nous utilisons pour développer et tester nos jeux en assembleur 6809. Sa version web, **TOJE Web**, fait tourner la même machine dans une page d'un navigateur ou d'un smartphone, sans rien installer : le cœur d'émulation est écrit en Java et compilé en WebAssembly.
 
 <figure class="toje-figure">
 	<img src="/images/toje/toje-web.png" alt="TOJE Web faisant tourner Ms. Pac-Man dans une page" />
@@ -15,7 +15,7 @@ TOJE est l'émulateur Thomson TO8 que nous utilisons pour développer et tester 
 
 ## Un émulateur TO8 écrit en Java
 
-TOJE est un émulateur **Thomson TO8** écrit en Java 21. Nous l'avons développé pour disposer d'un émulateur multiplateforme dont nous maîtrisons entièrement le code source, afin d'y ajouter tous les outils de débogage nécessaires à nos phases de développement.
+C'est un émulateur **Thomson TO8** écrit en Java 21. Nous l'avons développé pour disposer d'un émulateur multiplateforme dont nous maîtrisons entièrement le code source, afin d'y ajouter tous les outils de débogage nécessaires à nos phases de développement.
 
 Le projet suit une architecture hexagonale stricte : le **domaine** ne dépend d'aucune bibliothèque d'infrastructure. Il contient l'émulation complète du processeur MC6809, de la mémoire et de sa pagination, du gate array vidéo, du son, des entrées-sorties et des médias. Autour, des adaptateurs apportent le rendu, l'audio, les manettes et le débogage : libGDX et Swing pour le bureau, une page HTML pour le web.
 
@@ -45,7 +45,7 @@ Le tout fonctionne aussi **hors ligne** : une fois la page chargée, un service 
 
 ## Ce que TOJE Web n'est pas
 
-- **TO8 uniquement.** TOJE émule le TO8, pas toute la gamme Thomson : ni MO5, ni TO9, ni TO9+.
+- TOJE émule **uniquement** le TO8, pas toute la gamme Thomson : ni MO5, ni TO9, ni TO9+.
 - **Pas d'outillage de débogage.** Les points d'arrêt, le profileur et la trace restent dans la version bureau non disponible publiquement : le navigateur est fait pour jouer.
 
 ## Lancer

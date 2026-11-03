@@ -9,7 +9,7 @@ credits:
   - bentoc (coding)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/savage
 download: /releases/savage/savage-v0.1.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
 display-instructions: true  

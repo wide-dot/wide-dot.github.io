@@ -8,7 +8,7 @@ credits:
   - adnz (coding + graphics + musics)
   - bentoc, yoann & sam (conseils coding)
   - Cope-Com, Innerprise Software
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
 display-instructions: false  

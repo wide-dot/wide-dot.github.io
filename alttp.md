@@ -9,7 +9,7 @@ credits:
   - adnz (musique)
 github: https://github.com/wide-dot/thomson-to8-game-engine/tree/main/game-projects/zeldo
 download: /releases/alttp/alttp-v0.1.zip
-hardwares: 
+hardware: 
   - Thomson TO8
   - Thomson TO9+
   - RAM ext. 256 Ko (sauf Mégarom T.2)

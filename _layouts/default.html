@@ -105,12 +105,12 @@
 									</fieldset>	
 									{% endif %}		
 
-									{% if page.hardwares %}
+									{% if page.hardware %}
 									<fieldset>
-										<legend>Hardwares</legend>
+										<legend>Hardware</legend>
 										<ul>
-										{% for hardware in page.hardwares %}
-											<li>{{ hardware }}</li>
+										{% for item in page.hardware %}
+											<li>{{ item }}</li>
 										{% endfor %}
 										</ul>
 									</fieldset>	
