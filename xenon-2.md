@@ -3,7 +3,7 @@ layout: default
 title:  Xenon 2 Megablast
 date:   2026-11-03
 categories: game
-banner: /images/xenon-2/banner.jpg
+banner: /images/xenon-2/banner.svg
 credits:
   - fxrobin (portage 6809)
   - The Bitmap Brothers (jeu original)
@@ -42,10 +42,10 @@ Le jeu est jouable du premier au dernier niveau, jusqu'à la fin de partie et au
 ***Aucune exploitation commerciale n'est autorisée.***
 
 <div class="shots">
-    <img src="images/xenon-2/niveau-1.jpg" alt="Xenon 2 sur TO8 : niveau 1" />
+    <img src="images/xenon-2/niveau-1.png" alt="Xenon 2 sur TO8 : niveau 1" />
+    <img src="images/xenon-2/niveau-2.png" alt="Xenon 2 sur TO8 : niveau 2" />
+    <img src="images/xenon-2/niveau-3.png" alt="Xenon 2 sur TO8 : niveau 3" />
+    <img src="images/xenon-2/niveau-4.png" alt="Xenon 2 sur TO8 : niveau 4" />
+    <img src="images/xenon-2/niveau-5.png" alt="Xenon 2 sur TO8 : niveau 5" />
     <img src="images/xenon-2/boutique.jpg" alt="Xenon 2 sur TO8 : la boutique de Colin" />
-    <img src="images/xenon-2/boss-niveau-2.jpg" alt="Xenon 2 sur TO8 : boss du niveau 2" />
-    <img src="images/xenon-2/super-nashwan.jpg" alt="Xenon 2 sur TO8 : Super Nashwan" />
-    <img src="images/xenon-2/boss-niveau-1.jpg" alt="Xenon 2 sur TO8 : boss du niveau 1" />
-    <img src="images/xenon-2/niveau-3.jpg" alt="Xenon 2 sur TO8 : niveau 3" />
 </div>
