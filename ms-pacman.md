@@ -17,6 +17,7 @@ hardwares:
 display-instructions: false
 toje:
   - /releases/ms-pacman/ms-pacman.fd
+toje-image: /images/ms-pacman/ms-pacman-02.gif
 ---
 
 ## Description
@@ -45,7 +46,6 @@ Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2F
 
 <div class="row">
     <img src="images/ms-pacman/ms-pacman-01.gif" alt="" />
-    <img src="images/ms-pacman/ms-pacman-02.gif" alt="" />
 </div>
 
 ---
