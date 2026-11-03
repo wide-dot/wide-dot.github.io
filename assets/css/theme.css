@@ -280,8 +280,8 @@ fieldset > ul {
 }
 
 .flex-item-right .toje-more {
-	margin-top: -1.1em;
-	margin-bottom: 1.2em;
+	margin: 0.75em 0 0 0;
+	text-align: center;
 }
 
 /* --------------------------------------------------- Jeu complet (accueil) */
