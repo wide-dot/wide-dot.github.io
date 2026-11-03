@@ -298,6 +298,17 @@ fieldset > ul {
 	text-align: center;
 }
 
+.row.previews > img {
+	width: 50%;
+	height: auto;
+}
+
+@media screen and (max-width: 736px) {
+	.row.previews > img {
+		width: 100%;
+	}
+}
+
 /* --------------------------------------------------- Jeu complet (accueil) */
 
 .highlight-game {
