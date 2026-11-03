@@ -1,6 +1,6 @@
 # Prince of Persia
 
-Clavier ou manette.
+## Clavier
 
 | Touche | Action |
 |---|---|
@@ -18,3 +18,16 @@ Clavier ou manette.
 | CNT-S / CNT-N | Son / musique |
 | CNT-G | Sauvegarder (à partir du niveau 3) |
 | CNT-L | Reprendre la partie (écran titre) |
+
+## Manette
+
+| Manette | Action |
+|---|---|
+| Gauche / droite | Courir, se retourner |
+| Haut | Sauter, grimper |
+| Bas | Se baisser, descendre |
+| Haut + gauche / droite | Sauter en avant |
+| Bas + avant | Ramper |
+| Bouton | Épée, ramasser, boire ; maintenu : s'accrocher |
+| Bouton + gauche / droite | Pas prudent |
+| Haut / bas en combat | Parer / reculer |
