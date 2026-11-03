@@ -1,4 +1,6 @@
-# Prince of Persia — commandes
+# Prince of Persia
+
+Clavier ou manette.
 
 | Touche | Action |
 |---|---|
@@ -16,5 +18,3 @@
 | CNT-S / CNT-N | Son / musique |
 | CNT-G | Sauvegarder (à partir du niveau 3) |
 | CNT-L | Reprendre la partie (écran titre) |
-
-Manette : 8 directions + bouton (comme Espace), en même temps que le clavier. Bas + avant : ramper.
