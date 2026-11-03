@@ -23,9 +23,17 @@ Il s'agit d'une conversion de la version **Atari ST** : les cinq niveaux, leurs 
 
 Et bien sûr, **Colin** est là : sa boutique s'ouvre au milieu et à la fin de chaque niveau pour vendre et acheter armes, bonus et réparations. Il parle, il cligne des yeux, et il vous salue.
 
-## Réseau de neurones
+## Triches
 
-Comme pour Ms. Pac-Man, un réseau de neurones a appris à jouer au jeu. Il a été entraîné par algorithme génétique, en faisant tourner des milliers de parties dans [TOJE](toje-web.html) sans affichage, bien plus vite que le temps réel.
+Sur l'écran d'accueil, poussez la manette dans une direction, sans appuyer sur le bouton : après le fondu, la cracktro **SMALL-DOT** s'affiche, avec son trainer +3.
+
+- Haut / bas : choisir une ligne.
+- Gauche / droite ou bouton : activer ou désactiver la triche.
+- Bouton sur *BACK TO THE TITLE* : retour à l'écran d'accueil.
+
+Trois triches au choix : **INVINCIBILITY** (invincibilité), **MAXIMUM WEAPONS** (toutes les armes au maximum, avec la panoplie du Super Nashwan) et **INFINITE LIVES** (vies infinies). Elles restent actives après un GAME OVER.
+
+<p><img src="images/xenon-2/triche.png" alt="Xenon 2 sur TO8 : l'écran de triche SMALL-DOT" style="width: 100%; image-rendering: pixelated;" /></p>
 
 ## État du projet
 
