@@ -645,3 +645,20 @@ select option {
 	height: auto;
 	margin: 0.5em 0 0 0;
 }
+
+/* ------------------------------------------------------- Galerie de captures */
+
+.shots {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(16em, 1fr));
+	gap: 1em;
+	margin: 0 0 2em 0;
+}
+
+.shots img {
+	display: block;
+	width: 100%;
+	height: auto;
+	border-radius: 0.4em;
+	image-rendering: pixelated;
+}
