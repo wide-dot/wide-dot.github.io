@@ -9,7 +9,7 @@
 | K | Se baisser, descendre |
 | U / O | Sauter en avant à gauche / à droite |
 | Espace | Épée, ramasser, boire ; maintenu : s'accrocher |
-| Maj + J / L | Pas prudent |
+| Maj + une lettre | La lettre avec le bouton (Maj + J / L : pas prudent) |
 | I / K en combat | Parer / reculer |
 | ENT | Temps restant |
 | STOP | Pause |
