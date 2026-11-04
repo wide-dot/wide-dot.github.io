@@ -24,22 +24,23 @@ toje-image: /images/prince-of-persia/prince-of-persia-03.gif
 
 Prince of Persia enfin sur TO8 !
 
-Le code 6502 de Jordan Mechner a été porté routine par routine en 6809, et comparé a l'exécution à la version Apple II. Les graphismes viennent de la version PC en 4 couleurs, le son passe par le CNA du TO8.
-
-## L'éditeur de Mechner
-
-En bonus, on a porté l'éditeur de niveaux de Mechner : une disquette pour le donjon, une pour le palais, avec leurs disquettes de données dans le ZIP.
-
-Et en tapant P O P pendant une partie, ses touches de développement se réveillent.
+Le [code 6502 de Jordan Mechner](https://github.com/jmechner/Prince-of-Persia-Apple-II) a été porté routine par routine en 6809, et comparé a l'exécution à la version Apple II. Les graphismes viennent de la version PC en 4 couleurs, le son passe par le CNA du TO8.
 
 ## Jouer
 
-Le jeu se joue au clavier:
-J et L pour courir, I pour sauter, K pour se baisser, U et O pour sauter en avant, Espace pour l'épée.
-Maj avec une lettre ajoute le bouton : Maj + J ou L pour avancer prudemment.
-La manette marche aussi, pad Mega Drive compris.
+Le jeu se joue au clavier :
+{: style="margin-bottom: 0"}
 
-CNT-G sauvegarde la partie à partir du niveau 3, CNT-L sur l'écran titre la reprend.
+- **J / L** : courir
+- **I** : sauter
+- **K** : se baisser
+- **U / O** : sauter en avant
+- **Espace** : l'épée
+- **Maj + J / L** : avancer prudemment
+{: style="margin-bottom: 0"}
+
+La manette marche aussi, pad Mega Drive compris.<br />
+Toutes les commandes, celles du jeu, du développement et de l'éditeur, sont [plus bas](#commandes).
 
 Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2Freleases%2Fprince-of-persia%2Fprince-of-persia.fd&titre=Prince+of+Persia) avec TOJE.
 
@@ -48,6 +49,16 @@ Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2F
 <div class="row previews">
     <img src="images/prince-of-persia/prince-of-persia-01.gif" alt="" />
     <img src="images/prince-of-persia/prince-of-persia-02.gif" alt="" />
+</div>
+
+<br />
+
+## L'éditeur de Jordan Mechner
+
+En bonus, on a porté l'éditeur de niveaux de Mechner : une disquette pour le donjon, une pour le palais, avec leurs disquettes de données dans le ZIP.
+
+<div class="row">
+    <img src="images/prince-of-persia/prince-of-persia-editor.gif" alt="" width="100%" style="image-rendering: pixelated;" />
 </div>
 
 <br />
