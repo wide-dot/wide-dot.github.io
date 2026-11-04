@@ -279,9 +279,34 @@ fieldset > ul {
 	width: 100%;
 }
 
+.flex-item-right .toje-preview {
+	display: block;
+	margin: 0 0 1em 0;
+	border-bottom: 0;
+	line-height: 0;
+}
+
+.flex-item-right .toje-preview img {
+	display: block;
+	width: 100%;
+	border-radius: 0.5em;
+	image-rendering: pixelated;
+}
+
 .flex-item-right .toje-more {
 	margin: 0.75em 0 0 0;
 	text-align: center;
+}
+
+.row.previews > img {
+	width: 50%;
+	height: auto;
+}
+
+@media screen and (max-width: 736px) {
+	.row.previews > img {
+		width: 100%;
+	}
 }
 
 /* --------------------------------------------------- Jeu complet (accueil) */
