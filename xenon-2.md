@@ -17,7 +17,7 @@ display-instructions: false
 
 ## Description
 
-Le shoot-them-up vertical des Bitmap Brothers débarque sur TO8 !
+Le shoot-them-up vertical des Bitmap Brothers, quelle est donc cette diablerie ?
 
 Il s'agit d'une conversion de la version **Atari ST**, en assembleur 6809, sur le moteur de jeu wide-dot. Les graphismes, les décors et les trajectoires des ennemis viennent du ST : ils ont été relevés sur l'original puis comparés au pixel près avec la version TO8.
 
