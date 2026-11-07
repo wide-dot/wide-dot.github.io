@@ -13,6 +13,7 @@ hardware:
   - Thomson TO8/TO8D
   - Manette dans le premier port
   - Carte son SN76489
+  - Carte son YM2413 (facultative, musique de la cracktro)
 display-instructions: false
 toje:
   - /releases/rick-dangerous/rick-dangerous.fd
@@ -42,6 +43,8 @@ Pas de TO8 sous la main ? Ça tourne aussi [dans le navigateur](/toje/?media=%2F
 Appuyez sur le bouton à l'écran-titre : la cracktro **SMALL-DOT** s'ouvre sur *PLAY NORMAL GAME*, un second appui lance une partie normale.
 
 Pour tricher, montez dans le menu : vies illimitées, munitions illimitées et niveau de départ, puis *PLAY TRAINED GAME*. Haut / bas pour choisir une ligne, gauche / droite ou bouton pour changer la valeur. Une partie avec triches ne donne pas le bonus de fin.
+
+Le même menu choisit aussi les ports des cartes son, valables pour une partie normale comme pour une partie avec triches : *SN76489 PORT* ($E7FE, $E7FF, $E7F6 ou $E7F7) et *YM2413 PORT* ($E7FC ou $E7F4). Par défaut, le SN76489 est en $E7F7 si une carte Musique PLUS est détectée, sinon en $E7FE, et le YM2413 en $E7FC.
 
 ***Aucune exploitation commerciale n'est autorisée.***
 
