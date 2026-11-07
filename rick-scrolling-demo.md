@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  Rick Dangerous Scrolling Demo
+title:  Rick Dangerous, démo de scrolling
 date:   2023-02-16
 categories: game, demo
 banner: /images/rick/banner.png
