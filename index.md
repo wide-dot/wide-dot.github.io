@@ -36,6 +36,21 @@ right-image: /images/front/front.png
 	</div>
 </div>
 
+<div class="highlight-game">
+	<a class="highlight-media" href="rick-dangerous.html">
+		<img src="/images/rick/banner.png" alt="Rick Dangerous sur Thomson TO8" />
+	</a>
+	<div class="highlight-body">
+		<span class="highlight-kicker">Jeu complet</span>
+		<h3>Rick Dangerous</h3>
+		<p>La conversion du jeu de Core Design sur TO8, avec ses 4 niveaux, ses pièges et ses musiques, jouable à la manette.</p>
+		<div class="highlight-actions">
+			<a href="rick-dangerous.html" class="button primary">La fiche du jeu</a>
+			<a href="/toje/?media=%2Freleases%2Frick-dangerous%2Frick-dangerous.fd&amp;titre=Rick+Dangerous" class="button">Jouer dans le navigateur</a>
+		</div>
+	</div>
+</div>
+
 Notre groupe travaille actuellement sur 3 projets majeurs de jeux pour Thomson TO8 et TO9+ :
 
 - la conversion/adaptation de [R-Type](/r-type.html), par reverse-engineering de la version arcade de IREM,
