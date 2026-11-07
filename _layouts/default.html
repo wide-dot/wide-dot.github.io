@@ -79,7 +79,7 @@
 									{%endif%}
 									{{ content }}
 								</div>	
-								<div class="flex-item-right">
+								<div class="flex-item-right{% if page.url == '/' or page.url == '/index.html' %} hide{% endif %}">
 
 									{% if page.right-image %}
 					
