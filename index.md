@@ -38,7 +38,7 @@ right-image: /images/front/front.png
 
 <div class="highlight-game">
 	<a class="highlight-media" href="rick-dangerous.html">
-		<img src="/images/rick/banner.png" alt="Rick Dangerous sur Thomson TO8" />
+		<img src="/images/rick-dangerous/banner.png" alt="Rick Dangerous sur Thomson TO8 : les quatre niveaux" />
 	</a>
 	<div class="highlight-body">
 		<span class="highlight-kicker">Jeu complet</span>
