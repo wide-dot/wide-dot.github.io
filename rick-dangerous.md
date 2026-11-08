@@ -8,7 +8,7 @@ credits:
   - fxrobin (portage 6809)
   - Core Design / Simon Phipps (jeu original)
   - Drozerix (musique de l'écran de triche, « Cabin Fever! »)
-download: /releases/rick-dangerous/rick-dangerous-v1.0.zip
+download: /releases/rick-dangerous/rick-dangerous-v1.1.zip
 hardware:
   - Thomson TO8/TO8D
   - Manette dans le premier port
@@ -56,5 +56,10 @@ Pour tricher, montez dans le menu : vies illimitées, munitions illimitées et n
 Le même menu choisit aussi les ports des cartes son, valables pour une partie normale comme pour une partie avec triches : *SN76489 PORT* ($E7FE, $E7FF, $E7F6 ou $E7F7) et *YM2413 PORT* ($E7FC ou $E7F4). Par défaut, le SN76489 est en $E7F7 si une carte Musique PLUS est détectée, sinon en $E7FE, et le YM2413 en $E7FC.
 
 ***Aucune exploitation commerciale n'est autorisée.***
+
+## Versions
+
+- **1.1** (8 novembre 2026) : sprites mieux réduits (silhouettes pleines, détachées du décor par un contour noir), niveau 4 aux bleus sombres du ST, avec un bloc riveté redessiné pour le TO8.
+- **1.0** : première version complète.
 
 La [démo de scrolling](rick-scrolling-demo.html) de 2023, première étape sur ce thème, reste disponible.
