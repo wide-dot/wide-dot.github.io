@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=ef8e7d2">
+  <link rel="stylesheet" href="toje-web.css?v=308082d">
 </head>
 <body>
   <main class="chassis">
@@ -28,6 +28,12 @@
         <button id="ff" class="ff-btn" aria-label="Accélérer tant qu'on appuie (F7 au clavier)"
                 title="Accélérer tant qu'on appuie (F7 au clavier)">
           <svg viewBox="0 0 24 16" aria-hidden="true"><path d="M1 1l10 7-10 7zM12 1l10 7-10 7z"/></svg>
+        </button>
+        <button id="vol-quick" class="ff-btn mode-btn vol-quick" aria-pressed="false" data-muted="false"
+                title="Volume — cliquer pour couper ; F8 baisse, F9 monte">
+          <svg class="icon-sound" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3zM15.5 8.5a5 5 0 0 1 0 7l-1.4-1.4a3 3 0 0 0 0-4.2zM18.4 5.6a9 9 0 0 1 0 12.8L17 17a7 7 0 0 0 0-9.9z"/></svg>
+          <svg class="icon-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3zM15 9.4l1.4-1.4 2.6 2.6 2.6-2.6 1.4 1.4-2.6 2.6 2.6 2.6-1.4 1.4-2.6-2.6-2.6 2.6-1.4-1.4 2.6-2.6z"/></svg>
+          <span id="vol-quick-label" class="mode-label">100 %</span>
         </button>
         <button id="pointer-mode" class="ff-btn mode-btn" aria-pressed="false"
                 title="Port 1 : manette ou souris Thomson à deux boutons">
@@ -135,6 +141,14 @@
           </div>
         </section>
 
+        <section id="recent-box" class="menu-section" hidden>
+          <div class="recent-head">
+            <h3 class="menu-title">Médias récents</h3>
+            <button id="recent-clear" class="keycap small" title="Oublier la liste (gardée dans ce navigateur)">Vider</button>
+          </div>
+          <div id="recent-list" class="recent-list"></div>
+        </section>
+
         <section class="menu-section saves">
           <h3 class="menu-title">Parties sauvegardées</h3>
           <div id="saves" class="save-list"></div>
@@ -184,6 +198,15 @@
           <button id="sound" class="opt toggle" aria-pressed="true">
             <span class="opt-text">Son</span><i class="switch" aria-hidden="true"></i>
           </button>
+          <div class="opt-row">
+            <span class="opt-text">Volume<small>F8 baisse, F9 monte ; le haut-parleur en haut coupe le son</small></span>
+            <span class="vol-ctrl">
+              <button id="vol-down" class="kb-zoom-btn" type="button" title="Baisser le volume (F8)">−</button>
+              <input id="vol-slider" type="range" min="0" max="100" step="10" value="100" aria-label="Volume général">
+              <button id="vol-up" class="kb-zoom-btn" type="button" title="Monter le volume (F9)">+</button>
+              <span id="vol-level" class="kb-zoom-level">100 %</span>
+            </span>
+          </div>
           <button id="pixel-mode" class="opt toggle" aria-pressed="false">
             <span class="opt-text">Pixels nets<small>Chaque point sur un nombre entier de pixels, sans lissage ; points presque carrés, image un peu plus petite</small></span><i class="switch" aria-hidden="true"></i>
           </button>
@@ -235,7 +258,7 @@
 
       <details id="help" class="help">
         <summary>Aide</summary>
-        <p>Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… ») ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b> (cartouche <code>.rom</code>). Un jeu demande une autre disquette : « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la disquette — elle entre sans redémarrer. La partie en cours est gardée quand la page passe en arrière-plan, et proposée au retour ; trois emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu : choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile » affiche un stick et les boutons A/B, « Clavier » le clavier du TO8 (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la manette. Une manette USB ou Bluetooth fonctionne aussi : le voyant « Manette » s'allume quand elle est reconnue (appuyer sur un de ses boutons) ; une seconde manette joue sur l'autre port. « Touches du clavier et de la manette » change les touches de jeu, et redirige une touche du PC ou un bouton de manette vers une touche du TO8, pour chaque jeu. Au téléphone, le bouton « Abc » en haut de page sort le clavier du téléphone : ce qu'on y tape est frappé au TO8 (Entrée = ENT). Le bouton manette/souris en haut de page branche une souris Thomson au port 1, pour ce jeu (le TO8 redémarre la première fois : le moniteur ne la détecte qu'au démarrage) : la souris du PC sur l'écran, ou au téléphone un pavé tactile à la place du stick, avec les boutons G et D. « Touches de la manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B, retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton <b>»</b> en haut (ou F7) ; « Chargements rapides » accélère seul tant que le lecteur lit et qu'on ne touche à rien. Les disquettes de la bibliothèque et les fichiers ouverts restent protégés en écriture, et jamais modifiés. Pour un jeu qui sauvegarde : une fois le jeu lancé, « Copie de travail » (Mes disquettes) remplace sa disquette par une copie inscriptible, sans redémarrer ; ou « Nouvelle disquette vierge » en glisse une au lecteur 2. Ces disquettes sont gardées dans le navigateur, et se téléchargent en <code>.fd</code>.
+        <p>Choisir un média dans la bibliothèque, l'ouvrir (« Ouvrir un fichier… ») ou le glisser sur l'écran : le TO8 redémarre et presse <b>B</b> au menu (disquette <code>.fd</code>, carte SDDrive <code>.sd</code>) ou <b>0</b> (cartouche <code>.rom</code>). Un jeu demande une autre disquette : « Lecteur 1 » ou « Lecteur 2 » sous « Disquette choisie », puis la disquette — elle entre sans redémarrer. La partie en cours est gardée quand la page passe en arrière-plan, et proposée au retour ; trois emplacements la sauvent à la main. Une carte SDDrive ouvre son propre menu : choisir le jeu aux flèches, puis ENT. Au téléphone, « Manette tactile » affiche un stick et les boutons A/B, « Clavier » le clavier du TO8 (SHIFT et CNT restent enfoncés jusqu'à la touche suivante). Au clavier du PC : AZERTY positionnel, flèches + <b>Espace</b>/<b>Alt</b> pour la manette. Une manette USB ou Bluetooth fonctionne aussi : le voyant « Manette » s'allume quand elle est reconnue (appuyer sur un de ses boutons) ; une seconde manette joue sur l'autre port. « Touches du clavier et de la manette » change les touches de jeu, et redirige une touche du PC ou un bouton de manette vers une touche du TO8, pour chaque jeu. Au téléphone, le bouton « Abc » en haut de page sort le clavier du téléphone : ce qu'on y tape est frappé au TO8 (Entrée = ENT). Le bouton manette/souris en haut de page branche une souris Thomson au port 1, pour ce jeu (le TO8 redémarre la première fois : le moniteur ne la détecte qu'au démarrage) : la souris du PC sur l'écran, ou au téléphone un pavé tactile à la place du stick, avec les boutons G et D. « Touches de la manette tactile » ajoute jusqu'à quatre touches du TO8 à côté de A et B, retenues pour chaque jeu. Pour aller plus vite, maintenir le bouton <b>»</b> en haut (ou F7) ; le haut-parleur coupe le son, <b>F8</b>/<b>F9</b> baissent et montent le volume ; « Chargements rapides » accélère seul tant que le lecteur lit et qu'on ne touche à rien. Les disquettes de la bibliothèque et les fichiers ouverts restent protégés en écriture, et jamais modifiés. Pour un jeu qui sauvegarde : une fois le jeu lancé, « Copie de travail » (Mes disquettes) remplace sa disquette par une copie inscriptible, sans redémarrer ; ou « Nouvelle disquette vierge » en glisse une au lecteur 2. Ces disquettes sont gardées dans le navigateur, et se téléchargent en <code>.fd</code>.
         « Copier le lien » donne une adresse qui lance directement le jeu. La page
         se met en pause quand on la quitte ou qu'on ouvre ce menu au téléphone, et
         fonctionne hors ligne pour ce qui a déjà été chargé. Certains jeux chargent longtemps sur écran noir (Turbo Cup : près d'une minute) : le voyant « Disque » vert dit que la lecture se poursuit, et « Turbo disque » l'abrège.</p>
@@ -253,31 +276,33 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=ef8e7d2",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=ef8e7d2",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=ef8e7d2",
-        "./menu.js": "./menu.js?v=ef8e7d2",
-        "./build-info.js": "./build-info.js?v=ef8e7d2",
-        "./library.js": "./library.js?v=ef8e7d2",
-        "./locked-game.js": "./locked-game.js?v=ef8e7d2",
-        "./crt-screen.js": "./crt-screen.js?v=ef8e7d2",
-        "./save-store.js": "./save-store.js?v=ef8e7d2",
-        "./game-saves.js": "./game-saves.js?v=ef8e7d2",
-        "./touch-keys.js": "./touch-keys.js?v=ef8e7d2",
-        "./titles.js": "./titles.js?v=ef8e7d2",
-        "./my-disks.js": "./my-disks.js?v=ef8e7d2",
-        "./mouse-pointer.js": "./mouse-pointer.js?v=ef8e7d2",
-        "./phone-keyboard.js": "./phone-keyboard.js?v=ef8e7d2",
-        "./screenshot.js": "./screenshot.js?v=ef8e7d2",
-        "./screen-scaler.js": "./screen-scaler.js?v=ef8e7d2",
-        "./pixel-shader.js": "./pixel-shader.js?v=ef8e7d2",
-        "./input-bindings.js": "./input-bindings.js?v=ef8e7d2",
-        "./gamepads.js": "./gamepads.js?v=ef8e7d2",
-        "./bindings-panel.js": "./bindings-panel.js?v=ef8e7d2"
+        "./touch-pad.js": "./touch-pad.js?v=308082d",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=308082d",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=308082d",
+        "./menu.js": "./menu.js?v=308082d",
+        "./build-info.js": "./build-info.js?v=308082d",
+        "./library.js": "./library.js?v=308082d",
+        "./locked-game.js": "./locked-game.js?v=308082d",
+        "./crt-screen.js": "./crt-screen.js?v=308082d",
+        "./save-store.js": "./save-store.js?v=308082d",
+        "./game-saves.js": "./game-saves.js?v=308082d",
+        "./touch-keys.js": "./touch-keys.js?v=308082d",
+        "./titles.js": "./titles.js?v=308082d",
+        "./my-disks.js": "./my-disks.js?v=308082d",
+        "./recent-media.js": "./recent-media.js?v=308082d",
+        "./mouse-pointer.js": "./mouse-pointer.js?v=308082d",
+        "./phone-keyboard.js": "./phone-keyboard.js?v=308082d",
+        "./screenshot.js": "./screenshot.js?v=308082d",
+        "./screen-scaler.js": "./screen-scaler.js?v=308082d",
+        "./pixel-shader.js": "./pixel-shader.js?v=308082d",
+        "./input-bindings.js": "./input-bindings.js?v=308082d",
+        "./gamepads.js": "./gamepads.js?v=308082d",
+        "./bindings-panel.js": "./bindings-panel.js?v=308082d",
+        "./volume-control.js": "./volume-control.js?v=308082d"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=ef8e7d2"></script>
-  <script type="module" src="toje-web.js?v=ef8e7d2"></script>
+  <script src="classes.wasm-runtime.js?v=308082d"></script>
+  <script type="module" src="toje-web.js?v=308082d"></script>
 </body>
 </html>

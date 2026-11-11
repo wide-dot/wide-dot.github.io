@@ -16,6 +16,7 @@ import { createGameSaves } from './game-saves.js';
 import { createTouchKeys, keyChoices } from './touch-keys.js';
 import { titleOf, baseName } from './titles.js';
 import { createMyDisks } from './my-disks.js';
+import { createRecentMedia } from './recent-media.js';
 import { createMousePointer } from './mouse-pointer.js';
 import { createPhoneKeyboard } from './phone-keyboard.js';
 import { saveScreenshot } from './screenshot.js';
@@ -23,6 +24,7 @@ import { createScreenScaler } from './screen-scaler.js';
 import { createBindings } from './input-bindings.js';
 import { connectedPads, padName, readPad } from './gamepads.js';
 import { createBindingsPanel } from './bindings-panel.js';
+import { createVolumeControl } from './volume-control.js';
 import { lockedGame, scopedStore, fetchMedia, renderGameDisks, isDisk } from './locked-game.js';
 
 const FRAME_SECONDS = 0.02;
@@ -360,6 +362,9 @@ function start(toje, store) {
   // La page garde les octets de chacun : une partie sauvegardée les remonte.
   let media = { disks: [null, null], cart: null, sd: null };   // { name, bytes }
 
+  // Médias récents : les derniers chargés, octets compris (un fichier ouvert n'a pas d'adresse).
+  const recentMedia = !locked && store ? createRecentMedia(store) : null;
+
   // « Disquette choisie » : Démarrer (redémarre dessus) ou un lecteur, où elle
   // entre sans redémarrer — un jeu qui demande sa disquette 2. Revient à
   // Démarrer après chaque insertion, pour ne pas surprendre au média suivant.
@@ -410,6 +415,8 @@ function start(toje, store) {
     const isDisk = format !== 'rom' && format !== 'sd';
     const swap = isDisk && (drive !== null || target !== 'boot');
     const entry = { name, bytes, fromLibrary, myDisk, label };
+    // Une disquette « à moi » a déjà sa liste ; une page verrouillée n'a pas d'historique.
+    if (recentMedia && !myDisk) recentMedia.remember(name, bytes).then(renderRecent, e => console.error(e));
     if (swap) {
       if (drive === null) drive = Number(target);
       toje.swapDisk(drive, entry.bytes, name);
@@ -543,6 +550,51 @@ function start(toje, store) {
     $('my-disks-empty').hidden = disks.length > 0;
   }
 
+  async function renderRecent() {
+    if (!recentMedia) return;
+    const entries = await recentMedia.list();
+    $('recent-box').hidden = entries.length === 0;
+    $('recent-list').replaceChildren(...entries.map(e => {
+      const row = document.createElement('div');
+      row.className = 'recent-item';
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'lib-item';
+      item.title = `Charger ${e.name} (suit « Disquette choisie »)`;
+      const format = formatOf(e.name) || 'fd';
+      const badge = document.createElement('span');
+      badge.className = `badge badge-${format}`;
+      badge.textContent = format.toUpperCase();
+      const name = document.createElement('span');
+      name.className = 'lib-name';
+      name.textContent = titleOf(e.name);
+      const when = document.createElement('small');
+      when.textContent = new Date(e.used).toLocaleString('fr-FR',
+        { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      name.append(when);
+      item.append(badge, name);
+      item.addEventListener('click', async () => {
+        const bytes = await recentMedia.load(e.name);
+        if (bytes) await mount(e.name, bytes);
+        else renderRecent();
+      });
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'keycap small';
+      remove.textContent = '×';
+      remove.title = 'Retirer de la liste';
+      remove.addEventListener('click', async () => { await recentMedia.remove(e.name); renderRecent(); });
+      row.append(item, remove);
+      return row;
+    }));
+  }
+  $('recent-clear').addEventListener('click', async () => {
+    if (!recentMedia) return;
+    await recentMedia.clear();
+    renderRecent();
+  });
+  renderRecent();
+
   async function openFile(file) {
     mount(file.name, new Int8Array(await file.arrayBuffer()));
   }
@@ -633,6 +685,12 @@ function start(toje, store) {
     $('resume-yes').onclick = () => { $('resume').hidden = true; load(file); };
     $('resume-no').onclick = () => { $('resume').hidden = true; prefs.set('lastGame', null); };
   }
+
+  const volume = createVolumeControl(toje, prefs, {
+    quick: $('vol-quick'), quickLabel: $('vol-quick-label'),
+    slider: $('vol-slider'), level: $('vol-level'), down: $('vol-down'), up: $('vol-up'),
+  }, text => { status.textContent = text; });
+  window.tojeVolume = volume;      // recettes Playwright
 
   $('sound').addEventListener('click', e => {
     soundOn = !soundOn;
@@ -867,6 +925,11 @@ function start(toje, store) {
     if (!down && swallowed.delete(e.code)) { e.preventDefault(); return; }
     firstGesture();
     if (e.code === 'F7') { turboHeld = down; e.preventDefault(); return; }
+    if (e.code === 'F8' || e.code === 'F9') {      // répétition permise : maintenir fait glisser
+      if (down) volume.step(e.code === 'F9' ? 1 : -1);
+      e.preventDefault();
+      return;
+    }
     if (e.code === 'Pause') { if (down) setUserPaused(!userPaused); e.preventDefault(); return; }
     if (e.repeat) { e.preventDefault(); return; }    // le 6804 répète lui-même
     noteInput();

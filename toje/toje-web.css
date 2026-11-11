@@ -278,6 +278,11 @@ button, label { touch-action: manipulation; }
   box-shadow: 0 2px 0 var(--shadow);
 }
 .kb-zoom-btn:disabled { opacity: .4; }
+.vol-ctrl { display: flex; align-items: center; gap: 6px; }
+.vol-ctrl input[type="range"] { width: 130px; accent-color: var(--green); }
+.vol-quick .icon-muted, .vol-quick[data-muted="true"] .icon-sound { display: none; }
+.vol-quick[data-muted="true"] .icon-muted { display: inline; }
+.vol-quick .mode-label { min-width: 3.2em; font-variant-numeric: tabular-nums; }
 .kb-zoom-level { min-width: 46px; text-align: center; color: var(--ink-dim); font-variant-numeric: tabular-nums; }
 .kb-pan { order: -1; flex: 1; max-width: 60%; margin-right: auto; accent-color: var(--green); }
 .kb-pan[hidden] { display: none; }
@@ -830,6 +835,16 @@ button, label { touch-action: manipulation; }
   cursor: pointer;
 }
 .remap-add { width: auto; align-self: flex-start; }
+
+/* ── Médias récents (recent-media.js) ── */
+.recent-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.recent-head .keycap.small { margin: 0; padding: 4px 9px; }
+.recent-list { display: flex; flex-direction: column; }
+.recent-item { display: flex; align-items: center; gap: 4px; }
+.recent-item .lib-item { flex: 1; min-width: 0; }
+.recent-item .lib-name { flex: 1; display: flex; flex-direction: column; }
+.recent-item small { font-size: 12px; font-weight: 500; color: var(--ink-dim); }
+.recent-item .keycap.small { margin: 0; padding: 4px 9px; }
 
 /* ── Mes disquettes (my-disks.js) ── */
 .menu-note { margin: 4px 0 8px; font-size: 13px; font-weight: 500; color: var(--ink-dim); }
