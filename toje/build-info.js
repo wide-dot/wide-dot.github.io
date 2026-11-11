@@ -2,8 +2,8 @@
 // Fichiers filtrés de la page : celui-ci et index.html (versions ?v=…). Les
 // autres contiennent des gabarits ${…} JavaScript que le filtrage réécrirait.
 export const BUILD = {
-  version: '1.3.1',
-  time: '2026-11-11T10:02:37Z',      // ISO 8601, UTC
-  commit: '308082d',
+  version: '1.4.0',
+  time: '2026-11-11T11:38:35Z',      // ISO 8601, UTC
+  commit: '8680a63',
   dirty: 'false' === 'true',
 };
