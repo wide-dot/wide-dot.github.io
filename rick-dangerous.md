@@ -8,7 +8,7 @@ credits:
   - fxrobin (portage 6809)
   - Core Design / Simon Phipps (jeu original)
   - Drozerix (musique de l'écran de triche, « Cabin Fever! »)
-download: /releases/rick-dangerous/rick-dangerous-v1.1.zip
+download: /releases/rick-dangerous/rick-dangerous-v1.2.zip
 hardware:
   - Thomson TO8/TO8D
   - Manette dans le premier port
@@ -59,6 +59,7 @@ Le même menu choisit aussi les ports des cartes son, valables pour une partie n
 
 ## Versions
 
+- **1.2** (12 novembre 2026) : corrigé sur TO8 réel (et DCMOTO) : la manette répond partout, l'écran de triche n'a plus de barres parasites, le titre et le Hall of Fame n'ont plus d'artefacts pendant les fondus.
 - **1.1** (8 novembre 2026) : sprites mieux réduits (silhouettes pleines, détachées du décor par un contour noir), niveau 4 aux bleus sombres du ST, avec un bloc riveté redessiné pour le TO8.
 - **1.0** : première version complète.
 
