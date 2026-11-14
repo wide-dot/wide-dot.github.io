@@ -25,7 +25,7 @@ import { createBindings } from './input-bindings.js';
 import { connectedPads, padName, readPad } from './gamepads.js';
 import { createBindingsPanel } from './bindings-panel.js';
 import { createVolumeControl } from './volume-control.js';
-import { lockedGame, scopedStore, fetchMedia, renderGameDisks, isDisk } from './locked-game.js';
+import { lockedGame, scopedStore, fetchMedia, renderGameDisks, isDisk, relaysOf, PUBLIC_RELAYS } from './locked-game.js';
 
 const FRAME_SECONDS = 0.02;
 const AUDIO_LEAD = 0.08;          // ~4 trames d'avance : assez pour absorber un rAF en retard
@@ -1058,7 +1058,9 @@ function start(toje, store) {
     status.textContent = `chargement de ${locked.title}…`;
     let entries;
     try {
-      entries = await fetchMedia(locked, askForBlockedMedia);
+      entries = await fetchMedia(locked, askForBlockedMedia,
+        [...relaysOf(location.search), ...PUBLIC_RELAYS],
+        (m, via) => { console.info(`${m.name} : servi par le relais ${via}`); });
     } catch (e) {
       status.textContent = `échec du chargement : ${e.message}`;
       console.error(e);

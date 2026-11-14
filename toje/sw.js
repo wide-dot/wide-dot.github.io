@@ -9,7 +9,7 @@
 // Filtré par Maven (src/main/webapp-filtered) pour porter le commit : pas de
 // gabarit JavaScript à dollar-accolade ici, il serait réécrit.
 
-const VERSION = '3e92a52';
+const VERSION = 'd72da99';
 const CACHE = 'toje';
 const MEDIA = /\.(fd|sap|sd|rom|zip)$/i;
 
@@ -65,7 +65,10 @@ self.addEventListener('fetch', event => {
   // gardé lui aussi pour le hors-ligne. Seule une réponse CORS lisible est mise
   // en cache (une réponse opaque ne servirait à rien, la page ne la lit pas).
   if (url.origin !== self.location.origin) {
-    if (MEDIA.test(url.pathname)) event.respondWith(networkFirst(request));
+    // Média relayé (corsproxy.io/?url=…/jeu.zip) : l'adresse du média est dans la requête.
+    if (MEDIA.test(url.pathname) || MEDIA.test(decodeURIComponent(url.search))) {
+      event.respondWith(networkFirst(request));
+    }
     return;
   }
   // Sans ?v= (la page, les médias d'un jeu verrouillé pris sur le site) :

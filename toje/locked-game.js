@@ -78,23 +78,71 @@ export class BlockedMedia extends Error {
   }
 }
 
-/** Octets d'une adresse, avec une erreur qui dit quoi faire. */
-async function download(m) {
-  let response;
-  try {
-    response = await fetch(m.url);
-  } catch (e) {
-    // fetch ne distingue pas réseau coupé et refus CORS : le navigateur cache
-    // la cause. Une autre origine est le cas qui se règle chez l'hébergeur.
-    const other = typeof location !== 'undefined' && new URL(m.url).origin !== location.origin;
-    if (other) {
-      throw new BlockedMedia(m,
-        `${m.name} : ${new URL(m.url).host} refuse la lecture depuis cette page (pas d'en-tête CORS), ou est injoignable`);
-    }
-    throw new Error(`${m.name} : ${e.message}`);
-  }
-  if (!response.ok) throw new Error(`${m.name} : HTTP ${response.status}`);
+/**
+ * Relais CORS publics, essayés dans l'ordre quand le site du média refuse la
+ * lecture depuis la page (release GitHub, site perso). Chacun rend l'adresse
+ * relayée. Ce sont des services tiers : ils voient l'adresse du média, leurs
+ * conditions et leur disponibilité peuvent changer — d'où plusieurs, et le
+ * recours « télécharger puis ouvrir » quand aucun ne répond.
+ */
+export const PUBLIC_RELAYS = [
+  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+  url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+];
+
+/**
+ * Relais donnés par l'adresse de la page (`&relais=https://mon-relais/?url=`,
+ * répétable) : l'adresse du média, encodée, est ajoutée au bout. Ils passent
+ * avant les relais publics — un site qui a son propre relais s'en sert.
+ */
+export function relaysOf(search) {
+  return new URLSearchParams(search).getAll('relais')
+    .filter(r => /^https?:\/\//.test(r))
+    .map(prefix => url => prefix + encodeURIComponent(url));
+}
+
+/**
+ * Un relais rend parfois une page d'erreur HTML avec un statut 200 : on ne
+ * garde que des octets qui ressemblent au média attendu.
+ */
+function plausible(name, bytes) {
+  if (bytes.length === 0) return false;
+  if (kindOf(name) === 'zip') return isZip(bytes);
+  const head = new TextDecoder().decode(new Uint8Array(bytes.buffer, bytes.byteOffset, Math.min(64, bytes.length)));
+  return !/^\s*(<!doctype|<html|<\?xml|\{)/i.test(head);
+}
+
+async function fetchBytes(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return new Int8Array(await response.arrayBuffer());
+}
+
+/**
+ * Octets d'un média : en direct, sinon par un relais si son site refuse la
+ * page (rend aussi `via`, l'hôte du relais), sinon BlockedMedia.
+ */
+async function download(m, relays) {
+  try {
+    return { bytes: await fetchBytes(m.url), via: null };
+  } catch (e) {
+    const other = typeof location !== 'undefined' && new URL(m.url).origin !== location.origin;
+    // fetch ne distingue pas réseau coupé et refus CORS : le navigateur cache
+    // la cause. Un statut HTTP, lui, est une vraie réponse du site.
+    if (!other || !(e instanceof TypeError)) throw new Error(`${m.name} : ${e.message}`);
+  }
+  for (const relay of relays) {
+    const url = relay(m.url);
+    try {
+      const bytes = await fetchBytes(url);
+      if (plausible(m.name, bytes)) return { bytes, via: new URL(url).host };
+    } catch (e) {
+      // relais suivant
+    }
+  }
+  throw new BlockedMedia(m,
+    `${m.name} : ${new URL(m.url).host} refuse la lecture depuis cette page (pas d'en-tête CORS), ou est injoignable`);
 }
 
 /**
@@ -133,13 +181,15 @@ function oneFormatPerGame(files) {
  * `askUser(media)`, s'il est donné, est appelé pour un média que son site
  * refuse de servir à la page (lien de release GitHub, site perso sans CORS) :
  * il rend { name, bytes } du fichier que le visiteur a téléchargé lui-même.
- * C'est le seul recours sans intermédiaire : la page est statique, et passer
- * par un relais tiers lui ferait voir chaque adresse jouée.
+ * Avant cela, `relays` (relais CORS, cf. PUBLIC_RELAYS) sont essayés ;
+ * `onRelay(media, hôte)` dit lequel a servi.
  */
-export async function fetchMedia(game, askUser = null) {
+export async function fetchMedia(game, askUser = null, relays = PUBLIC_RELAYS, onRelay = null) {
   const one = async m => {
     try {
-      return await expand(m.name, await download(m));
+      const { bytes, via } = await download(m, relays);
+      if (via && onRelay) onRelay(m, via);
+      return await expand(m.name, bytes);
     } catch (e) {
       if (!(e instanceof BlockedMedia) || !askUser) throw e;
       const file = await askUser(m);
