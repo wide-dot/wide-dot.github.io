@@ -1058,7 +1058,7 @@ function start(toje, store) {
     status.textContent = `chargement de ${locked.title}…`;
     let entries;
     try {
-      entries = await fetchMedia(locked);
+      entries = await fetchMedia(locked, askForBlockedMedia);
     } catch (e) {
       status.textContent = `échec du chargement : ${e.message}`;
       console.error(e);
@@ -1074,5 +1074,29 @@ function start(toje, store) {
       (e, drive) => mount(e.name, e.bytes, { label: e.label, drive }));
     status.textContent = locked.title;
     if (await saves.offerResume()) startHint.hidden = true;
+  }
+
+  // Média que son site refuse de servir à la page : le visiteur le télécharge
+  // (un lien de téléchargement ordinaire n'a pas besoin de CORS) puis l'ouvre.
+  function askForBlockedMedia(media) {
+    const box = $('fetch-blocked');
+    const input = $('fetch-blocked-input');
+    $('fetch-blocked-host').textContent = new URL(media.url).host;
+    $('fetch-blocked-name').textContent = media.name;
+    $('fetch-blocked-link').href = media.url;
+    status.textContent = `${media.name} : à télécharger puis ouvrir`;
+    startHint.hidden = true;
+    box.hidden = false;
+    return new Promise(resolve => {
+      input.value = '';
+      input.onchange = async () => {
+        const file = input.files[0];
+        if (!file) return;
+        box.hidden = true;
+        startHint.hidden = false;
+        status.textContent = `chargement de ${locked.title}…`;
+        resolve({ name: file.name, bytes: new Int8Array(await file.arrayBuffer()) });
+      };
+    });
   }
 }

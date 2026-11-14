@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="toje-web.css?v=9825da1">
+  <link rel="stylesheet" href="toje-web.css?v=3e92a52">
 </head>
 <body>
   <main class="chassis">
@@ -76,6 +76,18 @@
         <div id="crt" class="crt-overlay" hidden aria-hidden="true"></div>
         <div id="drop-hint" class="drop-hint" hidden>Déposer le média (.fd, .sd, .rom)</div>
         <button id="start" class="overlay-start" hidden>Toucher pour activer le son</button>
+        <!-- Média d'un autre site qui refuse la lecture depuis la page (pas de CORS) :
+             le visiteur le télécharge lui-même, puis l'ouvre ici (locked-game.js). -->
+        <div id="fetch-blocked" class="overlay-resume" hidden role="dialog" aria-label="Média à ouvrir à la main">
+          <p><b id="fetch-blocked-host"></b> ne laisse pas la page lire <b id="fetch-blocked-name"></b>.</p>
+          <small>Télécharge-le, puis ouvre le fichier téléchargé : le jeu démarre aussitôt.</small>
+          <div class="row">
+            <a id="fetch-blocked-link" class="keycap" href="#" target="_blank" rel="noopener" download>1. Télécharger</a>
+            <label class="keycap action">2. Ouvrir le fichier
+              <input id="fetch-blocked-input" type="file" accept=".fd,.sap,.sd,.rom,.zip" hidden>
+            </label>
+          </div>
+        </div>
         <div id="resume" class="overlay-resume" hidden role="dialog" aria-label="Reprendre la partie">
           <img id="resume-thumb" class="resume-thumb" alt="">
           <p><span id="resume-verb">Reprendre</span> <b id="resume-title"></b> ?</p>
@@ -276,33 +288,34 @@
   <script type="importmap">
     {
       "imports": {
-        "./touch-pad.js": "./touch-pad.js?v=9825da1",
-        "./to8-keyboard.js": "./to8-keyboard.js?v=9825da1",
-        "./keyboard-zoom.js": "./keyboard-zoom.js?v=9825da1",
-        "./menu.js": "./menu.js?v=9825da1",
-        "./build-info.js": "./build-info.js?v=9825da1",
-        "./library.js": "./library.js?v=9825da1",
-        "./locked-game.js": "./locked-game.js?v=9825da1",
-        "./crt-screen.js": "./crt-screen.js?v=9825da1",
-        "./save-store.js": "./save-store.js?v=9825da1",
-        "./game-saves.js": "./game-saves.js?v=9825da1",
-        "./touch-keys.js": "./touch-keys.js?v=9825da1",
-        "./titles.js": "./titles.js?v=9825da1",
-        "./my-disks.js": "./my-disks.js?v=9825da1",
-        "./recent-media.js": "./recent-media.js?v=9825da1",
-        "./mouse-pointer.js": "./mouse-pointer.js?v=9825da1",
-        "./phone-keyboard.js": "./phone-keyboard.js?v=9825da1",
-        "./screenshot.js": "./screenshot.js?v=9825da1",
-        "./screen-scaler.js": "./screen-scaler.js?v=9825da1",
-        "./pixel-shader.js": "./pixel-shader.js?v=9825da1",
-        "./input-bindings.js": "./input-bindings.js?v=9825da1",
-        "./gamepads.js": "./gamepads.js?v=9825da1",
-        "./bindings-panel.js": "./bindings-panel.js?v=9825da1",
-        "./volume-control.js": "./volume-control.js?v=9825da1"
+        "./touch-pad.js": "./touch-pad.js?v=3e92a52",
+        "./to8-keyboard.js": "./to8-keyboard.js?v=3e92a52",
+        "./keyboard-zoom.js": "./keyboard-zoom.js?v=3e92a52",
+        "./menu.js": "./menu.js?v=3e92a52",
+        "./build-info.js": "./build-info.js?v=3e92a52",
+        "./library.js": "./library.js?v=3e92a52",
+        "./locked-game.js": "./locked-game.js?v=3e92a52",
+        "./zip-reader.js": "./zip-reader.js?v=3e92a52",
+        "./crt-screen.js": "./crt-screen.js?v=3e92a52",
+        "./save-store.js": "./save-store.js?v=3e92a52",
+        "./game-saves.js": "./game-saves.js?v=3e92a52",
+        "./touch-keys.js": "./touch-keys.js?v=3e92a52",
+        "./titles.js": "./titles.js?v=3e92a52",
+        "./my-disks.js": "./my-disks.js?v=3e92a52",
+        "./recent-media.js": "./recent-media.js?v=3e92a52",
+        "./mouse-pointer.js": "./mouse-pointer.js?v=3e92a52",
+        "./phone-keyboard.js": "./phone-keyboard.js?v=3e92a52",
+        "./screenshot.js": "./screenshot.js?v=3e92a52",
+        "./screen-scaler.js": "./screen-scaler.js?v=3e92a52",
+        "./pixel-shader.js": "./pixel-shader.js?v=3e92a52",
+        "./input-bindings.js": "./input-bindings.js?v=3e92a52",
+        "./gamepads.js": "./gamepads.js?v=3e92a52",
+        "./bindings-panel.js": "./bindings-panel.js?v=3e92a52",
+        "./volume-control.js": "./volume-control.js?v=3e92a52"
       }
     }
   </script>
-  <script src="classes.wasm-runtime.js?v=9825da1"></script>
-  <script type="module" src="toje-web.js?v=9825da1"></script>
+  <script src="classes.wasm-runtime.js?v=3e92a52"></script>
+  <script type="module" src="toje-web.js?v=3e92a52"></script>
 </body>
 </html>

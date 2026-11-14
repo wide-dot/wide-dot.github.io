@@ -9,8 +9,9 @@
 // Filtré par Maven (src/main/webapp-filtered) pour porter le commit : pas de
 // gabarit JavaScript à dollar-accolade ici, il serait réécrit.
 
-const VERSION = '9825da1';
+const VERSION = '3e92a52';
 const CACHE = 'toje';
+const MEDIA = /\.(fd|sap|sd|rom|zip)$/i;
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -38,7 +39,7 @@ async function networkFirst(request) {
   const cache = await caches.open(CACHE);
   try {
     const response = await fetch(request);
-    if (response.ok) await cache.put(request, response.clone());
+    if (response.ok && response.type !== 'opaque') await cache.put(request, response.clone());
     return response;
   } catch (e) {
     const cached = await cache.match(request, { ignoreSearch: true });
@@ -59,7 +60,14 @@ async function cacheFirst(request) {
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (request.method !== 'GET') return;
+  // Média d'un jeu verrouillé hébergé sur un autre site (?media=https://…) :
+  // gardé lui aussi pour le hors-ligne. Seule une réponse CORS lisible est mise
+  // en cache (une réponse opaque ne servirait à rien, la page ne la lit pas).
+  if (url.origin !== self.location.origin) {
+    if (MEDIA.test(url.pathname)) event.respondWith(networkFirst(request));
+    return;
+  }
   // Sans ?v= (la page, les médias d'un jeu verrouillé pris sur le site) :
   // l'adresse peut changer de contenu, le réseau d'abord.
   const versioned = url.searchParams.has('v');
