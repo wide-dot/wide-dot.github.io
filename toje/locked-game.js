@@ -85,8 +85,9 @@ export class BlockedMedia extends Error {
  * conditions et leur disponibilité peuvent changer — d'où plusieurs, et le
  * recours « télécharger puis ouvrir » quand aucun ne répond.
  */
+// corsproxy.io n'y est plus : sans compte et domaine déclaré, il est réservé au
+// développement (403 depuis un site en production, d'après sa documentation).
 export const PUBLIC_RELAYS = [
-  url => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
   url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
 ];
@@ -97,9 +98,28 @@ export const PUBLIC_RELAYS = [
  * avant les relais publics — un site qui a son propre relais s'en sert.
  */
 export function relaysOf(search) {
-  return new URLSearchParams(search).getAll('relais')
-    .filter(r => /^https?:\/\//.test(r))
-    .map(prefix => url => prefix + encodeURIComponent(url));
+  return prefixRelays(new URLSearchParams(search).getAll('relais'));
+}
+
+/** Préfixes de relais → fonctions (l'adresse du média, encodée, va au bout). */
+const prefixRelays = prefixes => prefixes
+  .filter(r => /^https?:\/\//.test(r))
+  .map(prefix => url => prefix + encodeURIComponent(url));
+
+/**
+ * Relais du site : `relais.txt` posé à côté de la page, un préfixe par ligne
+ * (`#` commente). Le moyen de brancher une fois pour toutes un relais à soi
+ * (toje-web/relay/cloudflare-worker.js) sans le répéter dans chaque adresse.
+ * Absent : aucun.
+ */
+export async function siteRelays(base) {
+  try {
+    const response = await fetch(new URL('relais.txt', base), { cache: 'no-cache' });
+    if (!response.ok) return [];
+    return prefixRelays((await response.text()).split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')));
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -134,11 +154,16 @@ async function download(m, relays) {
   }
   for (const relay of relays) {
     const url = relay(m.url);
+    const host = new URL(url).host;
     try {
       const bytes = await fetchBytes(url);
-      if (plausible(m.name, bytes)) return { bytes, via: new URL(url).host };
+      if (plausible(m.name, bytes)) return { bytes, via: host };
+      const head = new TextDecoder().decode(new Uint8Array(bytes.buffer, bytes.byteOffset, Math.min(120, bytes.length)));
+      console.warn(`relais ${host} : réponse qui n'est pas ${m.name} (${bytes.length} octets) : ${head}`);
     } catch (e) {
-      // relais suivant
+      // Un statut HTTP du relais (403 : domaine non déclaré, 429 : quota) dit
+      // pourquoi ; un TypeError, que le relais lui-même n'envoie pas de CORS.
+      console.warn(`relais ${host} : ${e.message}`);
     }
   }
   throw new BlockedMedia(m,
