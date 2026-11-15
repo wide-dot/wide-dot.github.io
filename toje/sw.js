@@ -9,7 +9,7 @@
 // Filtré par Maven (src/main/webapp-filtered) pour porter le commit : pas de
 // gabarit JavaScript à dollar-accolade ici, il serait réécrit.
 
-const VERSION = '1e35c79';
+const VERSION = '4b58aa3';
 const CACHE = 'toje';
 const MEDIA = /\.(fd|sap|sd|rom|zip)$/i;
 
